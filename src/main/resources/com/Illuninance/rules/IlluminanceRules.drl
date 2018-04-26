@@ -1,1 +1,69 @@
+package com.Illuninance
 
+// list import classes
+import com.eospy.model.Devices;
+import com.eospy.model.ServerEvent;
+
+// default dialect for the semantic code will be MVEL
+dialect "mvel"
+
+rule "event=allEvents Rule"
+    when
+        $event : ServerEvent( $eventId : id, event == "allEvents" )
+      	$device : Devices( $deviceId : id,  $eventId == id )
+    then
+		$device.action = "allEvents"; 
+		$device.status = "Light " + $event.getLight();
+		com.eospy.ui.MainWindow.getInstance().log("Rule event=allEvents: " + $event.getEvent() + " - " + $event.getName() + " - " + " Light Value: " + $event.getLight());
+		modify( $device );
+end
+
+rule "Key Press 1 Rule"
+    when
+        $event : ServerEvent( $eventId : id, event == "keyPress_1" )
+      	$device : Devices( $deviceId : id,  $eventId == id )
+    then
+		$device.action = "Key 1"; 
+		$device.status = "Light " + $event.getLight();
+		com.eospy.ui.MainWindow.getInstance().log("Rule Key Press 1: " + $event.getEvent() + " - " + $event.getName() + " - " + " Light Value: " + $event.getLight());
+		modify( $device );
+end
+
+rule "Key Press 2 Rule"
+    when
+        $event : ServerEvent( $eventId : id, event == "keyPress_2" )
+      	$device : Devices( $deviceId : id,  $eventId == id )
+    then
+		$device.action = "Key 2"; 
+		$device.status = "Light " + $event.getLight();
+		com.eospy.ui.MainWindow.getInstance().log("Rule Key Press 2: " + $event.getEvent() + " - " + $event.getName() + " - " + " Light Value: " + $event.getLight());
+		modify( $device );
+end
+
+rule "reedRelay Rule"
+    when
+        $event : ServerEvent( $eventId : id, (event == "reedRelay" || event == "Proximity") )
+      	$device : Devices( $deviceId : id,  $eventId == id )
+    then
+		$device.action = "Alert"; 
+		$device.status = "Light " + $event.getLight();
+		com.eospy.ui.MainWindow.getInstance().log("Rule reedRelay: " + $event.getEvent() + " - " + $event.getName() + " - " + " Light Value: " + $event.getLight());
+		modify( $device );
+end
+
+//declare any rules to fire in the jBPM AI_IoT.Illuminance process
+rule "Rule for device ID: 1"
+	ruleflow-group "Illuminance Rule Flow"
+	when
+		$event : ServerEvent( $eventId : id, $eventId == "1" )
+	then
+		com.eospy.ui.MainWindow.getInstance().log("ruleflow-group device ID: 1 " + $event.getEvent() + " - " + $event.getName());
+end
+
+rule "Rule for device ID: 2"
+	ruleflow-group "Illuminance Rule Flow"
+	when
+		$event : ServerEvent( $eventId : id, $eventId == "2" )
+	then
+		com.eospy.ui.MainWindow.getInstance().log("ruleflow-group device ID: 2 " + $event.getEvent() + " - " + $event.getName());
+end
