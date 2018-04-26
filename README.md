@@ -31,18 +31,18 @@ B. EOSPY Server – To install the EOSPY Server program on your Windows computer
 EOSPY will by default install in the destination location: C:\Program Files\EOSpy Server and create a Start Menu folder: EOSPY on your desktop.
 To start the EOSPY Server, click on the Eagle icon on your desktop. The EOSPY login and map will appear in your browser. The default email and password are both: admin
 
-3.a EOSPY Client (Arduino Tron) – To install the EOSPY Arduino Tron application on your Arduino Device, download the EOSPY Arduino Tron Sensor application from GIT.
+C.1 EOSPY Client (Arduino Tron) – To install the EOSPY Arduino Tron application on your Arduino Device, download the EOSPY Arduino Tron Sensor application from GIT.
 Update the with WiFi network values for network SSID (name) and network password. Update the EOSPY Server IP address and unique unit ID values and add in EOSPY Server.
 Also, you may use a DHT11 digital temperature and humidity sensor see the Arduino Tron Sensor sketch for more details and information.
 
-3.b EOSPY Client (Android) – To install the EOSPY Client application on your phone, download the EOSPY application from the Google App Store.
+C.2 EOSPY Client (Android) – To install the EOSPY Client application on your phone, download the EOSPY application from the Google App Store.
 To start the EOSPY Client, click on the Eagle icon on your phone. The EOSPY Client screen will appear. You can also download the EOSPY TI-SensorTag Client version.
 
 To configure a new EOSPY Client you will need to enter the EOSPY Server address, Domain name, or IP address into the Server address.
 Next add this device in the EOSPY Server by entering the Device name and the Device identifier. Swipe the Service Status On and YOU’RE DONE.
 The device will appear on the EOSPY Server map the next time the EOSPY Client sends GPS position information. 
 
-4. GPS Tracking Devices – Many companies make various off-the-shelf GPS Tracking devices. Configuring these devices will vary a little from vendors.
+D. GPS Tracking Devices – Many companies make various off-the-shelf GPS Tracking devices. Configuring these devices will vary a little from vendors.
 First, add the new device with a unique identifier into the EOSPY – Executive Order Sensor Processor sYstem Server.
 Next, configure your device to use the appropriate EOSPY Server IP address and port number. If the device failes to report, check the IP Address and Device ID.
 
@@ -61,7 +61,7 @@ If you want to use variations from the default ports you can change them in the 
 EOSPY supports more than 90 GPS communication protocols and more than 800 models of GPS tracking devices from popular GPS vendors.
 Review the list of supported devices for information about your GPS Tracking Device.
 
-###
+---
 
 [] EOSPY currently supports these data fileds in the Server Event data model:
 id=6&event=allEvents&protocol=osmand&servertime=<date>&timestamp=<date>&fixtime=<date>&outdated=false&valid=true
