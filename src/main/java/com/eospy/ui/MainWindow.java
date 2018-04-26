@@ -234,7 +234,7 @@ public class MainWindow {
 
 	void helpContentsAction(ActionEvent e) {
 		try {
-			Browser.url("http://www.eospy.com/help.html");
+			Browser.url("http://www.eospy.com/help/");
 		} catch (Exception ex) {
 			System.out.println(ex.toString());
 		}
