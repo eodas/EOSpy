@@ -99,8 +99,6 @@ then
    // sound the alarm 
 end 
 
-  - Executive Order Corporation
-  - Copyright © 1978, 2018: Executive Order Corporation, All Rights Reserved
-
+- Executive Order Corporation
+- Copyright © 1978, 2018: Executive Order Corporation, All Rights Reserved
 - Thank You! -Executive Order Custom Software Development Team
-
