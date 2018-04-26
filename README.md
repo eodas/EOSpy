@@ -1,5 +1,4 @@
 ﻿# EOSpy AI-IoT :: Internet of Things Drools-jBPM Arduino Tron
--------------------------------------------------------------
 
 Executive Order Corp - Arduino Tron - Arduino ESP8266 MQTT Telemetry Transport Machine-to-Machine(M2M)/Internet of Things(IoT)
 Arduino Tron :: EOSPY-Executive Order Sensor Processor sYstem - Arduino Tron MQTT AI-IoT Client using EOSpy AI-IoT Drools-jBPM
@@ -22,13 +21,13 @@ Executive Order Spy has several components:
 You can have an unlimited number and combination of EOSPY Clients and/or GPS tracking devices in use with EOSPY Server.
 (Download EOSPY Server from our website http://www.eospy.com and Download EOSPY Client from the Google Store, standard or TI-SensorTag version)
 
-1. EOSPY AI-IoT – To install the EOSPY AI-IoT program on your Windows computer, download and install the "Eclipse IDE for Java Developers.
+A. EOSPY AI-IoT – To install the EOSPY AI-IoT program on your Windows computer, download and install the "Eclipse IDE for Java Developers.
 Use the Eclipse feature to Add new software, available on the Eclipse menu “Help -> Install New Software”. Select the “Add” option and install these packages:
 Drools + jBPM Update Site 7.7.0 - http://downloads.jboss.org/jbpm/release/7.7.0.Final/updatesite/
 BPMN2-Modeler 1.4.2 - http://download.eclipse.org/bpmn2-modeler/updates/oxygen/1.4.2/
 GIT the EOSPY AI-IoT from the source code repository, and Import Existing Maven project.
 
-2. EOSPY Server – To install the EOSPY Server program on your Windows computer, download the eospy.exe installation program and click on the eospy.exe install program.
+B. EOSPY Server – To install the EOSPY Server program on your Windows computer, download the eospy.exe installation program and click on the eospy.exe install program.
 EOSPY will by default install in the destination location: C:\Program Files\EOSpy Server and create a Start Menu folder: EOSPY on your desktop.
 To start the EOSPY Server, click on the Eagle icon on your desktop. The EOSPY login and map will appear in your browser. The default email and password are both: admin
 
@@ -62,7 +61,7 @@ If you want to use variations from the default ports you can change them in the 
 EOSPY supports more than 90 GPS communication protocols and more than 800 models of GPS tracking devices from popular GPS vendors.
 Review the list of supported devices for information about your GPS Tracking Device.
 
-//////////////////
+###
 
 [] EOSPY currently supports these data fileds in the Server Event data model:
 id=6&event=allEvents&protocol=osmand&servertime=<date>&timestamp=<date>&fixtime=<date>&outdated=false&valid=true
