@@ -13,38 +13,38 @@ and products to self-monitor, self-diagnose and eventually, self-direct.
 Executive Order Spy — This quick guide will help you install and configure the EOSPY – Executive Order Sensor Processor sYstem components.
 
 Executive Order Spy has several components:
-1. The EOSPY AI-IoT, the Internet of Things Drools-jBPM Expert System.
-2. The EOSPY Server, the live map GPS tracking Windows program.
-3. The EOSPY Client, the Arduino Tron or Android application you install on an Android phone.
-4. Configure GSM/GPRS/GPS Tracking Devices to use with EOSPY – Executive Order Sensor Processor sYstem Server.
+(1) The EOSPY AI-IoT, the Internet of Things Drools-jBPM Expert System.
+(2) The EOSPY Server, the live map GPS tracking Windows program.
+(3) The EOSPY Client, the Arduino Tron or Android application you install on an Android phone.
+(4) Configure GSM/GPRS/GPS Tracking Devices to use with EOSPY – Executive Order Sensor Processor sYstem Server.
 
 You can have an unlimited number and combination of EOSPY Clients and/or GPS tracking devices in use with EOSPY Server.
 (Download EOSPY Server from our website http://www.eospy.com and Download EOSPY Client from the Google Store, standard or TI-SensorTag version)
 
-A. EOSPY AI-IoT – To install the EOSPY AI-IoT program on your Windows computer, download and install the "Eclipse IDE for Java Developers.
+(1) EOSPY AI-IoT – To install the EOSPY AI-IoT program on your Windows computer, download and install the "Eclipse IDE for Java Developers.
 Use the Eclipse feature to Add new software, available on the Eclipse menu “Help -> Install New Software”. Select the “Add” option and install these packages:
 Drools + jBPM Update Site 7.7.0 - http://downloads.jboss.org/jbpm/release/7.7.0.Final/updatesite/
 BPMN2-Modeler 1.4.2 - http://download.eclipse.org/bpmn2-modeler/updates/oxygen/1.4.2/
 GIT the EOSPY AI-IoT from the source code repository, and Import Existing Maven project.
 
-B. EOSPY Server – To install the EOSPY Server program on your Windows computer, download the eospy.exe installation program and click on the eospy.exe install program.
+(2) EOSPY Server – To install the EOSPY Server program on your Windows computer, download the eospy.exe installation program and click on the eospy.exe install program.
 EOSPY will by default install in the destination location: C:\Program Files\EOSpy Server and create a Start Menu folder: EOSPY on your desktop.
 To start the EOSPY Server, click on the Eagle icon on your desktop. The EOSPY login and map will appear in your browser. The default email and password are both: admin
 
-C.1 EOSPY Client (Arduino Tron) – To install the EOSPY Arduino Tron application on your Arduino Device, download the EOSPY Arduino Tron Sensor application from GIT.
+(3.A) EOSPY Client (Arduino Tron) – To install the EOSPY Arduino Tron application on your Arduino Device, download the EOSPY Arduino Tron Sensor application from GIT.
 Update the with WiFi network values for network SSID (name) and network password. Update the EOSPY Server IP address and unique unit ID values and add in EOSPY Server.
 Also, you may use a DHT11 digital temperature and humidity sensor see the Arduino Tron Sensor sketch for more details and information.
 
-C.2 EOSPY Client (Android) – To install the EOSPY Client application on your phone, download the EOSPY application from the Google App Store.
+(3.B) EOSPY Client (Android) – To install the EOSPY Client application on your phone, download the EOSPY application from the Google App Store.
 To start the EOSPY Client, click on the Eagle icon on your phone. The EOSPY Client screen will appear. You can also download the EOSPY TI-SensorTag Client version.
 
 To configure a new EOSPY Client you will need to enter the EOSPY Server address, Domain name, or IP address into the Server address.
 Next add this device in the EOSPY Server by entering the Device name and the Device identifier. Swipe the Service Status On and YOU’RE DONE.
 The device will appear on the EOSPY Server map the next time the EOSPY Client sends GPS position information. 
 
-D. GPS Tracking Devices – Many companies make various off-the-shelf GPS Tracking devices. Configuring these devices will vary a little from vendors.
+(4) GPS Tracking Devices – Many companies make various off-the-shelf GPS Tracking devices. Configuring these devices will vary a little from vendors.
 First, add the new device with a unique identifier into the EOSPY – Executive Order Sensor Processor sYstem Server.
-Next, configure your device to use the appropriate EOSPY Server IP address and port number. If the device failes to report, check the IP Address and Device ID.
+Next, configure your device to use the appropriate EOSPY Server IP address and port number. If the device fails to report, check the IP Address and Device ID.
 
 Device Unique Identifier
 For most devices you should use an IMEI (International Mobile Equipment Identity) number as a unique identifier.
