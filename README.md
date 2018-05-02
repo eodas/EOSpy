@@ -13,10 +13,10 @@ and products to self-monitor, self-diagnose and eventually, self-direct.
 Executive Order Spy — This quick guide will help you install and configure the EOSPY – Executive Order Sensor Processor sYstem components.
 
 Executive Order Spy has several components:
-(1) The EOSPY AI-IoT, the Internet of Things Drools-jBPM Expert System.
-(2) The EOSPY Server, the live map GPS tracking Windows program.
-(3) The EOSPY Client, the Arduino Tron or Android application you install on an Android phone.
-(4) Configure GSM/GPRS/GPS Tracking Devices to use with EOSPY – Executive Order Sensor Processor sYstem Server.
+1. The EOSPY AI-IoT, the Internet of Things Drools-jBPM Expert System.
+2. The EOSPY Server, the live map GPS tracking Windows program.
+3. The EOSPY Client, the Arduino Tron or Android application you install on an Android phone.
+4. Configure GSM/GPRS/GPS Tracking Devices to use with EOSPY – Executive Order Sensor Processor sYstem Server.
 
 You can have an unlimited number and combination of EOSPY Clients and/or GPS tracking devices in use with EOSPY Server.
 (Download EOSPY Server from our website http://www.eospy.com and Download EOSPY Client from the Google Store, standard or TI-SensorTag version)
