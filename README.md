@@ -63,7 +63,7 @@ Review the list of supported devices for information about your GPS Tracking Dev
 
 ---
 
-[] EOSPY currently supports these data fileds in the Server Event data model:
+[] EOSPY currently supports these data fields in the Server Event data model:
 id=6&event=allEvents&protocol=osmand&servertime=<date>&timestamp=<date>&fixtime=<date>&outdated=false&valid=true
 &lat=38.85&lon=-84.35&altitude=27.0&speed=0.0&course=0.0&address=<street address>&accuracy=0.0&network=null
 &batteryLevel=78.3&textMessage=Message_Sent&temp=71.2&ir_temp=0.0&humidity=0.0&mbar=79.9
