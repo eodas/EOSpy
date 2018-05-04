@@ -50,7 +50,7 @@ String lat = "38.888160"; // position LAT National Air and Space Museum - 600 In
 String lon = "-77.019868"; // position LON
 
 // Above are all the fields you need to provide values, the remaining fields are used in the Arduino_Tron application
-const bool readPuchButton = true; // Values for the digitalRead value from gpiox button
+const bool readPushButton = true; // Values for the digitalRead value from gpiox button
 const bool readDHT11Temp = false; // Values for the DHT11 digital temperature/humidity sensor
 
 const int httpPort = 5055; // OsmAnd server is running on default port 5055
@@ -175,7 +175,7 @@ void loop(void)
   switchState = 0;
   delay(100); // waits for tenth of a second
 
-  if (readPuchButton) {
+  if (readPushButton) {
     if (digitalRead(BUTTON5) == HIGH) // read the pushButton state
     {
       switchState = 5;
