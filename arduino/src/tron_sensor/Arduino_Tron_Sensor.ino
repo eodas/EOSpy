@@ -5,7 +5,7 @@
   - Copyright © 1978, 2018: Executive Order Corporation, All Rights Reserved
 ********************/
 
-#include <SimpleDHT.h>
+//#include <SimpleDHT.h> <-- uncommit for dht11
 
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
@@ -132,7 +132,7 @@ WiFiUDP udp;
 
 // DHT11 digital temperature and humidity sensor pin Vout (sense)
 int pinDHT11 = 2;
-SimpleDHT11 dht11;
+//SimpleDHT11 dht11; <-- uncommit for dht11
 
 // Required for LIGHT_SLEEP_T delay mode
 extern "C" {
@@ -314,16 +314,16 @@ void eospysend()
 void readdht11() {
   byte temperature = 0;
   byte _humidity = 0;
-  int error = SimpleDHTErrSuccess;
+  //int err = SimpleDHTErrSuccess; <-- uncommit for dht11
 
-  if ((error = dht11.read(pinDHT11, &temperature, &_humidity, NULL)) != SimpleDHTErrSuccess) {
-    Serial.print("Read DHT11 failed, error = ");
-    Serial.println(error);
-    return;
-  }
+  //if ((err = dht11.read(pinDHT11, &temperature, &_humidity, NULL)) != SimpleDHTErrSuccess) { <-- uncommit for dht11
+  //  Serial.print("Read DHT11 failed, error = ");
+  //  Serial.println(err);
+  //  return;
+  //}
 
   // convert to Fahrenheit
-  float temperatureF = (temperature * 9.0 / 5.0) + 32.0;
+  float temperatureF = 0; // (temperature * 9.0 / 5.0) + 32.0; <-- uncommit for dht11
   temp = String(temperatureF);
   humidity = String(_humidity);
 }
