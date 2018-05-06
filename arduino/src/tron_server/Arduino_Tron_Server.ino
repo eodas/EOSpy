@@ -40,7 +40,7 @@ void setup() {
   digitalWrite(LED3, LOW);
   digitalWrite(LED4, LOW);
 
-  // Arduino IDE Serial Monitor window to see what EOSPy code is doing
+  // Arduino IDE Serial Monitor window to see what EOSPY code is doing
   Serial.begin(115200); // Serial connection from ESP-01 via 3.3v console cable
 
   // Connect to WiFi network

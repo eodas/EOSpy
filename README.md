@@ -21,7 +21,7 @@ Executive Order Spy has several components:
 You can have an unlimited number and combination of EOSPY Clients and/or GPS tracking devices in use with EOSPY Server.
 (Download EOSPY Server from our website http://www.eospy.com and Download EOSPY Client from the Google Store, standard or TI-SensorTag version)
 
-(1) EOSPY AI-IoT – To install the EOSPY AI-IoT program on your Windows computer, download and install the "Eclipse IDE for Java Developers.
+(1) EOSPY AI-IoT – To install the EOSPY AI-IoT program on your Windows computer, download and install the "Eclipse IDE for Java Developers."
 Use the Eclipse feature to Add new software, available on the Eclipse menu “Help -> Install New Software”. Select the “Add” option and install these packages:
 Drools + jBPM Update Site 7.7.0 - http://downloads.jboss.org/jbpm/release/7.7.0.Final/updatesite/
 BPMN2-Modeler 1.4.2 - http://download.eclipse.org/bpmn2-modeler/updates/oxygen/1.4.2/
