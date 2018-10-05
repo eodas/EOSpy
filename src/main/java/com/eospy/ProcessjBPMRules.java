@@ -23,7 +23,7 @@ import com.eospy.util.WorkingMemoryListener;
 /**
  * The EOSpy AI-IoT application
  */
-public class RulesProcess {
+public class ProcessjBPMRules {
 
 	private DevicesList devices;
 	private KieSession kSession;
@@ -33,7 +33,7 @@ public class RulesProcess {
 	private String kSessionName = "";
 	private String processID = "";
 
-	public RulesProcess(DevicesList devices, String kSessionName, String processID, boolean knowledgeDebug) {
+	public ProcessjBPMRules(DevicesList devices, String kSessionName, String processID, boolean knowledgeDebug) {
 		super();
 		this.devices = devices;
 		this.kSessionName = kSessionName;

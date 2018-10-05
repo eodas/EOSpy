@@ -148,7 +148,7 @@ public class EOSpy_AI_IoT {
 		});
 
 		new URLConnection(arduinoURL, knowledgeDebug);
-		RulesProcess eospy = new RulesProcess(devices, kSessionName, processID, knowledgeDebug);
+		ProcessjBPMRules eospy = new ProcessjBPMRules(devices, kSessionName, processID, knowledgeDebug);
 		EventReader source = new EventReader(eospy, devices, serverEvent, eventSleepTimer);
 		source.StartEventThread();
 	}

@@ -8,7 +8,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.eospy.RulesProcess;
+import com.eospy.ProcessjBPMRules;
 import com.eospy.model.Devices;
 import com.eospy.model.DevicesList;
 import com.eospy.model.ServerEvent;
@@ -19,12 +19,12 @@ public class EventReader {
 	private volatile static boolean shutdown = false;
 	private String DateFormatString = "yyy-mm-dd hh:mm:ss";
 
-	private RulesProcess eospy;
+	private ProcessjBPMRules eospy;
 	private DevicesList devices;
 	private String serverEvent;
 	private int eventSleepTimer;
 
-	public EventReader(RulesProcess eospy, DevicesList devices, String serverEvent, int eventSleepTimer) {
+	public EventReader(ProcessjBPMRules eospy, DevicesList devices, String serverEvent, int eventSleepTimer) {
 		this.eospy = eospy;
 		this.devices = devices;
 		this.serverEvent = serverEvent;
