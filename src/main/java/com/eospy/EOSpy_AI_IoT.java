@@ -14,10 +14,7 @@ import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Properties;
 
-import com.eospy.events.EventReader;
-import com.eospy.model.DevicesList;
-import com.eospy.ui.MainWindow;
-import com.eospy.util.URLConnection;
+import com.eospy.ui.EOSpyWindow;
 
 /**
  * Executive Order Corporation we make Things Smart
@@ -56,7 +53,6 @@ public class EOSpy_AI_IoT {
 				+ " using EOSpy Arduino Tron AI-IoT Processing -version: " + appVer + " (" + buildDate + ")");
 
 		getIPAddress();
-		readProperties();
 
 		if (knowledgeDebug) {
 			System.out.println("os.name: " + System.getProperty("os.name"));
@@ -80,77 +76,21 @@ public class EOSpy_AI_IoT {
 		}
 	}
 
-	public void readProperties() {
-		try {
-			File file = new File("eospy.properties");
-			FileInputStream fileInput = new FileInputStream(file);
-			Properties properties = new Properties();
-			properties.load(fileInput);
-			fileInput.close();
-
-			Enumeration<?> enuKeys = properties.keys();
-			while (enuKeys.hasMoreElements()) {
-				String key = (String) enuKeys.nextElement();
-				String value = properties.getProperty(key);
-				if (knowledgeDebug) {
-					System.out.println(key + "=" + value);
-				}
-
-				if (key.indexOf("serverEvent") != -1) {
-					serverEvent = value;
-				}
-				if (key.indexOf("eventSleepTimer") != -1) {
-					String eventSleepTimerStr = value;
-					eventSleepTimer = Integer.parseInt(eventSleepTimerStr);
-					if (eventSleepTimer < 100) {
-						eventSleepTimer = 100;
-					}
-				}
-
-				if (key.indexOf("kSessionName") != -1) {
-					kSessionName = value;
-				}
-				if (key.indexOf("processID") != -1) {
-					processID = value;
-				}
-				if (key.indexOf("arduinoURL") != -1) {
-					arduinoURL = value;
-				}
-				if (key.equals("knowledgeDebug")) {
-					if (value.indexOf("true") != -1) {
-						knowledgeDebug = true;
-					}
-					return;
-				}
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 	public void init(final boolean exitOnClose) {
 		// set up and show main window
 		Locale.setDefault(Locale.US);
-		final DevicesList devices = new DevicesList();
 
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					MainWindow window = new MainWindow(devices.getDevices(), exitOnClose);
-					window.show(); // .setVisible(true);
+					EOSpyWindow window = new EOSpyWindow(exitOnClose);
+					window.show(); // window.frmEo.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
-
-		new URLConnection(arduinoURL, knowledgeDebug);
-		ProcessjBPMRules eospy = new ProcessjBPMRules(devices, kSessionName, processID, knowledgeDebug);
-		EventReader source = new EventReader(eospy, devices, serverEvent, eventSleepTimer);
-		source.StartEventThread();
 	}
 
 	public void getIPAddress() {
