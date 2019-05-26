@@ -3,17 +3,11 @@ package com.eospy;
 import java.awt.EventQueue;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.util.Enumeration;
 import java.util.Locale;
-import java.util.Properties;
-
 import com.eospy.ui.EOSpyWindow;
 
 /**
@@ -28,6 +22,32 @@ import com.eospy.ui.EOSpyWindow;
  */
 
 /**
+ * Update these with your LAT/LON GPS position values
+ * 
+ * You can find LAT/LON from an address https://www.latlong.net/convert-address-to-lat-long.html
+ * String address = "National_Air_Space_Museum_600_Independence_Ave_Washington_DC_20560";
+ * 
+ * Values ?id=334455&timestamp=1521212240&lat=38.888160&lon=-77.019868&speed=0.0&bearing=0.0&altitude=0.0&accuracy=0.0&batt=98.7
+ * String timestamp = "1521212240"; // timestamp
+ * String speeds = "0.0";
+ * String bearing = "0.0";
+ * String altitude = "0.0";
+ * String accuracy = "0.0"; // position accuracy
+ * String batt = "89.7"; // battery value
+ * String light = "53.4"; // photocell value
+ * 
+ * Arduino Tron currently supports these additional data fields in the Server Event data model:
+ * 
+ * id=6&event=allEvents&protocol=osmand&servertime=<date>&timestamp=<date>&fixtime=<date>&outdated=false&valid=true
+ * &lat=38.85&lon=-84.35&altitude=27.0&speed=0.0&course=0.0&address=<street address>&accuracy=0.0&network=null
+ * &batteryLevel=78.3&textMessage=Message_Sent&temp=71.2&ir_temp=0.0&humidity=0.0&mbar=79.9
+ * &accel_x=-0.01&accel_y=-0.07&accel_z=9.79&gyro_x=0.0&gyro_y=-0.0&gyro_z=-0.0&magnet_x=-0.01&magnet_y=-0.07&magnet_z=9.81
+ * &light=91.0&keypress=0.0&alarm=Temperature&distance=1.6&totalDistance=3.79&motion=false
+ * 
+ * You can add more additional fields to the data model and transmit via any device to the Arduino Tron Drools-jBPM processing.
+ */
+
+/**
  * This is the main class for EOSpy AI-IoT Drools-jBPM Expert System
  */
 public class EOSpy_AI_IoT {
@@ -39,12 +59,6 @@ public class EOSpy_AI_IoT {
 	private String buildDate = "0304";
 	private boolean is64bitJMV = false;
 	private boolean knowledgeDebug = false;
-
-	private int eventSleepTimer = 2000;
-	private String kSessionName = "ksession-movement";
-	private String processID = "com.TrainMovement";
-	private String arduinoURL = "http://10.0.0.2";
-	private String serverEvent = "C:\\Program Files\\EOSpy Server\\eospy-server event.log";
 
 	public EOSpy_AI_IoT(String[] args) {
 
@@ -118,7 +132,7 @@ public class EOSpy_AI_IoT {
 	}
 
 	public static void main(String[] args) {
-		System.out.println("Arduino Tron :: EOSPY-Executive Order Sensor Processor System"
+		System.out.println("EOSpy AI-IoT :: Internet of Things Drools-jBPM Expert System"
 				+ " - Arduino Tron MQTT AI-IoT Client using EOSpy AI-IoT Drools-jBPM");
 
 		new EOSpy_AI_IoT(args).init(true);

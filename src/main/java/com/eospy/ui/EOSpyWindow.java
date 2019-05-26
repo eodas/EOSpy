@@ -7,14 +7,22 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.eospy.ui.AboutDialog;
+import com.eospy.util.WebBrowser;
+import com.eospy.server.AgentConnect;
+
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
+import java.util.Date;
+
 import javax.swing.JToggleButton;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.WindowConstants;
 import javax.swing.JTextField;
 import javax.swing.JSeparator;
 import javax.swing.JSpinner;
@@ -38,8 +46,8 @@ public class EOSpyWindow {
 	private JSpinner spinner_FreqInterval;
 	private JToggleButton tglbtnServerToggleButton;
 
-	private int trackLat = 11;
-	private int trackLon = -11;
+	private int trackLat = 35;
+	private int trackLon = -35;
 	private int freqInterval = 300;
 	private String LatPosition = "38.888160";
 	private String LonPosition = "-77.019868";
@@ -52,13 +60,16 @@ public class EOSpyWindow {
 	// Initialize the contents of the frame
 	private JFrame buildFrame(boolean exitOnClose) {
 		frameIoT = new JFrame();
-		frameIoT.setTitle("EO");
+
+		frameIoT.setTitle("EOSpy AI-IoT :: Internet of Things Arduino Tron");
 		frameIoT.setBounds(100, 100, 450, 585);
+		frameIoT.setDefaultCloseOperation(exitOnClose ? JFrame.EXIT_ON_CLOSE : WindowConstants.DISPOSE_ON_CLOSE);
+
 		frameIoT.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 5, 234, -69, 0, 0 };
 		gridBagLayout.rowHeights = new int[] { 0, 17, 14, 2, 14, 20, 2, 14, 20, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-				0, 0, 0, 37, 0, 0 };
+				0, 0, 0, 42, 0, 0 };
 		gridBagLayout.columnWeights = new double[] { 1.0, 1.0, 0.0, 1.0, Double.MIN_VALUE };
 		gridBagLayout.rowWeights = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
 				0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
@@ -148,7 +159,7 @@ public class EOSpyWindow {
 		frameIoT.getContentPane().add(lblServerUrl, gbc_lblServerUrl);
 
 		textField_URL = new JTextField();
-		textField_URL.setText("http://10.0.0.2");
+		textField_URL.setText("http://10.0.0.2:5055");
 		textField_URL.setColumns(15);
 		GridBagConstraints gbc_textField_URL = new GridBagConstraints();
 		gbc_textField_URL.anchor = GridBagConstraints.NORTHWEST;
@@ -356,6 +367,7 @@ public class EOSpyWindow {
 		JPanel panel_1 = new JPanel();
 		panel_1.setLayout(null);
 		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+		gbc_panel_1.gridheight = 2;
 		gbc_panel_1.gridwidth = 2;
 		gbc_panel_1.insets = new Insets(0, 0, 5, 0);
 		gbc_panel_1.fill = GridBagConstraints.BOTH;
@@ -363,27 +375,85 @@ public class EOSpyWindow {
 		gbc_panel_1.gridy = 25;
 		frameIoT.getContentPane().add(panel_1, gbc_panel_1);
 
-		JButton btnNewButton = new JButton("Key1");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton btnKey1 = new JButton("Key1");
+		btnKey1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				calcLatLonAction(arg0);
+				serverIoTSendPost("&keypress=1.0");
 			}
 		});
-		btnNewButton.setBounds(0, 11, 65, 23);
-		panel_1.add(btnNewButton);
+		btnKey1.setBounds(0, 11, 65, 23);
+		panel_1.add(btnKey1);
 
-		JButton btnKey = new JButton("Key2");
-		btnKey.setBounds(90, 11, 65, 23);
-		panel_1.add(btnKey);
+		JButton btnKey2 = new JButton("Key2");
+		btnKey2.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				serverIoTSendPost("&keypress=2.0");
+			}
+		});
+		btnKey2.setBounds(90, 11, 65, 23);
+		panel_1.add(btnKey2);
 
 		JButton btnReed = new JButton("Reed");
+		btnReed.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				serverIoTSendPost("&keypress=4.0");
+			}
+		});
 		btnReed.setBounds(178, 11, 65, 23);
 		panel_1.add(btnReed);
 
 		JButton btnProx = new JButton("Prox");
+		btnProx.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				serverIoTSendPost("&keypress=8.0");
+			}
+		});
 		btnProx.setBounds(267, 11, 65, 23);
 		panel_1.add(btnProx);
+
+		JButton Post = new JButton("Post");
+		Post.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				serverIoTSendPost("");
+			}
+		});
+		Post.setBounds(0, 45, 65, 23);
+		panel_1.add(Post);
+
+		JButton Help = new JButton("Help");
+		Help.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				helpContentsAction(e);
+			}
+		});
+		Help.setBounds(90, 45, 65, 23);
+		panel_1.add(Help);
+
+		JButton About = new JButton("About");
+		About.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				aboutIoTBPMAction(e);
+			}
+		});
+		About.setBounds(178, 45, 72, 23);
+		panel_1.add(About);
+
+		JButton Exit = new JButton("Exit");
+		Exit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				System.exit(0);
+			}
+		});
+		Exit.setBounds(267, 45, 65, 23);
+		panel_1.add(Exit);
 
 		showServerService();
 
@@ -413,8 +483,9 @@ public class EOSpyWindow {
 			@Override
 			public void run() {
 				while (serverService) {
-					// keep doing what this thread should do.
-					System.out.println("Running");
+					// keep doing thread post
+					serverIoTSendPost("");
+					calcLatLonAction(null);
 
 					try {
 						Thread.sleep(freqInterval * 1000L);
@@ -425,6 +496,32 @@ public class EOSpyWindow {
 			}
 		});
 		thread.start();
+	}
+
+	void serverIoTSendPost(String IoTEvent) {
+		String postMsg = "/?id=" + textField_ID.getText();
+
+		java.util.Date date = new Date();
+		long fixtime = date.getTime();
+		fixtime = (long) (fixtime * 0.001);
+		postMsg = postMsg + "&timestamp=" + Long.toString(fixtime);
+
+		postMsg = postMsg + "&lat=" + LatPosition;
+		postMsg = postMsg + "&lon=" + LonPosition;
+		postMsg = postMsg + "&speed=0.0&bearing=0.0&altitude=0.0&accuracy=0.0&batt=89.7";
+
+		String serverEvent = textField_ServerEvent.getText();
+		if (!serverEvent.equals(null) || !serverEvent.equals("")) {
+			postMsg = postMsg + serverEvent;
+		}
+		if (!IoTEvent.equals("")) {
+			postMsg = postMsg + IoTEvent;
+		}
+
+		String postURL = textField_URL.getText();
+
+		AgentConnect agentConnect = new AgentConnect();
+		agentConnect.sendPost(postURL, postMsg);
 	}
 
 	void freqIntervalSpinnerChanged(ChangeEvent arg0) {
@@ -440,6 +537,8 @@ public class EOSpyWindow {
 	}
 
 	void calcLatLonAction(ActionEvent arg0) {
+		DecimalFormat df = new DecimalFormat("0.000000");
+
 		String Lat_str = textField_Lat.getText();
 		double Lat_num = new Double(Lat_str).doubleValue();
 		double Lat_new = (trackLat * 0.000001);
@@ -448,7 +547,8 @@ public class EOSpyWindow {
 		} else {
 			Lat_num = Lat_num - Lat_new;
 		}
-		LatPosition = new Double(Lat_num).toString();
+		LatPosition = df.format(Lat_num);
+		// LatPosition = new Double(Lat_num).toString();
 		textField_Lat.setText(LatPosition);
 		//
 		String Lon_str = textField_Lon.getText();
@@ -459,8 +559,24 @@ public class EOSpyWindow {
 		} else {
 			Lon_num = Lon_num - Lon_new;
 		}
-		LonPosition = new Double(Lon_num).toString();
+		LonPosition = df.format(Lon_num);
+		// LonPosition = new Double(Lon_num).toString();
 		textField_Lon.setText(LonPosition);
+	}
+
+	void helpContentsAction(ActionEvent e) {
+		WebBrowser wb = new WebBrowser();
+		wb.url("http://www.eospy.com/help/");
+	}
+
+	void aboutIoTBPMAction(ActionEvent e) {
+		try {
+			AboutDialog dialog = new AboutDialog();
+			dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+			dialog.setVisible(true);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	public void show() {
