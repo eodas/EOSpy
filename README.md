@@ -14,10 +14,9 @@ EOSPY Java — Automation Alert Monitoring – A Java version of the EOSPY – E
  
 The EOSPY Java Client application allows you to transmit automation and remote monitoring system information directly to the EOSPY Server 
 from your own Java application. Monitor buildings, servers, vehicles and people from anywhere in the world and post there status and condition 
-directly to the EOSPY Server from your own application. Stay connected and informed to what’s important. 
-
-The EOSPY Executive Order Spy Java Client is a GPS tracking automation and remote monitoring system that is a complete custom package for your 
-business or office. Its wireless GPS tracking allows you to monitor your office, systems, personal property, and business from anywhere in the world. 
+directly to the EOSPY Server from your own application. Stay connected and informed to what’s important. The EOSPY Executive Order Spy Java Client
+is a GPS tracking automation and remote monitoring system that is a complete custom package for your business or office. Its wireless GPS tracking 
+allows you to monitor your office, systems, personal property, and business from anywhere in the world. 
 
 Receive information from any number of events like when an employee arrives on-site, where a vehicle is located and even receive remote ambient light intensity, 
 temperature, humidity and other information. An alarm is triggered if the SOS button is pressed or the vehicle has exceeded the speed you defined. 
@@ -25,10 +24,7 @@ The EOSPY Java ties all location and environment monitoring information on one G
 
 Monitor buildings, servers, vehicles and people from anywhere in the world and post there status and condition directly to the EOSPY Server from your own application. 
 Stay connected and informed to what’s important. The EOSPY Executive Order Spy Java Client is a GPS tracking automation and remote monitoring system that is a complete
-custom package for your business or office. Its wireless GPS tracking allows you to monitor your office, systems, personal property, and business from anywhere in the world. 
-Receive information from any number of events like when an employee arrives on-site, where a vehicle is located and even receive remote ambient light intensity, temperature, 
-humidity and other information. An alarm is triggered if the SOS button is pressed or the vehicle has exceeded the speed you defined. The EOSPY Java ties all location and 
-environment monitoring information on one GPS Map Screen.
+custom package for your business or office. Its wireless GPS tracking allows you to monitor your office, systems, personal property, and business from anywhere in the world. Receive information from any number of events like when an employee arrives on-site, where a vehicle is located and even receive remote ambient light intensity, temperature, humidity and other information. An alarm is triggered if the SOS button is pressed or the vehicle has exceeded the speed you defined. The EOSPY Java ties all location and environment monitoring information on one GPS Map Screen.
 
 Executive Order Spy — This quick guide will help you install and configure the EOSPY – Executive Order Sensor Processor System components.
 
