@@ -436,13 +436,14 @@ public class EOSpyWindow {
 		panel_1.add(Help);
 
 		JButton About = new JButton("About");
+		About.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		About.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				aboutIoTBPMAction(e);
 			}
 		});
-		About.setBounds(178, 45, 72, 23);
+		About.setBounds(178, 45, 65, 23);
 		panel_1.add(About);
 
 		JButton Exit = new JButton("Exit");

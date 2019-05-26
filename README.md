@@ -1,7 +1,7 @@
 ﻿# EOSpy AI-IoT :: Internet of Things Drools-jBPM Arduino Tron
 
 Executive Order Corp - Arduino Tron - Arduino ESP8266 MQTT Telemetry Transport Machine-to-Machine(M2M)/Internet of Things(IoT)
-Arduino Tron :: EOSPY-Executive Order Sensor Processor sYstem - Arduino Tron MQTT AI-IoT Client using EOSpy AI-IoT Drools-jBPM
+Arduino Tron :: EOSPY-Executive Order Sensor Processor System - Arduino Tron MQTT AI-IoT Client using EOSpy AI-IoT Drools-jBPM
 
 The power of the IoT (Internet of Things) device increases greatly when business process (jBPM) can use them to provide information
 about our real-world as well as execute IoT (devices) as part of our business process. The jBPM-BPMN modular allow us to define 
@@ -10,13 +10,13 @@ we make the IoT devices “smart”. Moving beyond just collecting IoT data and 
 to improving the smart decision making is the key. Executive Order EOSpy Arduino Tron AI-IoT will help these IoT devices, environments 
 and products to self-monitor, self-diagnose and eventually, self-direct.
 
-Executive Order Spy — This quick guide will help you install and configure the EOSPY – Executive Order Sensor Processor sYstem components.
+Executive Order Spy — This quick guide will help you install and configure the EOSPY – Executive Order Sensor Processor System components.
 
 Executive Order Spy has several components:
 1. The EOSPY AI-IoT, the Internet of Things Drools-jBPM Expert System.
 2. The EOSPY Server, the live map GPS tracking Windows program.
 3. The EOSPY Client, the Arduino Tron or Android application you install on an Android phone.
-4. Configure GSM/GPRS/GPS Tracking Devices to use with EOSPY – Executive Order Sensor Processor sYstem Server.
+4. Configure GSM/GPRS/GPS Tracking Devices to use with EOSPY – Executive Order Sensor Processor System Server.
 
 You can have an unlimited number and combination of EOSPY Clients and/or GPS tracking devices in use with EOSPY Server.
 (Download EOSPY Server from our website http://www.eospy.com and Download EOSPY Client from the Google Store, standard or TI-SensorTag version)
@@ -43,7 +43,7 @@ Next add this device in the EOSPY Server by entering the Device name and the Dev
 The device will appear on the EOSPY Server map the next time the EOSPY Client sends GPS position information. 
 
 (4) GPS Tracking Devices – Many companies make various off-the-shelf GPS Tracking devices. Configuring these devices will vary a little from vendors.
-First, add the new device with a unique identifier into the EOSPY – Executive Order Sensor Processor sYstem Server.
+First, add the new device with a unique identifier into the EOSPY – Executive Order Sensor Processor System Server.
 Next, configure your device to use the appropriate EOSPY Server IP address and port number. If the device fails to report, check the IP Address and Device ID.
 
 Device Unique Identifier
