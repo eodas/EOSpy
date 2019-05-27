@@ -523,6 +523,7 @@ public class EOSpyWindow {
 
 		AgentConnect agentConnect = new AgentConnect();
 		agentConnect.sendPost(postURL, postMsg);
+	 // agentConnect.sendGet(postURL, postMsg);
 	}
 
 	void freqIntervalSpinnerChanged(ChangeEvent arg0) {
