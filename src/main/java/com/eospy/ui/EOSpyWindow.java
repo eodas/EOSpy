@@ -265,7 +265,7 @@ public class EOSpyWindow {
 				trackLatChange(arg0);
 			}
 		});
-		spinner_TrackLat.setModel(new SpinnerNumberModel(trackLat, -100, 100, 1));
+		spinner_TrackLat.setModel(new SpinnerNumberModel(100, -999, 999, 5));
 		GridBagConstraints gbc_spinner_Lat = new GridBagConstraints();
 		gbc_spinner_Lat.insets = new Insets(0, 0, 5, 5);
 		gbc_spinner_Lat.gridx = 2;
@@ -299,7 +299,7 @@ public class EOSpyWindow {
 				trackLonChange(arg0);
 			}
 		});
-		spinner_TrackLon.setModel(new SpinnerNumberModel(trackLon, -100, 100, 1));
+		spinner_TrackLon.setModel(new SpinnerNumberModel(-100, -999, 999, 5));
 		GridBagConstraints gbc_spinner_Lon = new GridBagConstraints();
 		gbc_spinner_Lon.insets = new Insets(0, 0, 5, 5);
 		gbc_spinner_Lon.gridx = 2;
