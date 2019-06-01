@@ -46,8 +46,8 @@ public class EOSpyWindow {
 	private JSpinner spinner_FreqInterval;
 	private JToggleButton tglbtnServerToggleButton;
 
-	private int trackLat = 35;
-	private int trackLon = -35;
+	private int trackLat = 100;
+	private int trackLon = -100;
 	private int freqInterval = 300;
 	private String LatPosition = "38.888160";
 	private String LonPosition = "-77.019868";
