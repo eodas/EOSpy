@@ -7,6 +7,7 @@ import java.util.Map;
  * An event informing of a state change due to some operation
  */
 public class DeviceEvent {
+
 	public Map<String, String> map = new HashMap<>();
 
 	public String id;
@@ -21,8 +22,11 @@ public class DeviceEvent {
 	public boolean valid;
 	public double lat;
 	public double lon;
+	public double hdop;
+	public String cell;
+	public String wifi;
 	public double altitude; // value in meters
-	public double speed; // value in knots
+	public double speed; // value in mph
 	public double course;
 	public String address;
 	public double accuracy;
@@ -84,6 +88,14 @@ public class DeviceEvent {
 		System.out.println();
 	}
 
+	public Map<String, String> getMap() {
+		return map;
+	}
+
+	public void setMap(Map<String, String> map) {
+		this.map = map;
+	}
+	
 	public String getId() {
 		return id;
 	}
@@ -180,6 +192,30 @@ public class DeviceEvent {
 		this.lon = lon;
 	}
 
+	public double getHdop() {
+		return hdop;
+	}
+
+	public void setHdop(double hdop) {
+		this.hdop = hdop;
+	}
+
+	public String getCell() {
+		return cell;
+	}
+
+	public void setCell(String cell) {
+		this.cell = cell;
+	}
+
+	public String getWifi() {
+		return wifi;
+	}
+
+	public void setWifi(String wifi) {
+		this.wifi = wifi;
+	}
+	
 	public double getAltitude() {
 		return altitude;
 	}
@@ -416,6 +452,7 @@ public class DeviceEvent {
 		try {
 			switch (key) {
 			case "id":
+			case "deviceid":
 				setId(value);
 				break;
 			case "name":
@@ -451,6 +488,20 @@ public class DeviceEvent {
 			case "lon":
 				setLon(Double.parseDouble(value));
 				break;
+			case "hdop":
+				setHdop(Double.parseDouble(value));
+				break;
+			case "location":
+				String[] location = value.split(",");
+				setLat(Double.parseDouble(location[0]));
+				setLon(Double.parseDouble(location[1]));
+				break;
+			case "cell":
+				setCell(value);
+				break;
+			case "wifi":
+				setWifi(value);
+				break;
 			case "altitude":
 				setAltitude(Double.parseDouble(value));
 				break;
@@ -467,6 +518,7 @@ public class DeviceEvent {
 				setAccuracy(Double.parseDouble(value));
 				break;
 			case "bearing":
+			case "heading":
 				setBearing(Double.parseDouble(value));
 				break;
 			case "network":
