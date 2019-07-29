@@ -50,9 +50,9 @@ import com.eospy.ui.EOSpyWindow;
 /**
  * This is the main class for EOSpy AI-IoT Drools-jBPM Expert System
  */
-public class EOSpy_AI_IoT {
+public class EOSpy_GPS {
 
-	EOSpy_AI_IoT eospy_ai_iot;
+	EOSpy_GPS eospy_ai_iot;
 
 	private String base_path = "";
 	private String appVer = "1.01A";
@@ -60,7 +60,7 @@ public class EOSpy_AI_IoT {
 	private boolean is64bitJMV = false;
 	private boolean knowledgeDebug = false;
 
-	public EOSpy_AI_IoT(String[] args) {
+	public EOSpy_GPS(String[] args) {
 
 		this.eospy_ai_iot = this;
 		System.out.println("EOSpy AI-IoT :: Internet of Things Drools-jBPM Expert System"
@@ -135,6 +135,6 @@ public class EOSpy_AI_IoT {
 		System.out.println("EOSpy AI-IoT :: Internet of Things Drools-jBPM Expert System"
 				+ " - Arduino Tron MQTT AI-IoT Client using EOSpy AI-IoT Drools-jBPM");
 
-		new EOSpy_AI_IoT(args).init(true);
+		new EOSpy_GPS(args).init(true);
 	}
 }
