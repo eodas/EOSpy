@@ -7,8 +7,11 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.eospy.comm.SerialComm;
+import com.eospy.gps.GPSnmea;
 import com.eospy.ui.AboutDialog;
 import com.eospy.util.WebBrowser;
+import com.eospy.model.DeviceEvent;
 import com.eospy.server.AgentConnect;
 
 import java.awt.Font;
@@ -29,12 +32,16 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerListModel;
 
 /**
- * Main window implementation for the EOSpy AI-IoT example
+ * Main window implementation for the EOSpy GPS AI-IoT example
  */
 public class EOSpyUI {
 
-	private JFrame frameIoT;
+	private JFrame frameGPS;
 
+	public GPSnmea gpsnmea;
+	public DeviceEvent deviceEvent;
+	public SerialComm serialcomm;
+	
 	private JTextField textField_ID;
 	private JTextField textField_URL;
 	private JTextField textField_Lat;
@@ -42,7 +49,7 @@ public class EOSpyUI {
 	private JTextField textField_ServerEvent;
 
 	private JLabel lblLabel_ServerStatus;
-	private JSpinner spinner_TrackLat;
+	private JSpinner spinner_COMPort;
 	private JSpinner spinner_FreqInterval;
 	private JToggleButton tglbtnServerToggleButton;
 
@@ -54,18 +61,22 @@ public class EOSpyUI {
 	private boolean serverService = false;
 
 	public EOSpyUI(boolean exitOnClose) {
-		this.frameIoT = buildFrame(exitOnClose);
+		this.frameGPS = buildFrame(exitOnClose);
+		
+		gpsnmea = new GPSnmea();
+		deviceEvent = new DeviceEvent();
+		serialcomm = new SerialComm();
 	}
 
 	// Initialize the contents of the frame
 	private JFrame buildFrame(boolean exitOnClose) {
-		frameIoT = new JFrame();
+		frameGPS = new JFrame();
 
-		frameIoT.setTitle("EOSpy AI-IoT :: Internet of Things Arduino Tron");
-		frameIoT.setBounds(100, 100, 450, 585);
-		frameIoT.setDefaultCloseOperation(exitOnClose ? JFrame.EXIT_ON_CLOSE : WindowConstants.DISPOSE_ON_CLOSE);
+		frameGPS.setTitle("EOSpy GPS AI-IoT :: Internet of Things Arduino Tron");
+		frameGPS.setBounds(100, 100, 450, 585);
+		frameGPS.setDefaultCloseOperation(exitOnClose ? JFrame.EXIT_ON_CLOSE : WindowConstants.DISPOSE_ON_CLOSE);
 
-		frameIoT.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frameGPS.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 5, 234, -69, 0, 0 };
 		gridBagLayout.rowHeights = new int[] { 0, 17, 14, 2, 14, 20, 2, 14, 20, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -73,7 +84,7 @@ public class EOSpyUI {
 		gridBagLayout.columnWeights = new double[] { 1.0, 1.0, 0.0, 1.0, Double.MIN_VALUE };
 		gridBagLayout.rowWeights = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
 				0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
-		frameIoT.getContentPane().setLayout(gridBagLayout);
+		frameGPS.getContentPane().setLayout(gridBagLayout);
 
 		JLabel lblNewLabel_1 = new JLabel("Service status");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -83,7 +94,7 @@ public class EOSpyUI {
 		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_1.gridx = 1;
 		gbc_lblNewLabel_1.gridy = 1;
-		frameIoT.getContentPane().add(lblNewLabel_1, gbc_lblNewLabel_1);
+		frameGPS.getContentPane().add(lblNewLabel_1, gbc_lblNewLabel_1);
 
 		lblLabel_ServerStatus = new JLabel("Service stopped");
 		GridBagConstraints gbc_lblLabel_ServerStatus = new GridBagConstraints();
@@ -92,7 +103,7 @@ public class EOSpyUI {
 		gbc_lblLabel_ServerStatus.insets = new Insets(0, 0, 5, 5);
 		gbc_lblLabel_ServerStatus.gridx = 1;
 		gbc_lblLabel_ServerStatus.gridy = 2;
-		frameIoT.getContentPane().add(lblLabel_ServerStatus, gbc_lblLabel_ServerStatus);
+		frameGPS.getContentPane().add(lblLabel_ServerStatus, gbc_lblLabel_ServerStatus);
 
 		tglbtnServerToggleButton = new JToggleButton("Off");
 		tglbtnServerToggleButton.addActionListener(new ActionListener() {
@@ -106,7 +117,7 @@ public class EOSpyUI {
 		gbc_tglbtnServerToggleButton.insets = new Insets(0, 0, 5, 5);
 		gbc_tglbtnServerToggleButton.gridx = 2;
 		gbc_tglbtnServerToggleButton.gridy = 2;
-		frameIoT.getContentPane().add(tglbtnServerToggleButton, gbc_tglbtnServerToggleButton);
+		frameGPS.getContentPane().add(tglbtnServerToggleButton, gbc_tglbtnServerToggleButton);
 
 		JSeparator separator_1 = new JSeparator();
 		GridBagConstraints gbc_separator_1 = new GridBagConstraints();
@@ -116,7 +127,7 @@ public class EOSpyUI {
 		gbc_separator_1.gridwidth = 2;
 		gbc_separator_1.gridx = 1;
 		gbc_separator_1.gridy = 3;
-		frameIoT.getContentPane().add(separator_1, gbc_separator_1);
+		frameGPS.getContentPane().add(separator_1, gbc_separator_1);
 
 		JLabel lblNewLabel_3 = new JLabel("Device identifier");
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -126,7 +137,7 @@ public class EOSpyUI {
 		gbc_lblNewLabel_3.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_3.gridx = 1;
 		gbc_lblNewLabel_3.gridy = 4;
-		frameIoT.getContentPane().add(lblNewLabel_3, gbc_lblNewLabel_3);
+		frameGPS.getContentPane().add(lblNewLabel_3, gbc_lblNewLabel_3);
 
 		textField_ID = new JTextField();
 		textField_ID.setText("100111");
@@ -135,7 +146,7 @@ public class EOSpyUI {
 		gbc_textField_ID.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_ID.gridx = 1;
 		gbc_textField_ID.gridy = 5;
-		frameIoT.getContentPane().add(textField_ID, gbc_textField_ID);
+		frameGPS.getContentPane().add(textField_ID, gbc_textField_ID);
 		textField_ID.setColumns(10);
 
 		JSeparator separator_2 = new JSeparator();
@@ -146,7 +157,7 @@ public class EOSpyUI {
 		gbc_separator_2.gridwidth = 2;
 		gbc_separator_2.gridx = 1;
 		gbc_separator_2.gridy = 6;
-		frameIoT.getContentPane().add(separator_2, gbc_separator_2);
+		frameGPS.getContentPane().add(separator_2, gbc_separator_2);
 
 		JLabel lblServerUrl = new JLabel("Server URL");
 		lblServerUrl.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -156,7 +167,7 @@ public class EOSpyUI {
 		gbc_lblServerUrl.insets = new Insets(0, 0, 5, 5);
 		gbc_lblServerUrl.gridx = 1;
 		gbc_lblServerUrl.gridy = 7;
-		frameIoT.getContentPane().add(lblServerUrl, gbc_lblServerUrl);
+		frameGPS.getContentPane().add(lblServerUrl, gbc_lblServerUrl);
 		
 				JLabel lblNewLabel_2 = new JLabel("COM Port");
 				GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
@@ -165,7 +176,7 @@ public class EOSpyUI {
 				gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 5);
 				gbc_lblNewLabel_2.gridx = 2;
 				gbc_lblNewLabel_2.gridy = 7;
-				frameIoT.getContentPane().add(lblNewLabel_2, gbc_lblNewLabel_2);
+				frameGPS.getContentPane().add(lblNewLabel_2, gbc_lblNewLabel_2);
 
 		textField_URL = new JTextField();
 		textField_URL.setText("http://10.0.0.2:5055");
@@ -175,21 +186,23 @@ public class EOSpyUI {
 		gbc_textField_URL.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_URL.gridx = 1;
 		gbc_textField_URL.gridy = 8;
-		frameIoT.getContentPane().add(textField_URL, gbc_textField_URL);
+		frameGPS.getContentPane().add(textField_URL, gbc_textField_URL);
 		
-				spinner_TrackLat = new JSpinner();
-				spinner_TrackLat.addChangeListener(new ChangeListener() {
+				spinner_COMPort = new JSpinner();
+				spinner_COMPort.addChangeListener(new ChangeListener() {
 					@Override
 					public void stateChanged(ChangeEvent arg0) {
 // update ->				trackLatChange(arg0);
+						serialcomm.CommListPorts(); // List available comms ports on system
+
 					}
 				});
-				spinner_TrackLat.setModel(new SpinnerListModel(new String[] {"COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9"}));
-				GridBagConstraints gbc_spinner_Lat = new GridBagConstraints();
-				gbc_spinner_Lat.insets = new Insets(0, 0, 5, 5);
-				gbc_spinner_Lat.gridx = 2;
-				gbc_spinner_Lat.gridy = 8;
-				frameIoT.getContentPane().add(spinner_TrackLat, gbc_spinner_Lat);
+				spinner_COMPort.setModel(new SpinnerListModel(new String[] {"COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9"}));
+				GridBagConstraints gbc_spinner_COMPort = new GridBagConstraints();
+				gbc_spinner_COMPort.insets = new Insets(0, 0, 5, 5);
+				gbc_spinner_COMPort.gridx = 2;
+				gbc_spinner_COMPort.gridy = 8;
+				frameGPS.getContentPane().add(spinner_COMPort, gbc_spinner_COMPort);
 
 		JLabel lblNewLabel = new JLabel("Tracking server URL");
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
@@ -198,7 +211,7 @@ public class EOSpyUI {
 		gbc_lblNewLabel.anchor = GridBagConstraints.NORTH;
 		gbc_lblNewLabel.gridx = 1;
 		gbc_lblNewLabel.gridy = 9;
-		frameIoT.getContentPane().add(lblNewLabel, gbc_lblNewLabel);
+		frameGPS.getContentPane().add(lblNewLabel, gbc_lblNewLabel);
 
 		JSeparator separator_3 = new JSeparator();
 		GridBagConstraints gbc_separator_3 = new GridBagConstraints();
@@ -207,7 +220,7 @@ public class EOSpyUI {
 		gbc_separator_3.insets = new Insets(0, 0, 5, 5);
 		gbc_separator_3.gridx = 1;
 		gbc_separator_3.gridy = 10;
-		frameIoT.getContentPane().add(separator_3, gbc_separator_3);
+		frameGPS.getContentPane().add(separator_3, gbc_separator_3);
 
 		JLabel lblNewLabel_4 = new JLabel("Frequence");
 		lblNewLabel_4.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -217,7 +230,7 @@ public class EOSpyUI {
 		gbc_lblNewLabel_4.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_4.gridx = 1;
 		gbc_lblNewLabel_4.gridy = 11;
-		frameIoT.getContentPane().add(lblNewLabel_4, gbc_lblNewLabel_4);
+		frameGPS.getContentPane().add(lblNewLabel_4, gbc_lblNewLabel_4);
 
 		spinner_FreqInterval = new JSpinner();
 		spinner_FreqInterval.addChangeListener(new ChangeListener() {
@@ -232,7 +245,7 @@ public class EOSpyUI {
 		gbc_spinner_FreqInterval.insets = new Insets(0, 0, 5, 5);
 		gbc_spinner_FreqInterval.gridx = 1;
 		gbc_spinner_FreqInterval.gridy = 12;
-		frameIoT.getContentPane().add(spinner_FreqInterval, gbc_spinner_FreqInterval);
+		frameGPS.getContentPane().add(spinner_FreqInterval, gbc_spinner_FreqInterval);
 
 		JLabel lblNewLabel_5 = new JLabel("Reporting interval in seconds");
 		GridBagConstraints gbc_lblNewLabel_5 = new GridBagConstraints();
@@ -241,7 +254,7 @@ public class EOSpyUI {
 		gbc_lblNewLabel_5.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_5.gridx = 1;
 		gbc_lblNewLabel_5.gridy = 13;
-		frameIoT.getContentPane().add(lblNewLabel_5, gbc_lblNewLabel_5);
+		frameGPS.getContentPane().add(lblNewLabel_5, gbc_lblNewLabel_5);
 
 		JSeparator separator_4 = new JSeparator();
 		GridBagConstraints gbc_separator_4 = new GridBagConstraints();
@@ -250,7 +263,7 @@ public class EOSpyUI {
 		gbc_separator_4.insets = new Insets(0, 0, 5, 5);
 		gbc_separator_4.gridx = 1;
 		gbc_separator_4.gridy = 14;
-		frameIoT.getContentPane().add(separator_4, gbc_separator_4);
+		frameGPS.getContentPane().add(separator_4, gbc_separator_4);
 
 		JLabel lblNewLabel_6 = new JLabel("Lat");
 		lblNewLabel_6.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -260,7 +273,7 @@ public class EOSpyUI {
 		gbc_lblNewLabel_6.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_6.gridx = 1;
 		gbc_lblNewLabel_6.gridy = 15;
-		frameIoT.getContentPane().add(lblNewLabel_6, gbc_lblNewLabel_6);
+		frameGPS.getContentPane().add(lblNewLabel_6, gbc_lblNewLabel_6);
 
 		textField_Lat = new JTextField();
 		textField_Lat.setText(LatStr);
@@ -270,7 +283,7 @@ public class EOSpyUI {
 		gbc_textField_Lat.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_Lat.gridx = 1;
 		gbc_textField_Lat.gridy = 16;
-		frameIoT.getContentPane().add(textField_Lat, gbc_textField_Lat);
+		frameGPS.getContentPane().add(textField_Lat, gbc_textField_Lat);
 
 		JLabel lblLon = new JLabel("Lon");
 		lblLon.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -280,7 +293,7 @@ public class EOSpyUI {
 		gbc_lblLon.insets = new Insets(0, 0, 5, 5);
 		gbc_lblLon.gridx = 1;
 		gbc_lblLon.gridy = 17;
-		frameIoT.getContentPane().add(lblLon, gbc_lblLon);
+		frameGPS.getContentPane().add(lblLon, gbc_lblLon);
 
 		textField_Lon = new JTextField();
 		textField_Lon.setText(LonStr);
@@ -290,7 +303,7 @@ public class EOSpyUI {
 		gbc_textField_Lon.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_Lon.gridx = 1;
 		gbc_textField_Lon.gridy = 18;
-		frameIoT.getContentPane().add(textField_Lon, gbc_textField_Lon);
+		frameGPS.getContentPane().add(textField_Lon, gbc_textField_Lon);
 
 		JLabel lblNewLabel_7 = new JLabel("GPS Lat / Lon position track values");
 		GridBagConstraints gbc_lblNewLabel_7 = new GridBagConstraints();
@@ -299,7 +312,7 @@ public class EOSpyUI {
 		gbc_lblNewLabel_7.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_7.gridx = 1;
 		gbc_lblNewLabel_7.gridy = 19;
-		frameIoT.getContentPane().add(lblNewLabel_7, gbc_lblNewLabel_7);
+		frameGPS.getContentPane().add(lblNewLabel_7, gbc_lblNewLabel_7);
 
 		JSeparator separator = new JSeparator();
 		GridBagConstraints gbc_separator = new GridBagConstraints();
@@ -308,7 +321,7 @@ public class EOSpyUI {
 		gbc_separator.insets = new Insets(0, 0, 5, 5);
 		gbc_separator.gridx = 1;
 		gbc_separator.gridy = 20;
-		frameIoT.getContentPane().add(separator, gbc_separator);
+		frameGPS.getContentPane().add(separator, gbc_separator);
 
 		JLabel lblNewLabel_8 = new JLabel("Server event model data fields");
 		lblNewLabel_8.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -318,7 +331,7 @@ public class EOSpyUI {
 		gbc_lblNewLabel_8.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_8.gridx = 1;
 		gbc_lblNewLabel_8.gridy = 21;
-		frameIoT.getContentPane().add(lblNewLabel_8, gbc_lblNewLabel_8);
+		frameGPS.getContentPane().add(lblNewLabel_8, gbc_lblNewLabel_8);
 
 		textField_ServerEvent = new JTextField();
 		GridBagConstraints gbc_textField_4 = new GridBagConstraints();
@@ -328,7 +341,7 @@ public class EOSpyUI {
 		gbc_textField_4.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_4.gridx = 1;
 		gbc_textField_4.gridy = 22;
-		frameIoT.getContentPane().add(textField_ServerEvent, gbc_textField_4);
+		frameGPS.getContentPane().add(textField_ServerEvent, gbc_textField_4);
 		textField_ServerEvent.setColumns(10);
 
 		JSeparator separator_5 = new JSeparator();
@@ -338,7 +351,7 @@ public class EOSpyUI {
 		gbc_separator_5.insets = new Insets(0, 0, 5, 5);
 		gbc_separator_5.gridx = 1;
 		gbc_separator_5.gridy = 23;
-		frameIoT.getContentPane().add(separator_5, gbc_separator_5);
+		frameGPS.getContentPane().add(separator_5, gbc_separator_5);
 
 		JLabel lblNewLabel_9 = new JLabel("Key press server alerts");
 		lblNewLabel_9.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -348,7 +361,7 @@ public class EOSpyUI {
 		gbc_lblNewLabel_9.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_9.gridx = 1;
 		gbc_lblNewLabel_9.gridy = 24;
-		frameIoT.getContentPane().add(lblNewLabel_9, gbc_lblNewLabel_9);
+		frameGPS.getContentPane().add(lblNewLabel_9, gbc_lblNewLabel_9);
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setLayout(null);
@@ -359,7 +372,7 @@ public class EOSpyUI {
 		gbc_panel_1.fill = GridBagConstraints.BOTH;
 		gbc_panel_1.gridx = 1;
 		gbc_panel_1.gridy = 25;
-		frameIoT.getContentPane().add(panel_1, gbc_panel_1);
+		frameGPS.getContentPane().add(panel_1, gbc_panel_1);
 
 		JButton btnKey1 = new JButton("Key1");
 		btnKey1.addActionListener(new ActionListener() {
@@ -444,7 +457,7 @@ public class EOSpyUI {
 
 		showServerService();
 
-		return frameIoT;
+		return frameGPS;
 	}
 
 	void serverServiceAction(ActionEvent arg0) {
@@ -568,7 +581,7 @@ public class EOSpyUI {
 	}
 
 	public void show() {
-		this.frameIoT.setVisible(true);
+		this.frameGPS.setVisible(true);
 	}
 
 }

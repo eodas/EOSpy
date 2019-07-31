@@ -16,6 +16,19 @@ import java.util.Map;
 
 public class GPSnmea {
 
+//	GPS Quality Indicators
+//	Indicator - Description
+//  
+//	0 -	Fix not available or invalid
+//	1 -	Single point - Converging PPP (TerraStar-L)
+//	2 -	Pseudorange differential - Converged PPP (TerraStar-L) - Converging PPP (TerraStar-C, TerraStar-C PRO, TerraStar-X)
+//	4 -	RTK fixed ambiguity solution
+//	5 -	RTK doubleing ambiguity solution - Converged PPP (TerraStar-C, TerraStar-C PRO, TerraStar-X)
+//	6 -	Dead reckoning mode
+//	7 -	Manual input mode (fixed position)
+//	8 -	Simulator mode
+//	9 -	WAAS (SBAS)1	
+
 	interface SentenceParser {
 		public boolean parse(String[] tokens, GPSPosition position);
 	}
@@ -223,19 +236,6 @@ public class GPSnmea {
 			return true;
 		}
 	}
-
-//	GPS Quality Indicators
-//	Indicator - Description
-//  
-//	0 -	Fix not available or invalid
-//	1 -	Single point - Converging PPP (TerraStar-L)
-//	2 -	Pseudorange differential - Converged PPP (TerraStar-L) - Converging PPP (TerraStar-C, TerraStar-C PRO, TerraStar-X)
-//	4 -	RTK fixed ambiguity solution
-//	5 -	RTK doubleing ambiguity solution - Converged PPP (TerraStar-C, TerraStar-C PRO, TerraStar-X)
-//	6 -	Dead reckoning mode
-//	7 -	Manual input mode (fixed position)
-//	8 -	Simulator mode
-//	9 -	WAAS (SBAS)1	
 
 	public class GPSPosition {
 

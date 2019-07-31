@@ -1,4 +1,4 @@
-package comm;
+package com.eospy.comm;
 
 /**
  * This version of the TwoWaySerialComm example makes use of the
@@ -11,8 +11,8 @@ import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
 
-import gps.GPSnmea;
-import model.DeviceEvent;
+//import gps.GPSnmea;
+//import model.DeviceEvent;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,8 +23,8 @@ public class SerialComm {
 	public String portName = "COM6";
 
 	public static SerialComm serialcomm;
-	public GPSnmea gpsnmea;
-	public DeviceEvent deviceEvent;
+//	public GPSnmea gpsnmea;
+//	public DeviceEvent deviceEvent;
 	
 	public SerialComm() {
 		super();
@@ -34,8 +34,8 @@ public class SerialComm {
 	public void StartComm() {
 		CommListPorts(); // List available comms ports on system
 
-		gpsnmea = new GPSnmea();
-		deviceEvent = new DeviceEvent();
+//		gpsnmea = new GPSnmea();
+//		deviceEvent = new DeviceEvent();
 
 		try {
 			CommConnect(portName);
@@ -96,7 +96,7 @@ public class SerialComm {
 	}
 
 	public void UpdateDevice(String line) {
-		gpsnmea.parse(line); // GPS nmea.parse line
+/*		gpsnmea.parse(line); // GPS nmea.parse line
 		
 		// public double utc = 0; // UTC time status of position (hours/minutes/seconds/decimal seconds)
 		deviceEvent.setLat(gpsnmea.position.lat); // lat Latitude
@@ -120,7 +120,7 @@ public class SerialComm {
 		// public String message; // $GPTXT - message transfers various information on the receiver
 		deviceEvent.setValid(gpsnmea.position.fixed); // valid - position fix as boolean refer to GPS quality table 	
 		
-		System.out.println(gpsnmea.position);
+		System.out.println(gpsnmea.position); */
 	}
 	
 	/**

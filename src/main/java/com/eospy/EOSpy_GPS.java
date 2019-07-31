@@ -13,8 +13,8 @@ import com.eospy.ui.EOSpyUI;
 /**
  * Executive Order Corporation we make Things Smart
  *
- * EOSpy AI-IoT :: Internet of Things Drools-jBPM Expert System using EOSpy Arduino Tron AI-IoT Processing
- * Arduino Tron :: EOSPY-Executive Order Sensor Processor System - Arduino Tron MQTT AI-IoT Client using EOSpy AI-IoT Drools-jBPM
+ * EOSpy GPS AI-IoT :: Internet of Things Drools-jBPM Expert System using EOSpy Arduino Tron AI-IoT Processing
+ * Arduino Tron :: EOSPY-Executive Order Sensor Processor System - Arduino Tron MQTT AI-IoT Client using EOSpy GPS AI-IoT Drools-jBPM
  * Executive Order Corporation - Arduino Tron - Arduino ESP8266 MQTT Telemetry Transport Machine-to-Machine(M2M)/Internet of Things(IoT)
  *
  * Executive Order Corporation
@@ -48,7 +48,7 @@ import com.eospy.ui.EOSpyUI;
  */
 
 /**
- * This is the main class for EOSpy AI-IoT Drools-jBPM Expert System
+ * This is the main class for EOSpy GPS AI-IoT Drools-jBPM Expert System
  */
 public class EOSpy_GPS {
 
@@ -63,7 +63,7 @@ public class EOSpy_GPS {
 	public EOSpy_GPS(String[] args) {
 
 		this.eospy_ai_iot = this;
-		System.out.println("EOSpy AI-IoT :: Internet of Things Drools-jBPM Expert System"
+		System.out.println("EOSpy GPS AI-IoT :: Internet of Things Drools-jBPM Expert System"
 				+ " using EOSpy Arduino Tron AI-IoT Processing -version: " + appVer + " (" + buildDate + ")");
 
 		getIPAddress();
@@ -132,8 +132,8 @@ public class EOSpy_GPS {
 	}
 
 	public static void main(String[] args) {
-		System.out.println("EOSpy AI-IoT :: Internet of Things Drools-jBPM Expert System"
-				+ " - Arduino Tron MQTT AI-IoT Client using EOSpy AI-IoT Drools-jBPM");
+		System.out.println("EOSpy GPS AI-IoT :: Internet of Things Drools-jBPM Expert System"
+				+ " - Arduino Tron MQTT AI-IoT Client using EOSpy GPS AI-IoT Drools-jBPM");
 
 		new EOSpy_GPS(args).init(true);
 	}
