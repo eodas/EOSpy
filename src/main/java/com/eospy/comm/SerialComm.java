@@ -22,13 +22,13 @@ public class SerialComm {
 
 	public String portName = "COM6";
 
-	public static SerialComm serialcomm;
+//	public static SerialComm serialcomm;
 //	public GPSnmea gpsnmea;
 //	public DeviceEvent deviceEvent;
 	
 	public SerialComm() {
 		super();
-		serialcomm = this;
+//		serialcomm = this;
 	}
 
 	public void StartComm() {
@@ -45,12 +45,17 @@ public class SerialComm {
 		}
 	}
 
-	public void CommListPorts() {
+	public String[] CommListPorts() {
+		int count = 0;
+		String[] portList = new String[20];
+
 		java.util.Enumeration<CommPortIdentifier> portEnum = CommPortIdentifier.getPortIdentifiers();
 		while (portEnum.hasMoreElements()) {
 			CommPortIdentifier portIdentifier = portEnum.nextElement();
+			portList[count] = portIdentifier.getName();
 			System.out.println(portIdentifier.getName() + " - " + getPortTypeName(portIdentifier.getPortType()));
 		}
+		return portList;
 	}
 
 	public String getPortTypeName(int portType) {
@@ -147,8 +152,8 @@ public class SerialComm {
 					}
 					buffer[len++] = (byte) data;
 				}
-				serialcomm.UpdateDevice(new String(buffer, 0, len));
-				// System.out.print(new String(buffer, 0, len));
+				// serialcomm.UpdateDevice(new String(buffer, 0, len));
+				 System.out.print(new String(buffer, 0, len));
 			} catch (IOException e) {
 				e.printStackTrace();
 				System.exit(-1);

@@ -38,10 +38,10 @@ public class EOSpyUI {
 
 	private JFrame frameGPS;
 
-	public GPSnmea gpsnmea;
-	public DeviceEvent deviceEvent;
-	public SerialComm serialcomm;
-	
+	private GPSnmea gpsnmea;
+	private DeviceEvent deviceEvent;
+	private SerialComm serialcomm;
+
 	private JTextField textField_ID;
 	private JTextField textField_URL;
 	private JTextField textField_Lat;
@@ -53,9 +53,8 @@ public class EOSpyUI {
 	private JSpinner spinner_FreqInterval;
 	private JToggleButton tglbtnServerToggleButton;
 
-//	private int trackLat = 100;
-//	private int trackLon = -100;
 	private int freqInterval = 300;
+	private String portName = "COM6";
 	private String LatStr = "38.888160";
 	private String LonStr = "-77.019868";
 	private boolean serverService = false;
@@ -192,7 +191,7 @@ public class EOSpyUI {
 				spinner_COMPort.addChangeListener(new ChangeListener() {
 					@Override
 					public void stateChanged(ChangeEvent arg0) {
-// update ->				trackLatChange(arg0);
+						ComPortChange(arg0);
 						serialcomm.CommListPorts(); // List available comms ports on system
 
 					}
@@ -378,7 +377,7 @@ public class EOSpyUI {
 		btnKey1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				serverIoTSendPost("&keypress=1.0");
+				serverSendPost("&keypress=1.0");
 			}
 		});
 		btnKey1.setBounds(0, 11, 65, 23);
@@ -388,7 +387,7 @@ public class EOSpyUI {
 		btnKey2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				serverIoTSendPost("&keypress=2.0");
+				serverSendPost("&keypress=2.0");
 			}
 		});
 		btnKey2.setBounds(90, 11, 65, 23);
@@ -398,7 +397,7 @@ public class EOSpyUI {
 		btnReed.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				serverIoTSendPost("&keypress=4.0");
+				serverSendPost("&keypress=4.0");
 			}
 		});
 		btnReed.setBounds(178, 11, 65, 23);
@@ -408,7 +407,7 @@ public class EOSpyUI {
 		btnProx.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				serverIoTSendPost("&keypress=8.0");
+				serverSendPost("&keypress=8.0");
 			}
 		});
 		btnProx.setBounds(267, 11, 65, 23);
@@ -418,7 +417,7 @@ public class EOSpyUI {
 		Post.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				serverIoTSendPost("");
+				serverSendPost("");
 			}
 		});
 		Post.setBounds(0, 45, 65, 23);
@@ -478,15 +477,30 @@ public class EOSpyUI {
 		}
 	}
 
+	void ComPortChange(ChangeEvent arg0) {
+		String portName = (String) spinner_COMPort.getValue();
+	}
+
+	void freqIntervalSpinnerChanged(ChangeEvent arg0) {
+		freqInterval = (Integer) spinner_FreqInterval.getValue();
+	}
+
 	void runServer() {
 		Thread thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				while (serverService) {
 					// keep doing thread post
-					serverIoTSendPost("");
-					calcLatLonAction(null);
+//					serverIoTSendPost("");
+//					calcLatLonAction(null);
 
+					try {
+						serialcomm.CommConnect(portName);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
 					try {
 						Thread.sleep(freqInterval * 1000L);
 					} catch (InterruptedException e) {
@@ -496,9 +510,8 @@ public class EOSpyUI {
 			}
 		});
 		thread.start();
-	}
-
-	void serverIoTSendPost(String IoTEvent) {
+	}	
+	void serverSendPost(String IoTEvent) {
 		String postMsg = "/?id=" + textField_ID.getText();
 
 		java.util.Date date = new Date();
@@ -524,19 +537,8 @@ public class EOSpyUI {
 		agentConnect.sendPost(postURL, postMsg);
 	 // agentConnect.sendGet(postURL, postMsg);
 	}
-
-	void freqIntervalSpinnerChanged(ChangeEvent arg0) {
-		freqInterval = (Integer) spinner_FreqInterval.getValue();
-	}
-
-/*	void trackLatChange(ChangeEvent arg0) {
-		trackLat = (Integer) spinner_TrackLat.getValue();
-	}
-
-	void trackLonChange(ChangeEvent arg0) {
-		trackLon = (Integer) spinner_TrackLon.getValue();
- 	} */
-
+	
+/*
 	void calcLatLonAction(ActionEvent arg0) {
 		DecimalFormat df = new DecimalFormat("0.000000");
 
@@ -550,10 +552,10 @@ public class EOSpyUI {
 		}
 		LatPosition = df.format(Lat_num); */
 		// LatPosition = new Double(Lat_num).toString();
-		textField_Lat.setText(LatStr);
-		//
-		String Lon_str = textField_Lon.getText();
-		double Lon_num = new Double(Lon_str).doubleValue();
+//		textField_Lat.setText(LatStr);
+		///
+//		String Lon_str = textField_Lon.getText();
+//		double Lon_num = new Double(Lon_str).doubleValue();
 /*		double Lon_new = (trackLon * 0.000001);
 		if (trackLon > 0) {
 			Lon_num = Lon_num + Lon_new;
@@ -562,10 +564,10 @@ public class EOSpyUI {
 		}
 		LonPosition = df.format(Lon_num); */
 		// LonPosition = new Double(Lon_num).toString();
-		textField_Lon.setText(LonStr);
-	}
-
-	void helpContentsAction(ActionEvent e) {
+//		textField_Lon.setText(LonStr);
+//	}
+	
+   void helpContentsAction(ActionEvent e) {
 		WebBrowser wb = new WebBrowser();
 		wb.url("http://www.eospy.com/help/");
 	}

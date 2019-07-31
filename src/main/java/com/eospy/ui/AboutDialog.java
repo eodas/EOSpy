@@ -33,7 +33,7 @@ public class AboutDialog extends JDialog {
 	private void initAboutBox() throws Exception {
 		ImageIcon aboutIcon = new ImageIcon("images" + File.separator + "EOSpyLogo.png");
 		setBounds(100, 100, 520, 300);
-		setTitle("EOSpy AI-IoT :: Internet of Things Drools-jBPM Arduino Tron Expert System");
+		setTitle("EOSpy GPS AI-IoT :: Internet of Things Drools-jBPM Arduino Tron Expert System");
 
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setLayout(new FlowLayout());
@@ -63,7 +63,7 @@ public class AboutDialog extends JDialog {
 		{
 			JTextPane txtEOSpySoftware = new JTextPane();
 			txtEOSpySoftware.setText(
-					"\r\nEOSpy AI-IoT :: Internet of Things Drools-jBPM Expert System using EOSpy Arduino Tron AI-IoT Processing.\r\n\r\n"
+					"\r\nEOSpy GPS AI-IoT :: Internet of Things Drools-jBPM Expert System using EOSpy Arduino Tron AI-IoT Processing.\r\n\r\n"
 							+ "This Software is Provided “As Is” And Any Expressed or Implied Warranties, Including, But Not Limited to, The Implied Warranties of "
 							+ "Merchantability And Fitness For A Particular Purpose Are Disclaimed.\r\n\r\nVisit the www.EOSpy.com website for additional information "
 							+ "and documentation on Drools-jBPM Expert Systems, Arduino Tron and other Arduino projects, android projects and AI-IoT Processing.\r\n\r\n"
