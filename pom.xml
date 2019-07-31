@@ -37,6 +37,13 @@
 
 	<dependencies>
 
+		<!-- https://mvnrepository.com/artifact/name.prokop.bart.rxtx/rxtx -->
+		<dependency>
+			<groupId>name.prokop.bart.rxtx</groupId>
+			<artifactId>rxtx</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
