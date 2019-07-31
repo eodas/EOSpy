@@ -14,27 +14,7 @@ import java.util.Map;
  * Corporation, All Rights Reserved
  */
 
-public class GPS_NMEA {
-
-	static double GPS_MPH_PER_KNOT = 1.15077945;
-	static double GPS_MPS_PER_KNOT = 0.51444444;
-	static double GPS_KMPH_PER_KNOT = 1.852;
-	static double GPS_MILES_PER_METER = 0.00062137112;
-	static double GPS_KM_PER_METER = 0.001;
-	static double GPS_FEET_PER_METER = 3.2808399;
-
-//	GPS Quality Indicators
-//	Indicator - Description
-//
-//	0 -	Fix not available or invalid
-//	1 -	Single point - Converging PPP (TerraStar-L)
-//	2 -	Pseudorange differential - Converged PPP (TerraStar-L) - Converging PPP (TerraStar-C, TerraStar-C PRO, TerraStar-X)
-//	4 -	RTK fixed ambiguity solution
-//	5 -	RTK doubleing ambiguity solution - Converged PPP (TerraStar-C, TerraStar-C PRO, TerraStar-X)
-//	6 -	Dead reckoning mode
-//	7 -	Manual input mode (fixed position)
-//	8 -	Simulator mode
-//	9 -	WAAS (SBAS)1	
+public class GPSnmea {
 
 	interface SentenceParser {
 		public boolean parse(String[] tokens, GPSPosition position);
@@ -93,7 +73,7 @@ public class GPS_NMEA {
 			} catch (Exception e) {
 			}
 			try {
-				position.sats = Integer.parseInt(tokens[7]);
+				position.satellites = Integer.parseInt(tokens[7]);
 			} catch (Exception e) {
 			}
 			try {
@@ -102,11 +82,11 @@ public class GPS_NMEA {
 			}
 			try {
 				position.altitude = Double.parseDouble(tokens[9]);
-				// 10 - a-units - Units of antenna altitude (M = metres)
 			} catch (Exception e) {
 			}
+			// 10 - a-units - Units of antenna altitude (M = metres)
 			try {
-				position.undulation = Double.parseDouble(tokens[11]);
+				position.geoid = Double.parseDouble(tokens[11]);
 			} catch (Exception e) {
 			}
 			// 12 - u-units - Units of undulation (M = metres)
@@ -114,33 +94,24 @@ public class GPS_NMEA {
 		}
 	}
 
-	class GPRMC implements SentenceParser {
-		// GPRMC - GPS specific information
+	class GPGLL implements SentenceParser {
+		// GPGLL - Geographic position
 		@Override
 		public boolean parse(String[] tokens, GPSPosition position) {
 			try {
-				position.utc = Double.parseDouble(tokens[1]);
-			} catch (Exception e) {
-			}
-			// 2 - pos status Position status (A = data valid, V = data invalid)
-			try {
-				position.lat = Latitude2Decimal(tokens[3], tokens[4]);
+				position.lat = Latitude2Decimal(tokens[1], tokens[2]);
 			} catch (Exception e) {
 			}
 			try {
-				position.lon = Longitude2Decimal(tokens[5], tokens[6]);
+				position.lon = Longitude2Decimal(tokens[3], tokens[4]);
 			} catch (Exception e) {
 			}
 			try {
-				position.speed = Double.parseDouble(tokens[7]);
+				position.utc = Double.parseDouble(tokens[5]);
 			} catch (Exception e) {
 			}
 			try {
-				position.course = Double.parseDouble(tokens[8]);
-			} catch (Exception e) {
-			}
-			try {
-				position.gdate = Double.parseDouble(tokens[9]);
+				position.valid = tokens[6];
 			} catch (Exception e) {
 			}
 			return true;
@@ -167,35 +138,47 @@ public class GPS_NMEA {
 		// GPGSV - GPS satellites in view
 		@Override
 		public boolean parse(String[] tokens, GPSPosition position) {
-			// 1 - $GPGSV - Log header. See Messages for more information.
-			// 2 - # msgs - Total number of messages (1-9)
-			// 3 - msg # - Message number (1-9)
-			// 4 - # sats - Total number of satellites in view.
-			// 5 - prn - Satellite PRN number - GPS = SBAS = GLO
-			// 6 - elev - Elevation, degrees, 90 maximum
-			// 7 - azimuth - Azimuth, degrees True, 000 to 359
+			// 0 - $GPGSV - Log header. See Messages for more information.
+			// 1 - # msgs - Total number of messages (1-9)
+			// 2 - msg # - Message number (1-9)
+			// 3 - # sats - Total number of satellites in view.
+			// 4 - prn - Satellite PRN number - GPS = SBAS = GLO
+			// 5 - elev - Elevation, degrees, 90 maximum
+			// 6 - azimuth - Azimuth, degrees True, 000 to 359
 			return true;
 		}
 	}
 
-	class GPGLL implements SentenceParser {
-		// GPGLL - Geographic position
+	class GPRMC implements SentenceParser {
+		// GPRMC - GPS specific information
 		@Override
 		public boolean parse(String[] tokens, GPSPosition position) {
 			try {
-				position.lat = Latitude2Decimal(tokens[1], tokens[2]);
+				position.utc = Double.parseDouble(tokens[1]);
 			} catch (Exception e) {
 			}
 			try {
-				position.lon = Longitude2Decimal(tokens[3], tokens[4]);
+				position.valid = tokens[2];
 			} catch (Exception e) {
 			}
 			try {
-				position.utc = Double.parseDouble(tokens[5]);
+				position.lat = Latitude2Decimal(tokens[3], tokens[4]);
 			} catch (Exception e) {
 			}
 			try {
-				position.valid = tokens[6];
+				position.lon = Longitude2Decimal(tokens[5], tokens[6]);
+			} catch (Exception e) {
+			}
+			try {
+				position.speed = Double.parseDouble(tokens[7]);
+			} catch (Exception e) {
+			}
+			try {
+				position.course = Double.parseDouble(tokens[8]);
+			} catch (Exception e) {
+			}
+			try {
+				position.gpsdate = Double.parseDouble(tokens[9]);
 			} catch (Exception e) {
 			}
 			return true;
@@ -226,38 +209,97 @@ public class GPS_NMEA {
 		}
 	}
 
+	class GPTXT implements SentenceParser {
+		// GPTXT - GPS message transfers various information on the receiver
+		@Override
+		public boolean parse(String[] tokens, GPSPosition position) {
+			// 1 - 01 numeric xx - Total number of messages in this transmission, 01..99
+			// 2 - 01 numeric yy - Message number in this transmission, range 01..xx
+			// 3 - 02 numeric zz - Text Identifier 00=ERROR 01=WARNING 02=NOTICE 07=USER
+			try {
+				position.message = tokens[4];
+			} catch (Exception e) {
+			}
+			return true;
+		}
+	}
+
+//	GPS Quality Indicators
+//	Indicator - Description
+//  
+//	0 -	Fix not available or invalid
+//	1 -	Single point - Converging PPP (TerraStar-L)
+//	2 -	Pseudorange differential - Converged PPP (TerraStar-L) - Converging PPP (TerraStar-C, TerraStar-C PRO, TerraStar-X)
+//	4 -	RTK fixed ambiguity solution
+//	5 -	RTK doubleing ambiguity solution - Converged PPP (TerraStar-C, TerraStar-C PRO, TerraStar-X)
+//	6 -	Dead reckoning mode
+//	7 -	Manual input mode (fixed position)
+//	8 -	Simulator mode
+//	9 -	WAAS (SBAS)1	
+
 	public class GPSPosition {
+
+		final double GPS_MPH_PER_KNOT = 1.15077945;
+		final double GPS_MPS_PER_KNOT = 0.51444444;
+		final double GPS_KMPH_PER_KNOT = 1.852;
+
+		final double GPS_MILES_PER_METER = 0.00062137112;
+		final double GPS_KM_PER_METER = 0.001;
+		final double GPS_FEET_PER_METER = 3.2808399;
+
 		// $GPGGA GPS Log header
-		public double utc = 0; // UTC time status of position (hours/minutes/seconds/ decimal seconds)
+		public double utc = 0; // UTC time status of position (hours/minutes/seconds/decimal seconds)
 		public double lat = 0; // lat Latitude
 		public double lon = 0; // lon Longitude
-		public int quality = 0; // quality refer to GPS Quality Indicators table
-		public double sats = 0; // sats Number of satellites in use. May be different to the number in view
+		public int quality = 0; // position fix 0: Fix not available 1: GPS SPS mode refer to GPS quality table
+		public int satellites = 0; // sats Number of satellites in use. May be different to the number in view
 		public double hdop = 0; // hdop Horizontal dilution of precision
 		public double altitude = 0; // altitude Antenna altitude above/below mean sea level
-		public double undulation = 0; // undulation - undulation - the relationship between the geoid ellipsoid
+		public double geoid = 0; // geoid - undulation - the relationship between the geoid ellipsoid
 		public double speed = 0; // speed Kn - Speed over ground, knots
 		public double course = 0; // track true - Track made good, degrees True
-		public double gdate = 0; // device date - Date: dd/mm/yy
-
+		public double gpsdate = 0; // gps device date - Date: dd/mm/yy
 		public double age = 0; // age Age of correction data (in seconds) - The maximum age limited 99 seconds.
 		public double stnID = 0; // stn ID Differential base station ID
-
 		public String modeMA = ""; // mode MA A = Automatic 2D/3D M = Manual, forced to operate in 2D or 3D
 		public int mode123 = 0; // mode 123 Mode: 1 = Fix not available; 2 = 2D; 3 = 3D
-
 		public String valid = ""; // data status - Data status: A = Data valid, V = Data invalid
-		public boolean fixed = false;
+		public String message; // $GPTXT - message transfers various information on the receiver
+		public boolean fixed = false; // valid - position fix as boolean refer to GPS quality table
 
 		public void updatefix() {
 			fixed = quality > 0;
 		}
 
+		public double speed_mph() {
+			return GPS_MPH_PER_KNOT * speed / 100.0;
+		}
+
+		public double speed_mps() {
+			return GPS_MPS_PER_KNOT * speed / 100.0;
+		}
+
+		public double speed_kmph() {
+			return GPS_KMPH_PER_KNOT * speed / 100.0;
+		}
+
+		public double altitude_miles() {
+			return GPS_MILES_PER_METER * altitude / 100.0;
+		}
+
+		public double altitude_kilometers() {
+			return GPS_KM_PER_METER * altitude / 100.0;
+		}
+
+		public double altitude_feet() {
+			return GPS_FEET_PER_METER * altitude / 100.0;
+		}
+
 		@Override
 		public String toString() {
 			return String.format(
-					"POSITION: utc: %f, lat: %f, lon: %f, Q: %d, sats: %f, hdop: %f, alt: %f, und: %f, speed: %f, course: %f, gdate: %f, fixed: %b, modeMA: %s, mode123: %d, valid: %s",
-					utc, lat, lon, quality, sats, hdop, altitude, undulation, speed, course, gdate, fixed, modeMA, mode123, valid);
+					"POSITION: utc: %f, lat: %f, lon: %f, Q: %d, sats: %d, hdop: %f, alt: %f, und: %f, speed: %f, course: %f, gdate: %f, valid: %s",
+					utc, lat, lon, quality, satellites, hdop, altitude, geoid, speed, course, gpsdate, valid);
 		}
 	}
 
@@ -265,13 +307,14 @@ public class GPS_NMEA {
 
 	private static final Map<String, SentenceParser> sentenceParsers = new HashMap<String, SentenceParser>();
 
-	public GPS_NMEA() {
+	public GPSnmea() {
 		sentenceParsers.put("GPGGA", new GPGGA());
-		sentenceParsers.put("GPRMC", new GPRMC());
+		sentenceParsers.put("GPGLL", new GPGLL());
 		sentenceParsers.put("GPGSA", new GPGSA());
 		sentenceParsers.put("GPGSV", new GPGSV());
-		sentenceParsers.put("GPGLL", new GPGLL());
+		sentenceParsers.put("GPRMC", new GPRMC());
 		sentenceParsers.put("GPVTG", new GPVTG());
+		sentenceParsers.put("GPTXT", new GPTXT());
 	}
 
 	public GPSPosition parse(String line) {
@@ -286,7 +329,6 @@ public class GPS_NMEA {
 			}
 			position.updatefix();
 		}
-
 		return position;
 	}
 }

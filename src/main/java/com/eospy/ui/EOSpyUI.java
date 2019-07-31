@@ -26,11 +26,12 @@ import javax.swing.WindowConstants;
 import javax.swing.JTextField;
 import javax.swing.JSeparator;
 import javax.swing.JSpinner;
+import javax.swing.SpinnerListModel;
 
 /**
  * Main window implementation for the EOSpy AI-IoT example
  */
-public class EOSpyWindow {
+public class EOSpyUI {
 
 	private JFrame frameIoT;
 
@@ -42,18 +43,17 @@ public class EOSpyWindow {
 
 	private JLabel lblLabel_ServerStatus;
 	private JSpinner spinner_TrackLat;
-	private JSpinner spinner_TrackLon;
 	private JSpinner spinner_FreqInterval;
 	private JToggleButton tglbtnServerToggleButton;
 
-	private int trackLat = 100;
-	private int trackLon = -100;
+//	private int trackLat = 100;
+//	private int trackLon = -100;
 	private int freqInterval = 300;
-	private String LatPosition = "38.888160";
-	private String LonPosition = "-77.019868";
+	private String LatStr = "38.888160";
+	private String LonStr = "-77.019868";
 	private boolean serverService = false;
 
-	public EOSpyWindow(boolean exitOnClose) {
+	public EOSpyUI(boolean exitOnClose) {
 		this.frameIoT = buildFrame(exitOnClose);
 	}
 
@@ -157,6 +157,15 @@ public class EOSpyWindow {
 		gbc_lblServerUrl.gridx = 1;
 		gbc_lblServerUrl.gridy = 7;
 		frameIoT.getContentPane().add(lblServerUrl, gbc_lblServerUrl);
+		
+				JLabel lblNewLabel_2 = new JLabel("COM Port");
+				GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
+				gbc_lblNewLabel_2.anchor = GridBagConstraints.NORTH;
+				gbc_lblNewLabel_2.fill = GridBagConstraints.HORIZONTAL;
+				gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 5);
+				gbc_lblNewLabel_2.gridx = 2;
+				gbc_lblNewLabel_2.gridy = 7;
+				frameIoT.getContentPane().add(lblNewLabel_2, gbc_lblNewLabel_2);
 
 		textField_URL = new JTextField();
 		textField_URL.setText("http://10.0.0.2:5055");
@@ -167,6 +176,20 @@ public class EOSpyWindow {
 		gbc_textField_URL.gridx = 1;
 		gbc_textField_URL.gridy = 8;
 		frameIoT.getContentPane().add(textField_URL, gbc_textField_URL);
+		
+				spinner_TrackLat = new JSpinner();
+				spinner_TrackLat.addChangeListener(new ChangeListener() {
+					@Override
+					public void stateChanged(ChangeEvent arg0) {
+// update ->				trackLatChange(arg0);
+					}
+				});
+				spinner_TrackLat.setModel(new SpinnerListModel(new String[] {"COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9"}));
+				GridBagConstraints gbc_spinner_Lat = new GridBagConstraints();
+				gbc_spinner_Lat.insets = new Insets(0, 0, 5, 5);
+				gbc_spinner_Lat.gridx = 2;
+				gbc_spinner_Lat.gridy = 8;
+				frameIoT.getContentPane().add(spinner_TrackLat, gbc_spinner_Lat);
 
 		JLabel lblNewLabel = new JLabel("Tracking server URL");
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
@@ -239,17 +262,8 @@ public class EOSpyWindow {
 		gbc_lblNewLabel_6.gridy = 15;
 		frameIoT.getContentPane().add(lblNewLabel_6, gbc_lblNewLabel_6);
 
-		JLabel lblNewLabel_2 = new JLabel("GPS Track");
-		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
-		gbc_lblNewLabel_2.anchor = GridBagConstraints.NORTH;
-		gbc_lblNewLabel_2.fill = GridBagConstraints.HORIZONTAL;
-		gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel_2.gridx = 2;
-		gbc_lblNewLabel_2.gridy = 15;
-		frameIoT.getContentPane().add(lblNewLabel_2, gbc_lblNewLabel_2);
-
 		textField_Lat = new JTextField();
-		textField_Lat.setText(LatPosition);
+		textField_Lat.setText(LatStr);
 		textField_Lat.setColumns(10);
 		GridBagConstraints gbc_textField_Lat = new GridBagConstraints();
 		gbc_textField_Lat.anchor = GridBagConstraints.NORTHWEST;
@@ -257,20 +271,6 @@ public class EOSpyWindow {
 		gbc_textField_Lat.gridx = 1;
 		gbc_textField_Lat.gridy = 16;
 		frameIoT.getContentPane().add(textField_Lat, gbc_textField_Lat);
-
-		spinner_TrackLat = new JSpinner();
-		spinner_TrackLat.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent arg0) {
-				trackLatChange(arg0);
-			}
-		});
-		spinner_TrackLat.setModel(new SpinnerNumberModel(100, -999, 999, 5));
-		GridBagConstraints gbc_spinner_Lat = new GridBagConstraints();
-		gbc_spinner_Lat.insets = new Insets(0, 0, 5, 5);
-		gbc_spinner_Lat.gridx = 2;
-		gbc_spinner_Lat.gridy = 16;
-		frameIoT.getContentPane().add(spinner_TrackLat, gbc_spinner_Lat);
 
 		JLabel lblLon = new JLabel("Lon");
 		lblLon.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -283,7 +283,7 @@ public class EOSpyWindow {
 		frameIoT.getContentPane().add(lblLon, gbc_lblLon);
 
 		textField_Lon = new JTextField();
-		textField_Lon.setText(LonPosition);
+		textField_Lon.setText(LonStr);
 		textField_Lon.setColumns(10);
 		GridBagConstraints gbc_textField_Lon = new GridBagConstraints();
 		gbc_textField_Lon.anchor = GridBagConstraints.NORTHWEST;
@@ -292,21 +292,7 @@ public class EOSpyWindow {
 		gbc_textField_Lon.gridy = 18;
 		frameIoT.getContentPane().add(textField_Lon, gbc_textField_Lon);
 
-		spinner_TrackLon = new JSpinner();
-		spinner_TrackLon.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent arg0) {
-				trackLonChange(arg0);
-			}
-		});
-		spinner_TrackLon.setModel(new SpinnerNumberModel(-100, -999, 999, 5));
-		GridBagConstraints gbc_spinner_Lon = new GridBagConstraints();
-		gbc_spinner_Lon.insets = new Insets(0, 0, 5, 5);
-		gbc_spinner_Lon.gridx = 2;
-		gbc_spinner_Lon.gridy = 18;
-		frameIoT.getContentPane().add(spinner_TrackLon, gbc_spinner_Lon);
-
-		JLabel lblNewLabel_7 = new JLabel("Lat / Lon GPS position track values");
+		JLabel lblNewLabel_7 = new JLabel("GPS Lat / Lon position track values");
 		GridBagConstraints gbc_lblNewLabel_7 = new GridBagConstraints();
 		gbc_lblNewLabel_7.anchor = GridBagConstraints.NORTH;
 		gbc_lblNewLabel_7.fill = GridBagConstraints.HORIZONTAL;
@@ -369,7 +355,7 @@ public class EOSpyWindow {
 		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
 		gbc_panel_1.gridheight = 2;
 		gbc_panel_1.gridwidth = 2;
-		gbc_panel_1.insets = new Insets(0, 0, 5, 0);
+		gbc_panel_1.insets = new Insets(0, 0, 0, 5);
 		gbc_panel_1.fill = GridBagConstraints.BOTH;
 		gbc_panel_1.gridx = 1;
 		gbc_panel_1.gridy = 25;
@@ -507,8 +493,8 @@ public class EOSpyWindow {
 		fixtime = (long) (fixtime * 0.001);
 		postMsg = postMsg + "&timestamp=" + Long.toString(fixtime);
 
-		postMsg = postMsg + "&lat=" + LatPosition;
-		postMsg = postMsg + "&lon=" + LonPosition;
+		postMsg = postMsg + "&lat=" + LatStr;
+		postMsg = postMsg + "&lon=" + LonStr;
 		postMsg = postMsg + "&speed=0.0&bearing=0.0&altitude=0.0&accuracy=0.0&batt=89.7";
 
 		String serverEvent = textField_ServerEvent.getText();
@@ -530,40 +516,40 @@ public class EOSpyWindow {
 		freqInterval = (Integer) spinner_FreqInterval.getValue();
 	}
 
-	void trackLatChange(ChangeEvent arg0) {
+/*	void trackLatChange(ChangeEvent arg0) {
 		trackLat = (Integer) spinner_TrackLat.getValue();
 	}
 
 	void trackLonChange(ChangeEvent arg0) {
 		trackLon = (Integer) spinner_TrackLon.getValue();
-	}
+ 	} */
 
 	void calcLatLonAction(ActionEvent arg0) {
 		DecimalFormat df = new DecimalFormat("0.000000");
 
 		String Lat_str = textField_Lat.getText();
 		double Lat_num = new Double(Lat_str).doubleValue();
-		double Lat_new = (trackLat * 0.000001);
+/*		double Lat_new = (trackLat * 0.000001);
 		if (trackLat > 0) {
 			Lat_num = Lat_num + Lat_new;
 		} else {
 			Lat_num = Lat_num - Lat_new;
 		}
-		LatPosition = df.format(Lat_num);
+		LatPosition = df.format(Lat_num); */
 		// LatPosition = new Double(Lat_num).toString();
-		textField_Lat.setText(LatPosition);
+		textField_Lat.setText(LatStr);
 		//
 		String Lon_str = textField_Lon.getText();
 		double Lon_num = new Double(Lon_str).doubleValue();
-		double Lon_new = (trackLon * 0.000001);
+/*		double Lon_new = (trackLon * 0.000001);
 		if (trackLon > 0) {
 			Lon_num = Lon_num + Lon_new;
 		} else {
 			Lon_num = Lon_num - Lon_new;
 		}
-		LonPosition = df.format(Lon_num);
+		LonPosition = df.format(Lon_num); */
 		// LonPosition = new Double(Lon_num).toString();
-		textField_Lon.setText(LonPosition);
+		textField_Lon.setText(LonStr);
 	}
 
 	void helpContentsAction(ActionEvent e) {

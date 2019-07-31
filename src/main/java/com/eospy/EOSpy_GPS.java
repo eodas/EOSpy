@@ -8,7 +8,7 @@ import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Locale;
-import com.eospy.ui.EOSpyWindow;
+import com.eospy.ui.EOSpyUI;
 
 /**
  * Executive Order Corporation we make Things Smart
@@ -98,7 +98,7 @@ public class EOSpy_GPS {
 			@Override
 			public void run() {
 				try {
-					EOSpyWindow window = new EOSpyWindow(exitOnClose);
+					EOSpyUI window = new EOSpyUI(exitOnClose);
 					window.show(); // window.frmEo.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
