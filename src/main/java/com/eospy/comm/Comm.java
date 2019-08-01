@@ -11,38 +11,18 @@ import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
 
-//import gps.GPSnmea;
-//import model.DeviceEvent;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class SerialComm {
+import com.eospy.ui.EOSpyUI;
 
-	public String portName = "COM6";
+public class Comm {
 
-//	public static SerialComm serialcomm;
-//	public GPSnmea gpsnmea;
-//	public DeviceEvent deviceEvent;
-	
-	public SerialComm() {
+	public SerialPort serialPort;
+
+	public Comm() {
 		super();
-//		serialcomm = this;
-	}
-
-	public void StartComm() {
-		CommListPorts(); // List available comms ports on system
-
-//		gpsnmea = new GPSnmea();
-//		deviceEvent = new DeviceEvent();
-
-		try {
-			CommConnect(portName);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	public String[] CommListPorts() {
@@ -83,7 +63,7 @@ public class SerialComm {
 			CommPort commPort = portIdentifier.open(this.getClass().getName(), 2000);
 
 			if (commPort instanceof SerialPort) {
-				SerialPort serialPort = (SerialPort) commPort;
+				serialPort = (SerialPort) commPort;
 				serialPort.setSerialPortParams(9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1,
 						SerialPort.PARITY_NONE);
 
@@ -100,34 +80,10 @@ public class SerialComm {
 		}
 	}
 
-	public void UpdateDevice(String line) {
-/*		gpsnmea.parse(line); // GPS nmea.parse line
-		
-		// public double utc = 0; // UTC time status of position (hours/minutes/seconds/decimal seconds)
-		deviceEvent.setLat(gpsnmea.position.lat); // lat Latitude
-		deviceEvent.setLon(gpsnmea.position.lon); // lon Longitude
-
-		// public int quality = 0; // position fix 0: Fix not available 1: GPS SPS mode refer to GPS quality table
-		// public int satellites = 0; // sats Number of satellites in use. May be different to the number in view
-		deviceEvent.setHdop(gpsnmea.position.hdop); // hdop Horizontal dilution of precision
-		deviceEvent.setAltitude(gpsnmea.position.altitude); // altitude Antenna altitude above/below mean sea level
-		// public double geoid = 0; // geoid - undulation - the relationship between the geoid ellipsoid
-		deviceEvent.setSpeed(gpsnmea.position.speed); // speed Kn - Speed over ground, knots
-		deviceEvent.setCourse(gpsnmea.position.course); // track true - Track made good, degrees True
-
-		// public double gpsdate = 0; // device date - Date: dd/mm/yy
-		// public double age = 0; // age Age of correction data (in seconds) - The maximum age limited 99 seconds.
-		// public double stnID = 0; // stn ID Differential base station ID
-		// public String modeMA = ""; // mode MA A = Automatic 2D/3D M = Manual, forced to operate in 2D or 3D
-		// public int mode123 = 0; // mode 123 Mode: 1 = Fix not available; 2 = 2D; 3 = 3D
-
-		// public String valid = ""; // data status - Data status: A = Data valid, V = Data invalid
-		// public String message; // $GPTXT - message transfers various information on the receiver
-		deviceEvent.setValid(gpsnmea.position.fixed); // valid - position fix as boolean refer to GPS quality table 	
-		
-		System.out.println(gpsnmea.position); */
+	public void CommClose() {
+		serialPort.close();
 	}
-	
+
 	/**
 	 * Handles the input coming from the serial port. A new line character is
 	 * treated as the end of a block in this example.
@@ -152,8 +108,9 @@ public class SerialComm {
 					}
 					buffer[len++] = (byte) data;
 				}
-				// serialcomm.UpdateDevice(new String(buffer, 0, len));
-				 System.out.print(new String(buffer, 0, len));
+
+				EOSpyUI.commline(new String(buffer, 0, len));
+
 			} catch (IOException e) {
 				e.printStackTrace();
 				System.exit(-1);
@@ -161,7 +118,6 @@ public class SerialComm {
 		}
 	}
 
-	/** */
 	public static class SerialWriter implements Runnable {
 		OutputStream out;
 
@@ -181,14 +137,5 @@ public class SerialComm {
 				System.exit(-1);
 			}
 		}
-	}
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		SerialComm tsc = new SerialComm();
-		tsc.StartComm();
 	}
 }

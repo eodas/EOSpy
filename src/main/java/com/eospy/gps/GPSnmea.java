@@ -256,7 +256,7 @@ public class GPSnmea {
 		public double hdop = 0; // hdop Horizontal dilution of precision
 		public double altitude = 0; // altitude Antenna altitude above/below mean sea level
 		public double geoid = 0; // geoid - undulation - the relationship between the geoid ellipsoid
-		public double speed = 0; // speed Kn - Speed over ground, knots
+		public double speed = 0; // speed Km - Speed over ground, knots
 		public double course = 0; // track true - Track made good, degrees True
 		public double gpsdate = 0; // gps device date - Date: dd/mm/yy
 		public double age = 0; // age Age of correction data (in seconds) - The maximum age limited 99 seconds.
