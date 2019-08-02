@@ -19,7 +19,7 @@ import com.eospy.ui.EOSpyUI;
 
 public class Comm {
 
-	public SerialPort serialPort;
+	private SerialPort serialPort;
 
 	public Comm() {
 		super();
