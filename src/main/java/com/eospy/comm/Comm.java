@@ -1,8 +1,22 @@
 package com.eospy.comm;
 
 /**
- * This version of the TwoWaySerialComm example makes use of the
- * SerialPortEventListener to avoid polling.
+ * 
+ * Open a connection to a serial device and then interact with it (receiving data and sending data). 
+ * One thing to note is that the package gnu.io is used instead of javax.comm, 
+ * though other than the change in package name the API follows the Java Communication API. 
+ * To find the names of the available ports, see the Discovering comm ports example.
+ * 
+ * This varies from the other 'Two Way Communication' example in that this uses an event to trigger the reading. 
+ * One advantage of this approach is that you are not having to poll the device to see if data is available.
+ * 
+ * Note: Make sure that you call the notifyOnDataAvailable() method of the SerialPort with a boolean true parameter. 
+ * Based on my experience with RXTX, 
+ * just registering to the SerialPort as a SerialPortEventListener is not enough -- the event will not be propagated unless you do this.
+ * 
+ * Note2: When all is done be sure to unregister the listener ( method removeEventListener()). 
+ * otherwise its possible that your program hangs during exiting causing the serial port to be blocked. 
+ * 
  */
 
 import gnu.io.CommPort;
@@ -25,6 +39,33 @@ public class Comm {
 		super();
 	}
 
+	// Retrieve available comms ports on your computer. 
+	// A CommPort is available if it is not being used by another application.
+	  public String[] CommListPorts() {
+			int count = 0;
+			String[] portList = new String[20];
+	        
+	        java.util.Enumeration<CommPortIdentifier> thePorts = CommPortIdentifier.getPortIdentifiers();
+	        while (thePorts.hasMoreElements()) {
+	            CommPortIdentifier com = (CommPortIdentifier) thePorts.nextElement();
+	            switch (com.getPortType()) {
+	            case CommPortIdentifier.PORT_SERIAL:
+	                try {
+	                    CommPort thePort = com.open("CommUtil", 50);
+	                    thePort.close();
+	                    portList[count] = com.getName();
+	                    count++;
+	                } catch (Exception e) {
+	                    System.out.println("Port, "  + com.getName() + ", is in use.");
+	                    System.err.println("Failed to open port " +  com.getName());
+	                    e.printStackTrace();
+	                }
+	            }
+	        }
+	        return portList;	
+	  }
+	  	
+/*	
 	public String[] CommListPorts() {
 		int count = 0;
 		String[] portList = new String[20];
@@ -54,7 +95,10 @@ public class Comm {
 			return "unknown type";
 		}
 	}
-
+*/
+	
+	// windows - COM1
+	// linux - /dev/term/a	
 	public void CommConnect(String portName) throws Exception {
 		CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(portName);
 		if (portIdentifier.isCurrentlyOwned()) {
@@ -81,12 +125,13 @@ public class Comm {
 	}
 
 	public void CommClose() {
+		serialPort.removeEventListener();
 		serialPort.close();
 	}
 
 	/**
-	 * Handles the input coming from the serial port. A new line character is
-	 * treated as the end of a block in this example.
+	 * Handles the input coming from the serial port.
+	 *  A new line character is treated as the end of a block in this example.
 	 */
 	public static class SerialReader implements SerialPortEventListener {
 		private InputStream in;
@@ -109,7 +154,7 @@ public class Comm {
 					buffer[len++] = (byte) data;
 				}
 
-				EOSpyUI.commline(new String(buffer, 0, len));
+				EOSpyUI.commLine(new String(buffer, 0, len));
 
 			} catch (IOException e) {
 				e.printStackTrace();

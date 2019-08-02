@@ -51,6 +51,7 @@ public class EOSpyUI {
 	private JTextField textField_ServerEvent;
 
 	private JLabel lblLabel_FixStatus;
+	private JLabel lblLabel_Progress;
 	private JLabel lblLabel_ServerStatus;
 	private JSpinner spinner_COMPort;
 	private JSpinner spinner_FreqInterval;
@@ -58,12 +59,15 @@ public class EOSpyUI {
 
 	private long lastSendTime = 0;
  	private int freqInterval = 300;
-	private String portName = "COM4";
+ 	private int progressCount = 0;
+ 	
+	private String portName = "COM6";
 	private String LatStr = "38.888160";
 	private String LonStr = "-77.019868";
 	private boolean serverService = false;
 	private boolean lastfixed = false;
-	
+	private boolean gpsDebug = false;
+
 	public EOSpyUI(boolean exitOnClose) {
 		this.gpsFrame = buildFrame(exitOnClose);
 		
@@ -77,7 +81,7 @@ public class EOSpyUI {
 	private JFrame buildFrame(boolean exitOnClose) {
 		gpsFrame = new JFrame();
 
-		gpsFrame.setTitle("EOSpy GPS AI-IoT :: Internet of Things GPS Tron");
+		gpsFrame.setTitle("EOSpy GPS AI-IoT :: GPS Tron Internet of Things");
 		gpsFrame.setBounds(100, 100, 450, 585);
 		gpsFrame.setDefaultCloseOperation(exitOnClose ? JFrame.EXIT_ON_CLOSE : WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -293,6 +297,7 @@ public class EOSpyUI {
 		lblLabel_FixStatus.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblLabel_FixStatus.setForeground(Color.RED);
 		GridBagConstraints gbc_lblNewLabel_10 = new GridBagConstraints();
+		gbc_lblNewLabel_10.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblNewLabel_10.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_10.gridx = 2;
 		gbc_lblNewLabel_10.gridy = 16;
@@ -317,6 +322,16 @@ public class EOSpyUI {
 		gbc_textField_Lon.gridx = 1;
 		gbc_textField_Lon.gridy = 18;
 		gpsFrame.getContentPane().add(textField_Lon, gbc_textField_Lon);
+		
+		lblLabel_Progress = new JLabel("Wait");
+		lblLabel_Progress.setForeground(Color.BLUE);
+		lblLabel_Progress.setFont(new Font("Tahoma", Font.BOLD, 11));
+		GridBagConstraints gbc_lblLabel_Progress = new GridBagConstraints();
+		gbc_lblLabel_Progress.fill = GridBagConstraints.HORIZONTAL;
+		gbc_lblLabel_Progress.insets = new Insets(0, 0, 5, 5);
+		gbc_lblLabel_Progress.gridx = 2;
+		gbc_lblLabel_Progress.gridy = 18;
+		gpsFrame.getContentPane().add(lblLabel_Progress, gbc_lblLabel_Progress);
 
 		JLabel lblNewLabel_7 = new JLabel("GPS Lat / Lon Position Track Values");
 		GridBagConstraints gbc_lblNewLabel_7 = new GridBagConstraints();
@@ -496,7 +511,18 @@ public class EOSpyUI {
 			lastfixed = fixed;
 		}
 	}
-	
+
+	void showPregress() {
+		String str = lblLabel_Progress.getText();
+		progressCount++;
+		if (progressCount > 10) {
+			progressCount = 1;
+			str = ">";
+		}
+		str = " " + str;
+		lblLabel_Progress.setText(str);
+	}
+
 	void ComPortChange(ChangeEvent arg0) {
 		String portName = (String) spinner_COMPort.getValue();
 	}
@@ -524,7 +550,7 @@ public class EOSpyUI {
 		}
 	}
 
-	public static void commline(String line) {
+	public static void commLine(String line) {
 		eospyui.UpdateDevice(line);
 	}
 
@@ -568,7 +594,11 @@ public class EOSpyUI {
 			lastSendTime = System.currentTimeMillis();
 			serverSendPost("");
  		}
-		System.out.print(".");
+		
+		if (gpsDebug) {
+			gpsnmea.toString();
+		}
+		showPregress();
 	}
 
 	void serverSendPost(String IoTEvent) {
@@ -602,11 +632,9 @@ public class EOSpyUI {
 		}
 
 		String postURL = textField_URL.getText();
-
-		System.out.println(postMsg);
 		
-//		AgentConnect agentConnect = new AgentConnect();
-//		agentConnect.sendPost(postURL, postMsg);
+  		AgentConnect agentConnect = new AgentConnect();
+  		agentConnect.sendPost(postURL, postMsg);
 	 // agentConnect.sendGet(postURL, postMsg);
 	}
 

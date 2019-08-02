@@ -58,17 +58,17 @@ public class EOSpy_GPS {
 	private String appVer = "1.01A";
 	private String buildDate = "0304";
 	private boolean is64bitJMV = false;
-	private boolean knowledgeDebug = false;
+	private boolean gpsDebug = false;
 
 	public EOSpy_GPS(String[] args) {
 
 		this.eospy_ai_iot = this;
-		System.out.println("EOSpy GPS AI-IoT :: Internet of Things Drools-jBPM Expert System"
-				+ " using EOSpy Arduino Tron AI-IoT Processing -version: " + appVer + " (" + buildDate + ")");
+		System.out.println("EOSpy GPS AI-IoT :: Internet of Things GPS Drools-jBPM Expert System"
+				+ " using EOSpy GPS AI-IoT Tron Processing -version: " + appVer + " (" + buildDate + ")");
 
 		getIPAddress();
 
-		if (knowledgeDebug) {
+		if (gpsDebug) {
 			System.out.println("os.name: " + System.getProperty("os.name"));
 			System.out.println("os.arch: " + System.getProperty("os.arch"));
 			is64bitJMV = (System.getProperty("os.arch").indexOf("64") != -1);
