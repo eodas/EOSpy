@@ -39,66 +39,26 @@ public class Comm {
 		super();
 	}
 
-	// Retrieve available comms ports on your computer. 
+	// Retrieve available comms ports on your computer.
 	// A CommPort is available if it is not being used by another application.
-	  public String[] CommListPorts() {
-			int count = 0;
-			String[] portList = new String[20];
-	        
-	        java.util.Enumeration<CommPortIdentifier> thePorts = CommPortIdentifier.getPortIdentifiers();
-	        while (thePorts.hasMoreElements()) {
-	            CommPortIdentifier com = (CommPortIdentifier) thePorts.nextElement();
-	            switch (com.getPortType()) {
-	            case CommPortIdentifier.PORT_SERIAL:
-	                try {
-	                    CommPort thePort = com.open("CommUtil", 50);
-	                    thePort.close();
-	                    portList[count] = com.getName();
-	                    count++;
-	                } catch (Exception e) {
-	                    System.out.println("Port, "  + com.getName() + ", is in use.");
-	                    System.err.println("Failed to open port " +  com.getName());
-	                    e.printStackTrace();
-	                }
-	            }
-	        }
-	        return portList;	
-	  }
-	  	
-/*	
 	public String[] CommListPorts() {
-		int count = 0;
 		String[] portList = new String[20];
+		int portCount = 0;
 
 		java.util.Enumeration<CommPortIdentifier> portEnum = CommPortIdentifier.getPortIdentifiers();
 		while (portEnum.hasMoreElements()) {
 			CommPortIdentifier portIdentifier = portEnum.nextElement();
-			portList[count] = portIdentifier.getName();
-			System.out.println(portIdentifier.getName() + " - " + getPortTypeName(portIdentifier.getPortType()));
+
+			if (portIdentifier.getPortType() == CommPortIdentifier.PORT_SERIAL) {
+				portList[portCount] = portIdentifier.getName();
+				portCount++;
+			}
 		}
 		return portList;
 	}
 
-	public String getPortTypeName(int portType) {
-		switch (portType) {
-		case CommPortIdentifier.PORT_I2C:
-			return "I2C";
-		case CommPortIdentifier.PORT_PARALLEL:
-			return "Parallel";
-		case CommPortIdentifier.PORT_RAW:
-			return "Raw";
-		case CommPortIdentifier.PORT_RS485:
-			return "RS485";
-		case CommPortIdentifier.PORT_SERIAL:
-			return "Serial";
-		default:
-			return "unknown type";
-		}
-	}
-*/
-	
 	// windows - COM1
-	// linux - /dev/term/a	
+	// linux - /dev/term/a
 	public void CommConnect(String portName) throws Exception {
 		CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(portName);
 		if (portIdentifier.isCurrentlyOwned()) {
@@ -130,8 +90,8 @@ public class Comm {
 	}
 
 	/**
-	 * Handles the input coming from the serial port.
-	 *  A new line character is treated as the end of a block in this example.
+	 * Handles the input coming from the serial port. A new line character is
+	 * treated as the end of a block in this example.
 	 */
 	public static class SerialReader implements SerialPortEventListener {
 		private InputStream in;

@@ -60,8 +60,9 @@ public class EOSpyUI {
 	private long lastSendTime = 0;
  	private int freqInterval = 300;
  	private int progressCount = 0;
+ 	private int progressBar = 0;
  	
-	private String portName = "COM6";
+	private String portName = "COM4";
 	private String LatStr = "38.888160";
 	private String LonStr = "-77.019868";
 	private boolean serverService = false;
@@ -81,7 +82,7 @@ public class EOSpyUI {
 	private JFrame buildFrame(boolean exitOnClose) {
 		gpsFrame = new JFrame();
 
-		gpsFrame.setTitle("EOSpy GPS AI-IoT :: GPS Tron Internet of Things");
+		gpsFrame.setTitle("EOSpy GPS AI-IoT :: Internet of Things GPS AI-IoT");
 		gpsFrame.setBounds(100, 100, 450, 585);
 		gpsFrame.setDefaultCloseOperation(exitOnClose ? JFrame.EXIT_ON_CLOSE : WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -598,7 +599,11 @@ public class EOSpyUI {
 		if (gpsDebug) {
 			gpsnmea.toString();
 		}
-		showPregress();
+		progressBar++;
+		if (progressBar > 10) {
+			showPregress();
+			progressBar = 0;
+		}
 	}
 
 	void serverSendPost(String IoTEvent) {

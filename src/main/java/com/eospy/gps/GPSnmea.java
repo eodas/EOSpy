@@ -27,7 +27,7 @@ public class GPSnmea {
 //	6 -	Dead reckoning mode
 //	7 -	Manual input mode (fixed position)
 //	8 -	Simulator mode
-//	9 -	WAAS (SBAS)1	
+//	9 -	WAAS (SBAS)	
 
 	interface SentenceParser {
 		public boolean parse(String[] tokens, GPSPosition position);
