@@ -50,6 +50,7 @@ public class Comm {
 			CommPortIdentifier portIdentifier = portEnum.nextElement();
 
 			if (portIdentifier.getPortType() == CommPortIdentifier.PORT_SERIAL) {
+				System.out.println(portIdentifier.getName());
 				portList[portCount] = portIdentifier.getName();
 				portCount++;
 			}

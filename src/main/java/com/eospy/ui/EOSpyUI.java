@@ -324,7 +324,7 @@ public class EOSpyUI {
 		gbc_textField_Lon.gridy = 18;
 		gpsFrame.getContentPane().add(textField_Lon, gbc_textField_Lon);
 		
-		lblLabel_Progress = new JLabel("Wait");
+		lblLabel_Progress = new JLabel(">");
 		lblLabel_Progress.setForeground(Color.BLUE);
 		lblLabel_Progress.setFont(new Font("Tahoma", Font.BOLD, 11));
 		GridBagConstraints gbc_lblLabel_Progress = new GridBagConstraints();
