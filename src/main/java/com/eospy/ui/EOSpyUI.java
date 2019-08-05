@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.eospy.EOSpy_GPS;
 import com.eospy.comm.Comm;
 import com.eospy.gps.GPSnmea;
 import com.eospy.ui.AboutDialog;
@@ -57,12 +58,11 @@ public class EOSpyUI {
 	private JSpinner spinner_FreqInterval;
 	private JToggleButton tglbtnServerToggleButton;
 
-	private long lastSendTime = 0;
  	private int freqInterval = 300;
+	private long lastSendTime = 0;
  	private int progressCount = 0;
  	private int progressBar = 0;
  	
-	private String portName = "COM4";
 	private String LatStr = "38.888160";
 	private String LonStr = "-77.019868";
 	private boolean serverService = false;
@@ -533,14 +533,14 @@ public class EOSpyUI {
 	}
 
 	void serverServiceAction(ActionEvent arg0) {
-		if (portName.equals(null) || portName.equals("")) {
+		if (EOSpy_GPS.portName.equals(null) || EOSpy_GPS.portName.equals("")) {
 			return;
 		}
 		serverService = !serverService;
 		showServerService();
 		if (serverService) {
 			try {
-				comm.CommConnect(portName);
+				comm.CommConnect(EOSpy_GPS.portName);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

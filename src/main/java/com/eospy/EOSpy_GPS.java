@@ -3,11 +3,17 @@ package com.eospy;
 import java.awt.EventQueue;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.Enumeration;
 import java.util.Locale;
+import java.util.Properties;
+
 import com.eospy.ui.EOSpyUI;
 
 /**
@@ -60,6 +66,14 @@ public class EOSpy_GPS {
 	private boolean is64bitJMV = false;
 	private boolean gpsDebug = false;
 
+	public static String portName = "COM1";
+	public static String id = ""; // 123456
+	public static String name = ""; // IoT_Parking_Kiosk
+	public static String process = ""; // com.IoTParkingKiosk
+	public static String server = ""; // http://10.0.0.2:5055
+
+	public static String gpio = ""; // create gpio controller
+	
 	public EOSpy_GPS(String[] args) {
 
 		this.eospy_ai_iot = this;
@@ -67,6 +81,7 @@ public class EOSpy_GPS {
 				+ " using EOSpy GPS AI-IoT Tron Processing -version: " + appVer + " (" + buildDate + ")");
 
 		getIPAddress();
+		readProperties();
 
 		if (gpsDebug) {
 			System.out.println("os.name: " + System.getProperty("os.name"));
@@ -107,6 +122,44 @@ public class EOSpy_GPS {
 		});
 	}
 
+	public void readProperties() {
+		try {
+			File file = new File("iotbpm.properties");
+			FileInputStream fileInput = new FileInputStream(file);
+			Properties properties = new Properties();
+			properties.load(fileInput);
+			fileInput.close();
+
+			Enumeration<?> enuKeys = properties.keys();
+			while (enuKeys.hasMoreElements()) {
+				String key = (String) enuKeys.nextElement();
+				String value = properties.getProperty(key);
+				if (key.indexOf("port") != -1) {
+					portName = value;
+				}
+				if (key.indexOf("id") != -1) {
+					id = value;
+				}
+				if (key.indexOf("name") != -1) {
+					name = value;
+				}
+				if (key.indexOf("process") != -1) {
+					process = value;
+				}
+				if (key.indexOf("server") != -1) {
+					server = value;
+				}
+				if (key.indexOf("gpio") != -1) {
+					gpio = value;
+				}
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void getIPAddress() {
 		// Returns the instance of InetAddress containing local host name and address
 		InetAddress localhost = null;
