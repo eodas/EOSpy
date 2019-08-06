@@ -264,7 +264,7 @@ public class GPSnmea {
 		public String modeMA = ""; // mode MA A = Automatic 2D/3D M = Manual, forced to operate in 2D or 3D
 		public int mode123 = 0; // mode 123 Mode: 1 = Fix not available; 2 = 2D; 3 = 3D
 		public String valid = ""; // data status - Data status: A = Data valid, V = Data invalid
-		public String message; // $GPTXT - message transfers various information on the receiver
+		public String message = ""; // $GPTXT - message transfers various information on the receiver
 		public boolean fixed = false; // valid - position fix as boolean refer to GPS quality table
 
 		public void updatefix() {

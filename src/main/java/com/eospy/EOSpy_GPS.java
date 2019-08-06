@@ -64,13 +64,13 @@ public class EOSpy_GPS {
 	private String appVer = "1.01A";
 	private String buildDate = "0304";
 	private boolean is64bitJMV = false;
-	private boolean gpsDebug = false;
+	public static boolean gpsDebug = false;
 
-	public static String portName = "COM1";
 	public static String id = ""; // 123456
 	public static String name = ""; // IoT_Parking_Kiosk
 	public static String process = ""; // com.IoTParkingKiosk
 	public static String server = ""; // http://10.0.0.2:5055
+	public static String portName = "COM1";
 
 	public static String gpio = ""; // create gpio controller
 	

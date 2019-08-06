@@ -67,7 +67,6 @@ public class EOSpyUI {
 	private String LonStr = "-77.019868";
 	private boolean serverService = false;
 	private boolean lastfixed = false;
-	private boolean gpsDebug = false;
 
 	public EOSpyUI(boolean exitOnClose) {
 		this.gpsFrame = buildFrame(exitOnClose);
@@ -203,10 +202,9 @@ public class EOSpyUI {
 					@Override
 					public void stateChanged(ChangeEvent arg0) {
 						ComPortChange(arg0);
-						comm.CommListPorts(); // List available comms ports on system
 					}
 				});
-				spinner_COMPort.setModel(new SpinnerListModel(new String[] {"COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9"}));
+				spinner_COMPort.setModel(new SpinnerListModel(new String[] { EOSpy_GPS.portName }));
 				GridBagConstraints gbc_spinner_COMPort = new GridBagConstraints();
 				gbc_spinner_COMPort.insets = new Insets(0, 0, 5, 5);
 				gbc_spinner_COMPort.gridx = 2;
@@ -324,7 +322,7 @@ public class EOSpyUI {
 		gbc_textField_Lon.gridy = 18;
 		gpsFrame.getContentPane().add(textField_Lon, gbc_textField_Lon);
 		
-		lblLabel_Progress = new JLabel(">");
+		lblLabel_Progress = new JLabel(".");
 		lblLabel_Progress.setForeground(Color.BLUE);
 		lblLabel_Progress.setFont(new Font("Tahoma", Font.BOLD, 11));
 		GridBagConstraints gbc_lblLabel_Progress = new GridBagConstraints();
@@ -518,13 +516,16 @@ public class EOSpyUI {
 		progressCount++;
 		if (progressCount > 10) {
 			progressCount = 1;
-			str = ">";
+			str = ".";
 		}
 		str = " " + str;
 		lblLabel_Progress.setText(str);
 	}
 
 	void ComPortChange(ChangeEvent arg0) {
+		String[] portList = new String[20];
+		portList = comm.CommListPorts(); // List available comms ports on system
+//		spinner_COMPort.setModel(new SpinnerListModel(new String[] { portList }));
 		String portName = (String) spinner_COMPort.getValue();
 	}
 
@@ -596,11 +597,11 @@ public class EOSpyUI {
 			serverSendPost("");
  		}
 		
-		if (gpsDebug) {
-			gpsnmea.toString();
+		if (EOSpy_GPS.gpsDebug) {
+			System.out.println(">"+gpsnmea.position.toString());
 		}
 		progressBar++;
-		if (progressBar > 10) {
+		if (progressBar > 5) {
 			showPregress();
 			progressBar = 0;
 		}
