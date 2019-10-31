@@ -188,7 +188,7 @@ public class EOSpyUI {
 				gpsFrame.getContentPane().add(lblNewLabel_2, gbc_lblNewLabel_2);
 
 		textField_URL = new JTextField();
-		textField_URL.setText("http://10.0.0.2:5055");
+		textField_URL.setText(EOSpy_GPS.server); // "http://10.0.0.2:5055");
 		textField_URL.setColumns(15);
 		GridBagConstraints gbc_textField_URL = new GridBagConstraints();
 		gbc_textField_URL.anchor = GridBagConstraints.NORTHWEST;
@@ -597,7 +597,7 @@ public class EOSpyUI {
 			serverSendPost("");
  		}
 		
-		if (EOSpy_GPS.gpsDebug) {
+		if (EOSpy_GPS.gpsDebug.indexOf("none") == -1) {
 			System.out.println(">"+gpsnmea.position.toString());
 		}
 		progressBar++;
@@ -635,6 +635,9 @@ public class EOSpyUI {
 		}
 		if (!IoTEvent.equals("")) {
 			postMsg = postMsg + IoTEvent;
+			if (EOSpy_GPS.gpsDebug.indexOf("none") == -1) {
+				System.out.println();
+			}
 		}
 
 		String postURL = textField_URL.getText();

@@ -64,9 +64,9 @@ public class EOSpy_GPS {
 	private String appVer = "1.01A";
 	private String buildDate = "0304";
 	private boolean is64bitJMV = false;
-	public static boolean gpsDebug = false;
+	public static String gpsDebug = "none"; // none, debug
 
-	public static String id = ""; // 123456
+	public static String id = ""; // 100111
 	public static String name = ""; // IoT_Parking_Kiosk
 	public static String process = ""; // com.IoTParkingKiosk
 	public static String server = ""; // http://10.0.0.2:5055
@@ -83,7 +83,7 @@ public class EOSpy_GPS {
 		getIPAddress();
 		readProperties();
 
-		if (gpsDebug) {
+		if (gpsDebug.indexOf("none") == -1) {
 			System.out.println("os.name: " + System.getProperty("os.name"));
 			System.out.println("os.arch: " + System.getProperty("os.arch"));
 			is64bitJMV = (System.getProperty("os.arch").indexOf("64") != -1);
@@ -134,6 +134,9 @@ public class EOSpy_GPS {
 			while (enuKeys.hasMoreElements()) {
 				String key = (String) enuKeys.nextElement();
 				String value = properties.getProperty(key);
+				if (key.indexOf("gpsDebug") != -1) {
+					gpsDebug = value;
+				}
 				if (key.indexOf("port") != -1) {
 					portName = value;
 				}
