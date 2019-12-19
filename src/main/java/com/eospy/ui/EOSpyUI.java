@@ -410,7 +410,7 @@ public class EOSpyUI {
 		JButton btnKey1 = new JButton("Key1");
 		btnKey1.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent e) {
 				serverSendPost("&keypress=1.0");
 			}
 		});
@@ -447,15 +447,15 @@ public class EOSpyUI {
 		btnProx.setBounds(267, 11, 65, 23);
 		panel_1.add(btnProx);
 
-		JButton Post = new JButton("Post");
-		Post.addActionListener(new ActionListener() {
+		JButton Map = new JButton("Map");
+		Map.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				serverSendPost("");
+			public void actionPerformed(ActionEvent e) {
+				mapPositionAction(e);
 			}
 		});
-		Post.setBounds(0, 45, 65, 23);
-		panel_1.add(Post);
+		Map.setBounds(0, 45, 65, 23);
+		panel_1.add(Map);
 
 		JButton Help = new JButton("Help");
 		Help.addActionListener(new ActionListener() {
@@ -467,20 +467,20 @@ public class EOSpyUI {
 		Help.setBounds(90, 45, 65, 23);
 		panel_1.add(Help);
 
-		JButton Map = new JButton("Map");
-		Map.addActionListener(new ActionListener() {
+		JButton About = new JButton("GPS");
+		About.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				mapPositionAction(e);
+				aboutIoTBPMAction(e);
 			}
 		});
-		Map.setBounds(178, 45, 65, 23);
-		panel_1.add(Map);
+		About.setBounds(178, 45, 65, 23);
+		panel_1.add(About);
 
 		JButton Exit = new JButton("Exit");
 		Exit.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
 			}
 		});

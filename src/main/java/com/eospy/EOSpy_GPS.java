@@ -73,7 +73,7 @@ public class EOSpy_GPS {
 	public static String portName = "COM1";
 
 	public static String gpio = ""; // create gpio controller
-	
+
 	public EOSpy_GPS(String[] args) {
 
 		this.eospy_ai_iot = this;
@@ -162,7 +162,7 @@ public class EOSpy_GPS {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void getIPAddress() {
 		// Returns the instance of InetAddress containing local host name and address
 		InetAddress localhost = null;
