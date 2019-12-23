@@ -230,7 +230,7 @@ public class GPSnmea {
 			// 2 - 01 numeric yy - Message number in this transmission, range 01..xx
 			// 3 - 02 numeric zz - Text Identifier 00=ERROR 01=WARNING 02=NOTICE 07=USER
 			try {
-				position.message = tokens[4];
+				position.message = position.message + tokens[4];
 			} catch (Exception e) {
 			}
 			return true;

@@ -564,35 +564,26 @@ public class EOSpyUI {
 		gpsnmea.parse(line); // GPS nmea.parse line
 
 		// $GPGGA GPS Log header
-		// public double utc = 0; // UTC time status of position
-		// (hours/minutes/seconds/decimal seconds)
+		// public double utc = 0; // UTC time status of position (hours/minutes/seconds/decimal seconds)
 		deviceEvent.setLat(gpsnmea.position.lat); // lat Latitude
 		deviceEvent.setLon(gpsnmea.position.lon); // lon Longitude
 
-		// public int quality = 0; // position fix 0: Fix not available 1: GPS SPS mode
-		// refer to GPS quality table
-		// public int satellites = 0; // sats Number of satellites in use. May be
-		// different to the number in view
-		deviceEvent.setHdop(gpsnmea.position.hdop); // hdop Horizontal dilution of precision
+		// public int quality = 0; // position fix 0: Fix not available 1: GPS SPS mode refer to GPS quality table
+		// public int satellites = 0; // sats Number of satellites in use. May be different to the number in view
+		deviceEvent.setHdop(gpsnmea.position.hdop); // hdop Horizontal dilution of precision 
 		deviceEvent.setAltitude(gpsnmea.position.altitude); // altitude Antenna altitude above/below mean sea level
-		// public double geoid = 0; // geoid - undulation - the relationship between the
-		// geoid ellipsoid
+		// public double geoid = 0; // geoid - undulation - the relationship between the geoid ellipsoid
 		deviceEvent.setSpeed(gpsnmea.position.speed); // speed Km - Speed over ground, knots
 		deviceEvent.setCourse(gpsnmea.position.course); // track true - Track made good, degrees True
 
 		// public double gpsdate = 0; // gps device date - Date: dd/mm/yy
-		// public double age = 0; // age Age of correction data (in seconds) - The
-		// maximum age limited 99 seconds.
+		// public double age = 0; // age Age of correction data (in seconds) - The maximum age limited 99 seconds
 		// public double stnID = 0; // stn ID Differential base station ID
-		// public String modeMA = ""; // mode MA A = Automatic 2D/3D M = Manual, forced
-		// to operate in 2D or 3D
-		// public int mode123 = 0; // mode 123 Mode: 1 = Fix not available; 2 = 2D; 3 =
-		// 3D
+		// public String modeMA = ""; // mode MA A = Automatic 2D/3D M = Manual, forced to operate in 2D or 3D
+		// public int mode123 = 0; // mode 123 Mode: 1 = Fix not available; 2 = 2D; 3 = 3D
 
-		// public String valid = ""; // data status - Data status: A = Data valid, V =
-		// Data invalid
-		// public String message; // $GPTXT - message transfers various information on
-		// the receiver
+		// public String valid = ""; // data status - Data status: A = Data valid, V = Data invalid
+		// public String message; // $GPTXT - message transfers various information on the receiver
 
 		deviceEvent.setValid(gpsnmea.position.fixed); // valid - position fix as boolean refer to GPS quality table
 		showFixStatus(gpsnmea.position.fixed);
@@ -674,7 +665,7 @@ public class EOSpyUI {
 
 	void aboutIoTBPMAction(ActionEvent e) {
 		try {
-			AboutDialog dialog = new AboutDialog();
+			AboutDialog dialog = new AboutDialog(gpsnmea.position.message);
 			dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception ex) {

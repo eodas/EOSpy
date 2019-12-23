@@ -7,21 +7,24 @@ import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JTextPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JTextPane;
 
 /**
  * This class displays the EOSpy standard about dialog
  */
 public class AboutDialog extends JDialog {
+	private String message = "";
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 
-	public AboutDialog() {
+	public AboutDialog(String message) {
+		this.message = message;
 		try {
 			setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 			initAboutBox();
@@ -70,6 +73,9 @@ public class AboutDialog extends JDialog {
 							+ " -- Executive Order Custom Software Development Team");
 			getContentPane().add(txtEOSpySoftware, BorderLayout.CENTER);
 		}
+		System.out.println("===================================================================================");
+		System.out.print(message);
+		System.out.println("===================================================================================");
 	}
 
 	public void actionPerformed_Ok(ActionEvent e) {
