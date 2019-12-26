@@ -13,6 +13,12 @@ import requests
 
 ser = serial.Serial('/dev/ttyACM0',9600,timeout=1) # Open Serial port - COM3,COM11,/dev/ttyACM0,/dev/ttyUSB0
 
+## fix permission problem for Ubuntu /dev/ttyACM0
+# sudo su //type password
+# cd /
+# cd dev
+# chown <username> ttyACM0
+
 # Update these with Raspberry Pi Tron service IP address and unique unit id values
 URL = "http://10.0.0.2:5055/" # Set EOSpy server IP address
 id = "100111" # Raspberry Pi Tron Device unique unit id
