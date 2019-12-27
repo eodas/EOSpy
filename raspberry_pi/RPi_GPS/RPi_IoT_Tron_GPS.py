@@ -1,126 +1,128 @@
 #!/usr/bin/env python3
-# /********************
-# - Executive Order Corporation - Raspberry Pi Tron MQTT Telemetry Transport Machine-to-Machine(M2M)/Internet of Things(IoT)
-# - Raspberry Pi Tron Drools-jBPM :: Executive Order Raspberry Pi Tron GPS Sensor MQTT AI-IoTBPM Client using AI-IoTBPM Drools-jBPM
-# - Raspberry Pi Tron AI-IoTBPM :: Internet of Things Drools-jBPM Expert System using Raspberry Pi Tron AI-IoTBPM Processing
-# - Executive Order Corporation
-# - Copyright © 1978, 2019: Executive Order Corporation, All Rights Reserved
-# ********************/
+"""
+Executive Order Corporation - Raspberry Pi Tron MQTT Telemetry Transport Machine-to-Machine(M2M)/Internet of Things(IoT)
+Raspberry Pi Tron Drools-jBPM :: Executive Order Raspberry Pi Tron Sensor AI-IoTBPM Client using AI-IoTBPM Drools-jBPM
+Raspberry Pi Tron AI-IoTBPM :: Internet of Things Drools-jBPM Expert System using Raspberry Pi Tron AI-IoTBPM Processing
+Executive Order Corporation
+Copyright © 1978, 2019: Executive Order Corporation, All Rights Reserved
+"""
 import time
 import serial
 # importing the requests library 
-import requests 
+import requests
 
-ser = serial.Serial('/dev/ttyACM0',9600,timeout=1) # Open Serial port - COM3,COM11,/dev/ttyACM0,/dev/ttyUSB0
+ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)  # Open Serial port - COM3,COM11,/dev/ttyACM0,/dev/ttyUSB0
 
-## fix permission problem for Ubuntu /dev/ttyACM0
+# fix permission problem for Ubuntu /dev/ttyACM0
 # sudo su //type password
 # cd /
 # cd dev
 # chown <username> ttyACM0
 
 # Update these with Raspberry Pi Tron service IP address and unique unit id values
-URL = "http://10.0.0.2:5055/" # Set EOSpy server IP address
-id = "100111" # Raspberry Pi Tron Device unique unit id
+URL = "http://10.0.0.2:5055/"  # Set EOSpy server IP address
+id = "100111"  # Raspberry Pi Tron Device unique unit id
 
-counter = 19 # Used to serverSendPost HTML every 20s
+counter = 19  # Used to serverSendPost HTML every 20s
 
 # $GPGGA GPS Log header
-utc = "0" # UTC time status of position (hours/minutes/seconds/decimal seconds)
+utc = "0"  # UTC time status of position (hours/minutes/seconds/decimal seconds)
 # Update these with your LAT/LON GPS position values
 # You can find LAT/LON from an address https://www.latlong.net/convert-address-to-lat-long.html
-address = "National_Air_Space_Museum_600_Independence_Ave_Washington_DC_20560";
-latstr = "38.888160" # lat Latitude
-lngstr = "-77.019868" # lng Longitude
-speed = "0" # speed Km - Speed over ground, knots
-course = "0.00" # track true - Track made good, degrees True as bearing
-altitude = "0" # altitude Antenna altitude above/below mean sea level
-message = "0" # total number of messages in this transmission
-accuracy = "0.0" # GPS device accuracy
-valid = "V" # data status - Data status: A = Data valid, V = Data invalid
-batt = "89.7" # GPS device batteryLevel
-light = "53.4"; # photocell value
+address = "National_Air_Space_Museum_600_Independence_Ave_Washington_DC_20560"
+latstr = "38.888160"  # lat Latitude
+lngstr = "-77.019868"  # lng Longitude
+speed = "0"  # speed Km - Speed over ground, knots
+course = "0.00"  # track true - Track made good, degrees True as bearing
+altitude = "0"  # altitude Antenna altitude above/below mean sea level
+message = "0"  # total number of messages in this transmission
+accuracy = "0.0"  # GPS device accuracy
+valid = "V"  # data status - Data status: A = Data valid, V = Data invalid
+batt = "89.7"  # GPS device batteryLevel
+light = "53.4"  # photocell value
 
 # You can add more additional fields to the data model and transmit via any device to the Raspberry Pi Tron Drools-jBPM processing
 
 # Values for the DHT11 digital temperature/humidity sensor; &temp= and &humidity= fields
-temp = "0.0";
-humidity = "0.0";
+temp = "0.0"
+humidity = "0.0"
 
 # Values to send in &textMessage= filed
-textMessage = "text_message";
+textMessage = "text_message"
 
 # Values to send in &keypress= field
-TYPE_ALLEVENTS = "allEvents"; # allEvents
-TYPE_KEYPRESS_1 = "1.0"; # keypress_1
-TYPE_KEYPRESS_2 = "2.0"; # keypress_2
-TYPE_REED_RELAY = "4.0"; # reedRelay
-TYPE_PROXIMITY = "8.0"; # proximity
+TYPE_ALLEVENTS = "allEvents"  # allEvents
+TYPE_KEYPRESS_1 = "1.0"  # keypress_1
+TYPE_KEYPRESS_2 = "2.0"  # keypress_2
+TYPE_REED_RELAY = "4.0"  # reedRelay
+TYPE_PROXIMITY = "8.0"  # proximity
 
 # Values to send in &alarm= field
-alarm = "general";
+alarm = "general"
 
 # Values to send in &alarm= field
-ALARM_GENERAL = "general";
-ALARM_SOS = "sos";
-ALARM_VIBRATION = "vibration";
-ALARM_MOVEMENT = "movement";
-ALARM_LOW_SPEED = "lowspeed";
-ALARM_OVERSPEED = "overspeed";
-ALARM_FALL_DOWN = "fallDown";
-ALARM_LOW_POWER = "lowPower";
-ALARM_LOW_BATTERY = "lowBattery";
-ALARM_FAULT = "fault";
-ALARM_POWER_OFF = "powerOff";
-ALARM_POWER_ON = "powerOn";
-ALARM_DOOR = "door";
-ALARM_GEOFENCE = "geofence";
-ALARM_GEOFENCE_ENTER = "geofenceEnter";
-ALARM_GEOFENCE_EXIT = "geofenceExit";
-ALARM_GPS_ANTENNA_CUT = "gpsAntennaCut";
-ALARM_ACCIDENT = "accident";
-ALARM_TOW = "tow";
-ALARM_ACCELERATION = "hardAcceleration";
-ALARM_BRAKING = "hardBraking";
-ALARM_CORNERING = "hardCornering";
-ALARM_FATIGUE_DRIVING = "fatigueDriving";
-ALARM_POWER_CUT = "powerCut";
-ALARM_POWER_RESTORED = "powerRestored";
-ALARM_JAMMING = "jamming";
-ALARM_TEMPERATURE = "temperature";
-ALARM_PARKING = "parking";
-ALARM_SHOCK = "shock";
-ALARM_BONNET = "bonnet";
-ALARM_FOOT_BRAKE = "footBrake";
-ALARM_OIL_LEAK = "oilLeak";
-ALARM_TAMPERING = "tampering";
-ALARM_REMOVING = "removing";
+ALARM_GENERAL = "general"
+ALARM_SOS = "sos"
+ALARM_VIBRATION = "vibration"
+ALARM_MOVEMENT = "movement"
+ALARM_LOW_SPEED = "lowspeed"
+ALARM_OVERSPEED = "overspeed"
+ALARM_FALL_DOWN = "fallDown"
+ALARM_LOW_POWER = "lowPower"
+ALARM_LOW_BATTERY = "lowBattery"
+ALARM_FAULT = "fault"
+ALARM_POWER_OFF = "powerOff"
+ALARM_POWER_ON = "powerOn"
+ALARM_DOOR = "door"
+ALARM_GEOFENCE = "geofence"
+ALARM_GEOFENCE_ENTER = "geofenceEnter"
+ALARM_GEOFENCE_EXIT = "geofenceExit"
+ALARM_GPS_ANTENNA_CUT = "gpsAntennaCut"
+ALARM_ACCIDENT = "accident"
+ALARM_TOW = "tow"
+ALARM_ACCELERATION = "hardAcceleration"
+ALARM_BRAKING = "hardBraking"
+ALARM_CORNERING = "hardCornering"
+ALARM_FATIGUE_DRIVING = "fatigueDriving"
+ALARM_POWER_CUT = "powerCut"
+ALARM_POWER_RESTORED = "powerRestored"
+ALARM_JAMMING = "jamming"
+ALARM_TEMPERATURE = "temperature"
+ALARM_PARKING = "parking"
+ALARM_SHOCK = "shock"
+ALARM_BONNET = "bonnet"
+ALARM_FOOT_BRAKE = "footBrake"
+ALARM_OIL_LEAK = "oilLeak"
+ALARM_TAMPERING = "tampering"
+ALARM_REMOVING = "removing"
+
 
 def serverSendPost():
     bvalid = 'false'
     bearing = "0"
     if len(course) == 0:
-      bearing = "0.00"
-      
+        bearing = "0.00"
+
     if valid == "V":
-      bvalid = 'true'
+        bvalid = 'true'
 
     # defining a params dict for the parameters to be sent to the API 
-    PARAMS = {       'id' : id,
-              'timestamp' : utc,
-                    'lat' : latstr,
-                    'lon' : lngstr,
-                  'speed' : speed,
-                'bearing' : bearing,
-               'altitude' : altitude,
-               'accuracy' : accuracy,
-                  'valid' : bvalid }
+    PARAMS = {'id': id,
+              'timestamp': utc,
+              'lat': latstr,
+              'lon': lngstr,
+              'speed': speed,
+              'bearing': bearing,
+              'altitude': altitude,
+              'accuracy': accuracy,
+              'valid': bvalid}
 
     # sending get request and saving the response as response object 
-    resp = requests.get(url = URL, params = PARAMS) 
+    resp = requests.get(url=URL, params=PARAMS)
 
     print(">>> Connection Status:", resp.status_code)
     return
+
 
 def readString():
     while 1:
@@ -129,11 +131,14 @@ def readString():
         line = ser.readline().decode("utf-8")  # Read the entire string
         return line
 
+
 def getTime(string, format, returnFormat):
     global utc
     # utc = int(string)
     utc = int(time.time())
-    return time.strftime(returnFormat, time.strptime(string, format))  # Convert date and time to a nice printable format
+    return time.strftime(returnFormat,
+                         time.strptime(string, format))  # Convert date and time to a nice printable format
+
 
 def latitude2Decimal(lat, NS):
     global latstr
@@ -143,7 +148,8 @@ def latitude2Decimal(lat, NS):
     if NS == 'S':
         latitudeDegrees = "-" + latitudeDegrees
     latstr = latitudeDegrees
-    return latitudeDegrees;
+    return latitudeDegrees
+
 
 def longitude2Decimal(lng, WE):
     global lngstr
@@ -155,7 +161,8 @@ def longitude2Decimal(lng, WE):
     if WE == 'W':
         longitudeDegrees = "-" + longitudeDegrees
     lngstr = longitudeDegrees
-    return longitudeDegrees;
+    return longitudeDegrees
+
 
 # GPRMC - GPS specific information
 def printRMC(lines):
@@ -174,26 +181,28 @@ def printRMC(lines):
     speed = lines[7]
     print("Track angle (deg):", lines[8])
     course = lines[8]
-    print("Fix date at:", lines[9]) # "%H%M%S.%f%d%m%y", "%a %b %d %H:%M:%S %Y"), "UTC")
+    print("Fix date at:", lines[9])  # "%H%M%S.%f%d%m%y", "%a %b %d %H:%M:%S %Y"), "UTC")
     print("Magnetic variation: ", lines[10], end='')
-    if len(lines) == 13:  # The returned string will be either 12 or 13 - it will return 13 if NMEA standard used is above 2.3
+    if len(
+            lines) == 13:  # The returned string will be either 12 or 13 - it will return 13 if NMEA standard used is above 2.3
         print(lines[11])
         print("Mode (A=Autonomous, D=Differential, E=Estimated, N=Data not valid):", lines[12].partition("*")[0])
     else:
         print(lines[11].partition("*")[0])
 
     counter += 1
-    if counter > 10: # Send serverSendPost HTML every 10s
+    if counter > 10:  # Send serverSendPost HTML every 10s
         counter = 0
         serverSendPost()
     return
+
 
 # GPGGA - GPS fix data and undulation
 def printGGA(lines):
     global altitude
     print("========================================GGA========================================")
     # print(lines, '\n')
-    
+
     print("Fix taken at:", getTime(lines[1], "%H%M%S.%f", "%H:%M:%S"), "UTC")
     lat = latitude2Decimal(lines[2], lines[3])
     lng = longitude2Decimal(lines[4], lines[5])
@@ -208,11 +217,12 @@ def printGGA(lines):
     print("DGPS station ID number:", lines[14].partition("*")[0])
     return
 
+
 # GPGSA - GPS DOP and active satellites
 def printGSA(lines):
     print("========================================GSA========================================")
     # print(lines, '\n')
-    
+
     print("Selection of 2D or 3D fix (A=Auto,M=Manual):", lines[1])
     print("3D fix (1=No fix,2=2D fix, 3=3D fix):", lines[2])
     print("PRNs of satellites used for fix:", end='')
@@ -224,6 +234,7 @@ def printGSA(lines):
     print("HDOP", lines[16])
     print("VDOP", lines[17].partition("*")[0])
     return
+
 
 # GPGSV - GPS satellites in view
 def printGSV(lines):
@@ -243,6 +254,7 @@ def printGSV(lines):
         print("SNR (higher is better):", lines[7 + i * 4].partition("*")[0])
     return
 
+
 # GPGLL - Geographic position
 def printGLL(lines):
     print("========================================GLL========================================")
@@ -256,6 +268,7 @@ def printGLL(lines):
     if lines[7].partition("*")[0]:  # Extra field since NMEA standard 2.3
         print("Mode (A=Autonomous, D=Differential, E=Estimated, N=Data not valid):", lines[7].partition("*")[0])
     return
+
 
 # GPVTG - Track made good and ground speed
 def printVTG(lines):
@@ -274,18 +287,22 @@ def printVTG(lines):
         print("Mode (A=Autonomous, D=Differential, E=Estimated, N=Data not valid):", lines[9].partition("*")[0])
     return
 
+
 # GPTXT - GPS message transfers various information on the receiver
 def printTXT(lines):
     global message
     print("========================================TXT========================================")
     # print(lines, '\n')
-    
+
     print("Total number of messages:", lines[1])
     print("This Message number:", lines[2])
     print("Text Identifier 00=ERROR 01=WARNING 02=NOTICE 07=USER:", lines[3])
     print("Message text:", lines[4])
     message = message + lines[4]
+    if "FFFFFFFF" in lines[4]:
+        print(message)
     return
+
 
 def checksum(line):
     checkString = line.partition("*")
@@ -294,7 +311,7 @@ def checksum(line):
         checksum ^= ord(c)
 
     try:  # Just to make sure
-        inputChecksum = int(checkString[2].rstrip(), 16);
+        inputChecksum = int(checkString[2].rstrip(), 16)
     except:
         print("Error in string")
         return False
@@ -307,6 +324,7 @@ def checksum(line):
         print("=====================================================================================")
         print(hex(checksum), "!=", hex(inputChecksum))
         return False
+
 
 if __name__ == '__main__':
     try:
