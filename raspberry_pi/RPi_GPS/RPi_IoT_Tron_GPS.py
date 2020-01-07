@@ -4,7 +4,7 @@ Executive Order Corporation - Raspberry Pi Tron MQTT Telemetry Transport Machine
 Raspberry Pi Tron Drools-jBPM :: Executive Order Raspberry Pi Tron Sensor AI-IoTBPM Client using AI-IoTBPM Drools-jBPM
 Raspberry Pi Tron AI-IoTBPM :: Internet of Things Drools-jBPM Expert System using Raspberry Pi Tron AI-IoTBPM Processing
 Executive Order Corporation
-Copyright © 1978, 2019: Executive Order Corporation, All Rights Reserved
+Copyright © 1978, 2020: Executive Order Corporation, All Rights Reserved
 """
 import time
 import serial
@@ -13,7 +13,7 @@ import requests
 
 ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)  # Open Serial port - COM3,COM11,/dev/ttyACM0,/dev/ttyUSB0
 
-# fix permission problem for Ubuntu /dev/ttyACM0
+# fix permission problem in Ubuntu /dev/ttyACM0
 # sudo su //type password
 # cd /
 # cd dev
@@ -23,7 +23,8 @@ ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)  # Open Serial port - COM3,
 URL = "http://10.0.0.2:5055/"  # Set EOSpy server IP address
 id = "100111"  # Raspberry Pi Tron Device unique unit id
 
-counter = 19  # Used to serverSendPost HTML every 20s
+# Above are all the fields you need to provide values, the remaining fields are used in the RPi Tron application
+counter = 10  # Used to serverSendPost HTML every 20s
 
 # $GPGGA GPS Log header
 utc = "0"  # UTC time status of position (hours/minutes/seconds/decimal seconds)
@@ -40,6 +41,14 @@ accuracy = "0.0"  # GPS device accuracy
 valid = "V"  # data status - Data status: A = Data valid, V = Data invalid
 batt = "89.7"  # GPS device batteryLevel
 light = "53.4"  # photocell value
+
+# Raspberry Pi Tron currently supports these additional data fields in the Server Event data model:
+
+# id=6&event=allEvents&protocol=osmand&servertime=<date>&timestamp=<date>&fixtime=<date>&outdated=false&valid=true
+# &lat=38.85&lon=-84.35&altitude=27.0&speed=0.0&course=0.0&address=<street address>&accuracy=0.0&network=null
+# &batteryLevel=78.3&textMessage=Message_Sent&temp=71.2&ir_temp=0.0&humidity=0.0&mbar=79.9
+# &accel_x=-0.01&accel_y=-0.07&accel_z=9.79&gyro_x=0.0&gyro_y=-0.0&gyro_z=-0.0&magnet_x=-0.01&magnet_y=-0.07&magnet_z=9.81
+# &light=91.0&keypress=0.0&alarm=Temperature&distance=1.6&totalDistance=3.79&motion=false
 
 # You can add more additional fields to the data model and transmit via any device to the Raspberry Pi Tron Drools-jBPM processing
 
@@ -117,6 +126,15 @@ def serverSendPost():
               'accuracy': accuracy,
               'valid': bvalid}
 
+	# Raspberry Pi Tron currently supports these additional data fields in the Server Event data model:
+	# 'batt': batt,
+	# 'temp': temp,
+	# 'humidity': humidity,
+	# 'keypress': TYPE_KEYPRESS_1
+	# 'textMessage: textMessage,
+	# 'alarm': ALARM_TEMPERATURE,
+	# 'light': light,
+
     # sending get request and saving the response as response object 
     resp = requests.get(url=URL, params=PARAMS)
 
@@ -191,7 +209,7 @@ def printRMC(lines):
         print(lines[11].partition("*")[0])
 
     counter += 1
-    if counter > 10:  # Send serverSendPost HTML every 10s
+    if counter > 20:  # Send serverSendPost HTML every 20s
         counter = 0
         serverSendPost()
     return
