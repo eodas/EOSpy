@@ -126,14 +126,14 @@ def serverSendPost():
               'accuracy': accuracy,
               'valid': bvalid}
 
-	# Raspberry Pi Tron currently supports these additional data fields in the Server Event data model:
-	# 'batt': batt,
-	# 'temp': temp,
-	# 'humidity': humidity,
-	# 'keypress': TYPE_KEYPRESS_1
-	# 'textMessage: textMessage,
-	# 'alarm': ALARM_TEMPERATURE,
-	# 'light': light,
+    # Raspberry Pi Tron currently supports these additional data fields in the Server Event data model:
+    # 'batt': batt,
+    # 'temp': temp,
+    # 'humidity': humidity,
+    # 'keypress': TYPE_KEYPRESS_1
+    # 'textMessage: textMessage,
+    # 'alarm': ALARM_TEMPERATURE,
+    # 'light': light,
 
     # sending get request and saving the response as response object 
     resp = requests.get(url=URL, params=PARAMS)
