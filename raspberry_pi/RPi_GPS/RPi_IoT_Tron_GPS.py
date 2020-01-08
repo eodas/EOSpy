@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """
 Executive Order Corporation - Raspberry Pi Tron MQTT Telemetry Transport Machine-to-Machine(M2M)/Internet of Things(IoT)
 Raspberry Pi Tron Drools-jBPM :: Executive Order Raspberry Pi Tron Sensor AI-IoTBPM Client using AI-IoTBPM Drools-jBPM
@@ -357,10 +357,10 @@ if __name__ == '__main__':
                     printGGA(lines)
                     pass
                 elif lines[0] == "GPGSA":
-                    # printGSA(lines)
+                    printGSA(lines)
                     pass
                 elif lines[0] == "GPGSV":
-                    # printGSV(lines)
+                    printGSV(lines)
                     pass
                 elif lines[0] == "GPGLL":
                     printGLL(lines)
