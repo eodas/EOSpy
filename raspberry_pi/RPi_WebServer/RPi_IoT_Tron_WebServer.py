@@ -16,7 +16,7 @@ from urllib.parse import urlparse
 from urllib.parse import parse_qs
 
 # Update these with Raspberry Pi Tron service IP address and unique unit id values
-URL = "http://10.0.0.2:5055/"  # Set EOSpy server IP address
+URL = "http://73.137.241.23:5055/"  # Set EOSpy server IP address
 id = "100111"  # Raspberry Pi Tron Device unique unit id
 
 # Above are all the fields you need to provide values, the remaining fields are used in the RPi Tron application
@@ -189,6 +189,7 @@ class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
         global LED2
 
         global setup
+        global keypress
         global textMessage
 
         if setup:
@@ -211,29 +212,38 @@ class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
         command = urlparse(self.path).path
         if '/DEV0' in query_components:
             textMessage = "dev0_" + command[6:]
-            serverSendPost()
             LED0 = query_components["/DEV0"][0]
             if 'ON' in LED0:
+                keypress = "1.0"
+                serverSendPost()
                 GPIO.output(LedPin0, GPIO.HIGH)  # LED pin11 on
             else:
+                keypress = "2.0"
+                serverSendPost()
                 GPIO.output(LedPin0, GPIO.LOW)  # LED pin11 off
 
         if '/DEV1' in query_components:
             textMessage = "dev1_" + command[6:]
-            serverSendPost()
             LED1 = query_components["/DEV1"][0]
             if 'ON' in LED1:
+                keypress = "3.0"
+                serverSendPost()
                 GPIO.output(LedPin1, GPIO.HIGH)  # LED pin13 on
             else:
+                keypress = "4.0"
+                serverSendPost()
                 GPIO.output(LedPin1, GPIO.LOW)  # LED pin13 off
 
         if '/DEV2' in query_components:
             textMessage = "dev2_" + command[6:]
-            serverSendPost()
             LED2 = query_components["/DEV2"][0]
             if 'ON' in LED2:
+                keypress = "5.0"
+                serverSendPost()
                 GPIO.output(LedPin2, GPIO.HIGH)  # LED pin15 on
             else:
+                keypress = "6.0"
+                serverSendPost()
                 GPIO.output(LedPin2, GPIO.LOW)  # LED pin15 off
 
         # Pi IoT Tron custom HTML code to generate GPIO functions
