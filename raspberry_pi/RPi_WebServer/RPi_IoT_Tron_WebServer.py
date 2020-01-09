@@ -16,7 +16,7 @@ from urllib.parse import urlparse
 from urllib.parse import parse_qs
 
 # Update these with Raspberry Pi Tron service IP address and unique unit id values
-URL = "http://73.137.241.23:5055/"  # Set EOSpy server IP address
+URL = "http://10.0.0.2:5055/"  # Set EOSpy server IP address
 id = "100111"  # Raspberry Pi Tron Device unique unit id
 
 # Above are all the fields you need to provide values, the remaining fields are used in the RPi Tron application
