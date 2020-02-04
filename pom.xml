@@ -35,7 +35,7 @@
 		</repository>
 	</repositories>
 
-	<dependencies>
+	<dependencies> 
 
 		<!-- https://mvnrepository.com/artifact/name.prokop.bart.rxtx/rxtx -->
 		<dependency>
