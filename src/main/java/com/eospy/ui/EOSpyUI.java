@@ -158,7 +158,8 @@ public class EOSpyUI {
 		gpsFrame.getContentPane().add(lblNewLabel_3, gbc_lblNewLabel_3);
 
 		textField_ID = new JTextField();
-		textField_ID.setText("100111");
+		textField_ID.setText(EOSpy_GPS.id); // "100111");
+		// textField_ID.setText("100111");
 		GridBagConstraints gbc_textField_ID = new GridBagConstraints();
 		gbc_textField_ID.anchor = GridBagConstraints.NORTHWEST;
 		gbc_textField_ID.insets = new Insets(0, 0, 5, 5);

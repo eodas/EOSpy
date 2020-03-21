@@ -66,11 +66,11 @@ public class EOSpy_GPS {
 	private boolean is64bitJMV = false;
 	public static String gpsDebug = "none"; // none, debug
 
-	public static String id = ""; // 100111
+	public static String id = "100111"; // 100111 
 	public static String name = ""; // IoT_Parking_Kiosk
 	public static String process = ""; // com.IoTParkingKiosk
 	public static String server = ""; // http://10.0.0.2:5055
-	public static String portName = "COM1";
+	public static String portName = "COM1"; // COM1
 
 	public static String gpio = ""; // create gpio controller
 
