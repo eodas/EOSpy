@@ -8,7 +8,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.eospy.EOSpy_GPS;
-import com.eospy.comm.Comm;
+import com.eospy.comm.jSerialComm;
 import com.eospy.gps.GPSnmea;
 import com.eospy.ui.AboutDialog;
 import com.eospy.util.WebBrowser;
@@ -39,7 +39,7 @@ public class EOSpyUI {
 
 	private JFrame gpsFrame;
 
-	private Comm comm;
+	private jSerialComm comm;
 	private GPSnmea gpsnmea;
 	private DeviceEvent deviceEvent;
 	private static EOSpyUI eospyui;
@@ -72,7 +72,7 @@ public class EOSpyUI {
 		this.gpsFrame = buildFrame(exitOnClose);
 
 		eospyui = this;
-		comm = new Comm();
+		comm = new jSerialComm();
 		gpsnmea = new GPSnmea();
 		deviceEvent = new DeviceEvent();
 	}
@@ -545,15 +545,9 @@ public class EOSpyUI {
 		serverService = !serverService;
 		showServerService();
 		if (serverService) {
-			try {
-				comm.CommConnect(EOSpy_GPS.portName);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
+			comm.openCommPort();
 		} else {
-			comm.CommClose();
+			comm.closeCommPort();
 		}
 	}
 
