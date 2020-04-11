@@ -37,6 +37,7 @@ public class jSerialComm {
 		commPort = SerialPort.getCommPorts()[0];
 		System.out.println("SerialPort: " + commPort);
 		EOSpy_GPS.portName = commPort.toString();
+		EOSpyUI.updateCOMPort(commPort.toString());
 		commPort.openPort();
 		commPort.addDataListener(new SerialPortDataListener() {
 
@@ -59,7 +60,7 @@ public class jSerialComm {
 						commString = "";
 					}
 				}
-				System.out.println("Read " + numRead + " bytes.");
+				System.out.println("Read " + numRead + " bytes");
 			}
 		});
 	}
@@ -70,47 +71,7 @@ public class jSerialComm {
 	}
 	
 /*	
-	void openComPort() {
-		SerialPort comPort = SerialPort.getCommPorts()[0];
-		System.out.println("SerialPort: " + comPort);
-		comPort.openPort();
-		comPort.addDataListener(new SerialPortDataListener() {
 
-			@Override
-			public int getListeningEvents() {
-				return SerialPort.LISTENING_EVENT_DATA_AVAILABLE;
-			}
-
-			@Override
-			public void serialEvent(SerialPortEvent event) {
-				if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE)
-					return;
-//
-				try {
-					int len = 0;
-					while ((data = in.read()) > -1) {
-						if (data == '\n') {
-							break;
-						}
-						buffer[len++] = (byte) data;
-					}
-
-					EOSpyUI.commLine(new String(buffer, 0, len));
-				
-//				
-				byte[] newData = new byte[comPort.bytesAvailable()];
-				int numRead = comPort.readBytes(newData, newData.length);
-				System.out.println("Read " + numRead + " bytes.");
-			}
-		});
-	}
-	
-	public void closeComPort() {
-		comPort.removeDataListener();
-		comPort.closePort();
-	}
-	
-	
 	// Retrieve available comms ports on your computer.
 	// A CommPort is available if it is not being used by another application.
 	public String[] CommListPorts() {

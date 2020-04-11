@@ -50,7 +50,7 @@ public class EOSpyUI {
 	private JTextField textField_Lon;
 	private JTextField textField_COMPort;
 	private JTextField textField_ServerEvent;
-	private JTextField textField_FixStatus;
+	private static JTextField textField_FixStatus;
 
 	private JLabel lblLabel_FixStatus;
 	private JLabel lblLabel_Progress;
@@ -81,7 +81,7 @@ public class EOSpyUI {
 	private JFrame buildFrame(boolean exitOnClose) {
 		gpsFrame = new JFrame();
 
-		gpsFrame.setTitle("EOSpy GPS AI-IoT :: Internet of Things GPS AI-IoT");
+		gpsFrame.setTitle("EOSpy GPS AI-IoT :: Internet of Things");
 		gpsFrame.setBounds(100, 100, 450, 624);
 		gpsFrame.setDefaultCloseOperation(exitOnClose ? JFrame.EXIT_ON_CLOSE : WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -96,6 +96,7 @@ public class EOSpyUI {
 		gpsFrame.getContentPane().setLayout(gridBagLayout);
 
 		textField_FixStatus = new JTextField();
+		textField_FixStatus.setForeground(Color.WHITE);
 		textField_FixStatus.setBackground(Color.RED);
 		GridBagConstraints gbc_textField_FixStatus = new GridBagConstraints();
 		gbc_textField_FixStatus.gridwidth = 4;
@@ -666,6 +667,10 @@ public class EOSpyUI {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	public static void updateCOMPort(String portName) {
+		textField_FixStatus.setText("      " + portName);
 	}
 
 	public void show() {
