@@ -415,7 +415,7 @@ public class EOSpyUI {
 				serverSendPost("&keypress=1.0");
 			}
 		});
-		btnKey1.setBounds(0, 11, 65, 23);
+		btnKey1.setBounds(0, 11, 76, 23);
 		panel_1.add(btnKey1);
 
 		JButton btnKey2 = new JButton("Key2");
@@ -425,7 +425,7 @@ public class EOSpyUI {
 				serverSendPost("&keypress=2.0");
 			}
 		});
-		btnKey2.setBounds(90, 11, 65, 23);
+		btnKey2.setBounds(90, 11, 76, 23);
 		panel_1.add(btnKey2);
 
 		JButton btnReed = new JButton("Reed");
@@ -435,7 +435,7 @@ public class EOSpyUI {
 				serverSendPost("&keypress=4.0");
 			}
 		});
-		btnReed.setBounds(178, 11, 65, 23);
+		btnReed.setBounds(178, 11, 76, 23);
 		panel_1.add(btnReed);
 
 		JButton btnProx = new JButton("Prox");
@@ -445,7 +445,7 @@ public class EOSpyUI {
 				serverSendPost("&keypress=8.0");
 			}
 		});
-		btnProx.setBounds(267, 11, 65, 23);
+		btnProx.setBounds(267, 11, 76, 23);
 		panel_1.add(btnProx);
 
 		JButton Map = new JButton("Map");
@@ -455,7 +455,7 @@ public class EOSpyUI {
 				mapPositionAction(e);
 			}
 		});
-		Map.setBounds(0, 45, 65, 23);
+		Map.setBounds(0, 45, 76, 23);
 		panel_1.add(Map);
 
 		JButton Help = new JButton("Help");
@@ -465,7 +465,7 @@ public class EOSpyUI {
 				helpContentsAction(e);
 			}
 		});
-		Help.setBounds(90, 45, 65, 23);
+		Help.setBounds(90, 45, 76, 23);
 		panel_1.add(Help);
 
 		JButton About = new JButton("GPS");
@@ -475,7 +475,7 @@ public class EOSpyUI {
 				aboutIoTBPMAction(e);
 			}
 		});
-		About.setBounds(178, 45, 65, 23);
+		About.setBounds(178, 45, 76, 23);
 		panel_1.add(About);
 
 		JButton Exit = new JButton("Exit");
@@ -485,7 +485,7 @@ public class EOSpyUI {
 				System.exit(0);
 			}
 		});
-		Exit.setBounds(267, 45, 65, 23);
+		Exit.setBounds(267, 45, 76, 23);
 		panel_1.add(Exit);
 
 		showServerService();
