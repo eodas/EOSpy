@@ -5,6 +5,22 @@
 Executive Order Corp - Arduino Tron - Arduino ESP8266 MQTT Telemetry Transport Machine-to-Machine(M2M)/Internet of Things(IoT)
 Arduino Tron :: EOSPY-Executive Order Sensor Processor System - Arduino Tron MQTT AI-IoT Client using EOSpy AI-IoT Drools-jBPM
 
+# Raspberry Pi IoT RPi (Pi IoT Tron) - INTERNET OF THINGS (IoT) :: Internet of Things Drools-jBPM Expert System using Pi IoT Tron AI-IoTBPMServer
+
+![alt tag](http://iotbpm.com/wp-content/uploads/2019/07/RaspberryPiArduino.3.png "Raspberry Pi IoT Tron")
+
+### Raspberry Pi IoT Kiosk (Pi IoT Tron) - Kiosk - INTERNET OF THINGS (IoT)
+
+Raspberry Pi IoT Tron - MQTT Telemetry Transport Machine-to-Machine(M2M)/Internet of Things(IoT)
+Arduino Tron :: EOSPY-Executive Order Sensor Processor System - Arduino Tron MQTT AI-IoT Client using EOSpy AI-IoT Drools-jBPM
+
+# Nvidia AI-IoT :: Internet of Things Drools-jBPM NVidia Tron
+
+![alt tag](https://iotbpm.com/wp-content/uploads/2020/05/cms_13137-nvidia-tron.png "Nvidia Tron")
+
+Executive Order Corp - Nvidia Tron - MQTT Telemetry Transport Machine-to-Machine(M2M)/Internet of Things(IoT)
+Arduino Tron :: EOSPY-Executive Order Sensor Processor System - Arduino Tron MQTT AI-IoT Client using EOSpy AI-IoT Drools-jBPM
+
 The power of the IoT (Internet of Things) device increases greatly when business process (jBPM) can use them to provide information
 about our real-world as well as execute IoT (devices) as part of our business process. The jBPM-BPMN modular allow us to define 
 both the Business Processes and IoT Devices Behavior at the same time using one diagram. With EOSpy adding Drools-jBPM to IoT,
