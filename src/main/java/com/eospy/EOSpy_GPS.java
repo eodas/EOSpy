@@ -24,7 +24,7 @@ import com.eospy.ui.EOSpyUI;
  * Executive Order Corporation - Arduino Tron - Arduino ESP8266 MQTT Telemetry Transport Machine-to-Machine(M2M)/Internet of Things(IoT)
  *
  * Executive Order Corporation
- * Copyright � 1978, 2018: Executive Order Corporation, All Rights Reserved
+ * Copyright (C) 1978, 2018: Executive Order Corporation, All Rights Reserved
  */
 
 /**
