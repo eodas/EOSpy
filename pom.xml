@@ -9,13 +9,13 @@
 	<version>1.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
+	<name>EOSpy GPS :: Internet of Things Drools-jBPM Expert System using EOSpy Arduino Tron AI-IoT</name>
+	<description>EOSpy GPS :: AI-IoT Application using the jBPM and Drools Rules Engine for EOSpy Arduino Tron and AI-IoT Executive Order Corp</description>
+
 	<properties>
 	    <maven.compiler.target>1.7</maven.compiler.target>
 	    <maven.compiler.source>1.7</maven.compiler.source>
 	</properties>
-
-	<name>EOSpy GPS :: Internet of Things Drools-jBPM Expert System using EOSpy Arduino Tron AI-IoT</name>
-	<description>EOSpy GPS :: AI-IoT Application using the jBPM and Drools Rules Engine for EOSpy Arduino Tron and AI-IoT Executive Order Corp</description>
 
 	<dependencies> 
 
