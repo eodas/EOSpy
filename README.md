@@ -134,5 +134,5 @@ then
 end 
 
 - Executive Order Corporation
-- Copyright © 1978, 2021: Executive Order Corporation, All Rights Reserved
+- Copyright © 1978, 2021 : Executive Order Corporation, All Rights Reserved
 - Thank You! -Executive Order Custom Software Development Team 
