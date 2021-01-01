@@ -10,7 +10,7 @@ import java.util.Map;
  * Arduino Tron AI-IoTBPM Processing GPSnmea - GPS library for Arduino providing
  * universal NMEA parsing from GPS satellites
  *
- * Executive Order Corporation Copyright (c) 1978, 2019: Executive Order
+ * Executive Order Corporation Copyright (c) 1978, 2021: Executive Order
  * Corporation, All Rights Reserved
  */
 
