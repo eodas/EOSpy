@@ -23,6 +23,7 @@ public class DeviceEvent {
 	public double lat;
 	public double lon;
 	public double hdop;
+	public double satellites;
 	public String cell;
 	public String wifi;
 	public double altitude; // value in meters
@@ -198,6 +199,14 @@ public class DeviceEvent {
 
 	public void setHdop(double hdop) {
 		this.hdop = hdop;
+	}
+
+	public double getSatellites() {
+		return satellites;
+	}
+
+	public void setSatellites(double satellites) {
+		this.satellites = satellites;
 	}
 
 	public String getCell() {
@@ -490,6 +499,10 @@ public class DeviceEvent {
 				break;
 			case "hdop":
 				setHdop(Double.parseDouble(value));
+				break;
+			case "sats":
+			case "satellites":
+				setSatellites(Double.parseDouble(value));
 				break;
 			case "location":
 				String[] location = value.split(",");

@@ -22,7 +22,7 @@ package com.eospy.comm;
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;
 import com.fazecast.jSerialComm.SerialPortEvent;
-import com.eospy.EOSpy_GPS;
+import com.eospy.EOSpyGPS;
 import com.eospy.ui.EOSpyUI;
 
 public class jSerialComm {
@@ -36,7 +36,7 @@ public class jSerialComm {
 	public void openCommPort() {
 		commPort = SerialPort.getCommPorts()[0];
 		System.out.println("SerialPort: " + commPort);
-		EOSpy_GPS.portName = commPort.toString();
+		EOSpyGPS.portName = commPort.toString();
 		EOSpyUI.updateCOMPort(commPort.toString());
 		commPort.openPort();
 		commPort.addDataListener(new SerialPortDataListener() {

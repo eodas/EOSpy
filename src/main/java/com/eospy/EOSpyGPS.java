@@ -56,9 +56,9 @@ import com.eospy.ui.EOSpyUI;
 /**
  * This is the main class for EOSpy GPS AI-IoT Drools-jBPM Expert System
  */
-public class EOSpy_GPS {
+public class EOSpyGPS {
 
-	EOSpy_GPS eospy_ai_iot;
+	EOSpyGPS eospy_ai_iot;
 
 	private String base_path = "";
 	private String appVer = "1.01A";
@@ -71,10 +71,10 @@ public class EOSpy_GPS {
 	public static String process = ""; // com.IoTParkingKiosk
 	public static String server = ""; // http://10.0.0.2:5055
 	public static String portName = "COM1"; // COM1
-
+	public static String frequence = "300"; // Reporting Interval
 	public static String gpio = ""; // create gpio controller
 
-	public EOSpy_GPS(String[] args) {
+	public EOSpyGPS(String[] args) {
 
 		this.eospy_ai_iot = this;
 		System.out.println("EOSpy GPS AI-IoT :: Internet of Things GPS Drools-jBPM Expert System"
@@ -137,9 +137,6 @@ public class EOSpy_GPS {
 				if (key.indexOf("gpsDebug") != -1) {
 					gpsDebug = value;
 				}
-				if (key.indexOf("port") != -1) {
-					portName = value;
-				}
 				if (key.indexOf("id") != -1) {
 					id = value;
 				}
@@ -151,6 +148,12 @@ public class EOSpy_GPS {
 				}
 				if (key.indexOf("server") != -1) {
 					server = value;
+				}
+				if (key.indexOf("port") != -1) {
+					portName = value;
+				}
+				if (key.indexOf("frequence") != -1) {
+					frequence = value;
 				}
 				if (key.indexOf("gpio") != -1) {
 					gpio = value;
@@ -191,6 +194,6 @@ public class EOSpy_GPS {
 		System.out.println("EOSpy GPS AI-IoT :: Internet of Things Drools-jBPM Expert System"
 				+ " - Arduino Tron MQTT AI-IoT Client using EOSpy GPS AI-IoT Drools-jBPM");
 
-		new EOSpy_GPS(args).init(true);
+		new EOSpyGPS(args).init(true);
 	}
 }

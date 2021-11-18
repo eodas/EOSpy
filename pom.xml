@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.eospy</groupId>
-	<artifactId>EOSpy_GPS</artifactId>
+	<artifactId>EOSpyGPS</artifactId>
 	<version>1.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
