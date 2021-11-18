@@ -80,14 +80,15 @@ public class EOSpyUI {
 	// Initialize the contents of the frame
 	private JFrame buildFrame(boolean exitOnClose) {
 		gpsFrame = new JFrame();
+		gpsFrame.getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 16));
 
-		gpsFrame.setTitle("EOSpy GPS AI-IoT :: Internet of Things");
-		gpsFrame.setBounds(100, 100, 408, 430);
+		gpsFrame.setTitle("EOSpyGPS AI-IoT :: Internet of Things");
+		gpsFrame.setBounds(10, 10, 555, 455);
 		gpsFrame.setDefaultCloseOperation(exitOnClose ? JFrame.EXIT_ON_CLOSE : WindowConstants.DISPOSE_ON_CLOSE);
 
 		gpsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[] { 5, 234, -69, 0, 0 };
+		gridBagLayout.columnWidths = new int[] { 23, 417, 135, 0, 0 };
 		gridBagLayout.rowHeights = new int[] { 32, 17, 14, 0, 0, 0, 0, 0, 0, 0, 0,
 				0, 0, 0, 42, 0, 0 };
 		gridBagLayout.columnWeights = new double[] { 1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE };
@@ -108,6 +109,7 @@ public class EOSpyUI {
 		textField_FixStatus.setColumns(10);
 
 		JLabel lblNewLabel_1 = new JLabel("Service Status");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
 		gbc_lblNewLabel_1.anchor = GridBagConstraints.NORTH;
 		gbc_lblNewLabel_1.fill = GridBagConstraints.HORIZONTAL;
@@ -117,6 +119,7 @@ public class EOSpyUI {
 		gpsFrame.getContentPane().add(lblNewLabel_1, gbc_lblNewLabel_1);
 
 		lblLabel_ServerStatus = new JLabel("Service Stopped");
+		lblLabel_ServerStatus.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		GridBagConstraints gbc_lblLabel_ServerStatus = new GridBagConstraints();
 		gbc_lblLabel_ServerStatus.anchor = GridBagConstraints.NORTH;
 		gbc_lblLabel_ServerStatus.fill = GridBagConstraints.HORIZONTAL;
@@ -126,6 +129,7 @@ public class EOSpyUI {
 		gpsFrame.getContentPane().add(lblLabel_ServerStatus, gbc_lblLabel_ServerStatus);
 
 		tglbtnServerToggleButton = new JToggleButton("Off");
+		tglbtnServerToggleButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		tglbtnServerToggleButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -245,6 +249,7 @@ public class EOSpyUI {
 		gpsFrame.getContentPane().add(separator_1, gbc_separator_1);
 
 		JLabel lblNewLabel_6 = new JLabel("Lat");
+		lblNewLabel_6.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		GridBagConstraints gbc_lblNewLabel_6 = new GridBagConstraints();
 		gbc_lblNewLabel_6.anchor = GridBagConstraints.NORTH;
 		gbc_lblNewLabel_6.fill = GridBagConstraints.HORIZONTAL;
@@ -254,9 +259,11 @@ public class EOSpyUI {
 		gpsFrame.getContentPane().add(lblNewLabel_6, gbc_lblNewLabel_6);
 
 		textField_Lat = new JTextField();
+		textField_Lat.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		textField_Lat.setText(LatStr);
 		textField_Lat.setColumns(10);
 		GridBagConstraints gbc_textField_Lat = new GridBagConstraints();
+		gbc_textField_Lat.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_Lat.anchor = GridBagConstraints.NORTHWEST;
 		gbc_textField_Lat.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_Lat.gridx = 1;
@@ -264,7 +271,7 @@ public class EOSpyUI {
 		gpsFrame.getContentPane().add(textField_Lat, gbc_textField_Lat);
 
 		lblLabel_FixStatus = new JLabel("No Fix");
-		lblLabel_FixStatus.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblLabel_FixStatus.setFont(new Font("Tahoma", Font.BOLD, 16));
 		lblLabel_FixStatus.setForeground(Color.RED);
 		GridBagConstraints gbc_lblNewLabel_10 = new GridBagConstraints();
 		gbc_lblNewLabel_10.fill = GridBagConstraints.HORIZONTAL;
@@ -274,6 +281,7 @@ public class EOSpyUI {
 		gpsFrame.getContentPane().add(lblLabel_FixStatus, gbc_lblNewLabel_10);
 
 		JLabel lblNewLabel_10 = new JLabel("Lon");
+		lblNewLabel_10.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		GridBagConstraints gbc_lblNewLabel_13 = new GridBagConstraints();
 		gbc_lblNewLabel_13.anchor = GridBagConstraints.NORTH;
 		gbc_lblNewLabel_13.fill = GridBagConstraints.HORIZONTAL;
@@ -283,6 +291,7 @@ public class EOSpyUI {
 		gpsFrame.getContentPane().add(lblNewLabel_10, gbc_lblNewLabel_13);
 
 		JLabel lblNewLabel_12 = new JLabel("Status");
+		lblNewLabel_12.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		GridBagConstraints gbc_lblNewLabel_12 = new GridBagConstraints();
 		gbc_lblNewLabel_12.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_12.gridx = 2;
@@ -290,9 +299,11 @@ public class EOSpyUI {
 		gpsFrame.getContentPane().add(lblNewLabel_12, gbc_lblNewLabel_12);
 
 		textField_Lon = new JTextField();
+		textField_Lon.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		textField_Lon.setText(LonStr);
 		textField_Lon.setColumns(10);
 		GridBagConstraints gbc_textField_Lon = new GridBagConstraints();
+		gbc_textField_Lon.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_Lon.anchor = GridBagConstraints.NORTHWEST;
 		gbc_textField_Lon.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_Lon.gridx = 1;
@@ -301,7 +312,7 @@ public class EOSpyUI {
 
 		lblLabel_Progress = new JLabel("@");
 		lblLabel_Progress.setForeground(Color.BLUE);
-		lblLabel_Progress.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblLabel_Progress.setFont(new Font("Tahoma", Font.BOLD, 16));
 		GridBagConstraints gbc_lblLabel_Progress = new GridBagConstraints();
 		gbc_lblLabel_Progress.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblLabel_Progress.insets = new Insets(0, 0, 5, 5);
@@ -310,6 +321,7 @@ public class EOSpyUI {
 		gpsFrame.getContentPane().add(lblLabel_Progress, gbc_lblLabel_Progress);
 
 		JLabel lblNewLabel_7 = new JLabel("GPS Lat / Lon Position Track Values");
+		lblNewLabel_7.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		GridBagConstraints gbc_lblNewLabel_7 = new GridBagConstraints();
 		gbc_lblNewLabel_7.anchor = GridBagConstraints.NORTH;
 		gbc_lblNewLabel_7.fill = GridBagConstraints.HORIZONTAL;
@@ -329,6 +341,7 @@ public class EOSpyUI {
 		gpsFrame.getContentPane().add(separator_2, gbc_separator_2);
 
 		JLabel lblNewLabel_8 = new JLabel("Server Event Model Data Fields");
+		lblNewLabel_8.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		GridBagConstraints gbc_lblNewLabel_8 = new GridBagConstraints();
 		gbc_lblNewLabel_8.anchor = GridBagConstraints.NORTH;
 		gbc_lblNewLabel_8.fill = GridBagConstraints.HORIZONTAL;
@@ -338,6 +351,7 @@ public class EOSpyUI {
 		gpsFrame.getContentPane().add(lblNewLabel_8, gbc_lblNewLabel_8);
 
 		textField_ServerEvent = new JTextField();
+		textField_ServerEvent.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		GridBagConstraints gbc_textField_4 = new GridBagConstraints();
 		gbc_textField_4.gridwidth = 2;
 		gbc_textField_4.anchor = GridBagConstraints.NORTH;
@@ -359,7 +373,7 @@ public class EOSpyUI {
 		gpsFrame.getContentPane().add(separator_3, gbc_separator_3);
 
 		JLabel lblNewLabel_9 = new JLabel("Key Press Server Alerts");
-		lblNewLabel_9.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblNewLabel_9.setFont(new Font("Tahoma", Font.BOLD, 16));
 		GridBagConstraints gbc_lblNewLabel_9 = new GridBagConstraints();
 		gbc_lblNewLabel_9.anchor = GridBagConstraints.NORTH;
 		gbc_lblNewLabel_9.fill = GridBagConstraints.HORIZONTAL;
@@ -380,83 +394,91 @@ public class EOSpyUI {
 		gpsFrame.getContentPane().add(panel_1, gbc_panel_1);
 
 		JButton btnKey1 = new JButton("Key1");
+		btnKey1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnKey1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				serverSendPost("&keypress=1.0");
 			}
 		});
-		btnKey1.setBounds(0, 11, 76, 23);
+		btnKey1.setBounds(0, 0, 85, 35);
 		panel_1.add(btnKey1);
 
 		JButton btnKey2 = new JButton("Key2");
+		btnKey2.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnKey2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				serverSendPost("&keypress=2.0");
 			}
 		});
-		btnKey2.setBounds(90, 11, 76, 23);
+		btnKey2.setBounds(140, 0, 85, 35);
 		panel_1.add(btnKey2);
 
 		JButton btnReed = new JButton("Reed");
+		btnReed.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnReed.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				serverSendPost("&keypress=4.0");
 			}
 		});
-		btnReed.setBounds(178, 11, 76, 23);
+		btnReed.setBounds(280, 0, 85, 35);
 		panel_1.add(btnReed);
 
 		JButton btnProx = new JButton("Prox");
+		btnProx.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnProx.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				serverSendPost("&keypress=8.0");
 			}
 		});
-		btnProx.setBounds(267, 11, 76, 23);
+		btnProx.setBounds(426, 0, 85, 35);
 		panel_1.add(btnProx);
 
 		JButton Map = new JButton("Map");
+		Map.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		Map.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				mapPositionAction(e);
 			}
 		});
-		Map.setBounds(0, 45, 76, 23);
+		Map.setBounds(0, 40, 85, 35);
 		panel_1.add(Map);
 
 		JButton Help = new JButton("Help");
+		Help.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		Help.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				helpContentsAction(e);
 			}
 		});
-		Help.setBounds(90, 45, 76, 23);
+		Help.setBounds(140, 40, 85, 35);
 		panel_1.add(Help);
 
 		JButton About = new JButton("GPS");
+		About.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		About.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				aboutIoTBPMAction(e);
 			}
 		});
-		About.setBounds(178, 45, 76, 23);
+		About.setBounds(280, 40, 85, 35);
 		panel_1.add(About);
 
 		JButton Exit = new JButton("Exit");
+		Exit.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		Exit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
 			}
 		});
-		Exit.setBounds(267, 45, 76, 23);
+		Exit.setBounds(426, 40, 85, 35);
 		panel_1.add(Exit);
 
 		showServerService();
