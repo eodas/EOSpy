@@ -68,7 +68,7 @@ public class AboutDialog extends JDialog {
 			JTextPane txtEOSpySoftware = new JTextPane();
 			txtEOSpySoftware.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			txtEOSpySoftware.setText(
-					"EOSpy GPS AI-IoT :: Internet of Things Drools-jBPM Expert System using EOSpy Arduino Tron AI-IoT Processing.\r\n\r\n"
+					"EOSpyGPS AI-IoT :: Internet of Things Drools-jBPM Expert System using EOSpy Arduino Tron AI-IoT Processing.\r\n\r\n"
 							+ "This Software is Provided -As Is- And Any Expressed or Implied Warranties, Including, But Not Limited to, The Implied Warranties of "
 							+ "Merchantability And Fitness For A Particular Purpose Are Disclaimed.\r\n\r\nVisit the www.EOSpy.com website for additional information "
 							+ "and documentation on Drools-jBPM Expert Systems, Arduino Tron and other Arduino projects, android projects and AI-IoT Processing.\r\n\r\n"

@@ -12,7 +12,7 @@ import com.eospy.comm.jSerialComm;
 import com.eospy.gps.GPSnmea;
 import com.eospy.ui.AboutDialog;
 import com.eospy.util.WebBrowser;
-import com.eospy.model.DeviceEvent;
+import com.eospy.model.Event;
 import com.eospy.server.AgentConnect;
 
 import java.awt.Font;
@@ -31,9 +31,11 @@ import javax.swing.JTextField;
 import javax.swing.JSeparator;
 import javax.swing.JSpinner;
 import java.awt.Color;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
- * Main window implementation for the EOSpy GPS AI-IoT example
+ * Main window implementation for the EOSpyGPS AI-IoT example
  */
 public class EOSpyUI {
 
@@ -41,7 +43,7 @@ public class EOSpyUI {
 
 	private jSerialComm comm;
 	private GPSnmea gpsnmea;
-	private DeviceEvent deviceEvent;
+	private Event deviceEvent;
 	private static EOSpyUI eospyui;
 
 	// private JTextField textField_ID;
@@ -74,16 +76,22 @@ public class EOSpyUI {
 		eospyui = this;
 		comm = new jSerialComm();
 		gpsnmea = new GPSnmea();
-		deviceEvent = new DeviceEvent();
+		deviceEvent = new Event();
 	}
 
 	// Initialize the contents of the frame
 	private JFrame buildFrame(boolean exitOnClose) {
 		gpsFrame = new JFrame();
+		gpsFrame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				windowClosingAction(e);
+			}
+		});
 		gpsFrame.getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 16));
 
 		gpsFrame.setTitle("EOSpyGPS AI-IoT :: Internet of Things");
-		gpsFrame.setBounds(10, 10, 555, 455);
+		gpsFrame.setBounds(10, 10, 555, 485);
 		gpsFrame.setDefaultCloseOperation(exitOnClose ? JFrame.EXIT_ON_CLOSE : WindowConstants.DISPOSE_ON_CLOSE);
 
 		gpsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -532,7 +540,7 @@ public class EOSpyUI {
 	} */
 
 	void serverServiceAction(ActionEvent arg0) {
-		if (EOSpyGPS.portName.equals(null) || EOSpyGPS.portName.equals("")) {
+		if (EOSpyGPS.portname.equals(null) || EOSpyGPS.portname.equals("")) {
 			return;
 		}
 		serverService = !serverService;
@@ -611,7 +619,25 @@ public class EOSpyUI {
 		}
 	}
 
-	void serverSendPost(String IoTEvent) {
+	public void serverSendPost(String IoTEvent) {
+
+		// continuously blink the led every 1/2 second for 15 seconds
+		if (IoTEvent.indexOf("&keypress=1.0") != -1) {
+			EOSpyGPS.pi4jgpio.redled1Blink(500, 15000);
+		}
+		if (IoTEvent.indexOf("&keypress=2.0") != -1) {
+			EOSpyGPS.pi4jgpio.redled2Blink(500, 15000);
+		}
+		if (IoTEvent.indexOf("&keypress=4.0") != -1) {
+			EOSpyGPS.pi4jgpio.yellowled1Blink(500, 15000);
+		}
+		if (IoTEvent.indexOf("&keypress=8.0") != -1) {
+			EOSpyGPS.pi4jgpio.yellowled2Blink(500, 15000);
+		}
+
+		// continuously blink the led every 1 second
+		EOSpyGPS.pi4jgpio.greenled1Blink(1000, 15000);
+		
 		DecimalFormat lf = new DecimalFormat("0.000000");
 		DecimalFormat sf = new DecimalFormat("0.00");
 		String postMsg = "/?id=" + EOSpyGPS.id; //textField_ID.getText();
@@ -680,4 +706,24 @@ public class EOSpyUI {
 	public void show() {
 		this.gpsFrame.setVisible(true);
 	}
+	
+	void windowClosingAction(WindowEvent e) {
+		// stop all GPIO activity/threads
+		// (this method will forcefully shutdown all GPIO monitoring threads and scheduled tasks)
+		if ((EOSpyGPS.gpio == "") || (EOSpyGPS.gpio.indexOf("none") != -1)) {
+			System.err.println(
+					"Note: create gpio controller e.g. gpio=GPIO_01 not defined in iotbpm.properties file.");
+		} else {
+			// Pi4J GPIO controller
+			EOSpyGPS.eospygps.stopPi4jGPIO(); // implement this method call if you wish to terminate the Pi4J GPIO controller
+		}
+
+		if (serverService) {
+			comm.closeCommPort();
+		} else {
+			System.out.println("Note: jSerialComm.SerialPort comm.closeCommPort() not active.");
+		}
+		// System.exit(0);
+	}
+	
 }

@@ -36,7 +36,7 @@ public class jSerialComm {
 	public void openCommPort() {
 		commPort = SerialPort.getCommPorts()[0];
 		System.out.println("SerialPort: " + commPort);
-		EOSpyGPS.portName = commPort.toString();
+		EOSpyGPS.portname = commPort.toString();
 		EOSpyUI.updateCOMPort(commPort.toString());
 		commPort.openPort();
 		commPort.addDataListener(new SerialPortDataListener() {

@@ -15,6 +15,7 @@ import java.util.Locale;
 import java.util.Properties;
 
 import com.eospy.ui.EOSpyUI;
+import com.eospy.pi4j.Pi4jGPIO;
 
 /**
  * Executive Order Corporation we make Things Smart
@@ -58,27 +59,27 @@ import com.eospy.ui.EOSpyUI;
  */
 public class EOSpyGPS {
 
-	EOSpyGPS eospy_ai_iot;
+	public static EOSpyGPS eospygps;
 
 	private String base_path = "";
 	private String appVer = "1.01A";
 	private String buildDate = "0304";
 	private boolean is64bitJMV = false;
+	public static Pi4jGPIO pi4jgpio = null;
 	public static String gpsDebug = "none"; // none, debug
 
 	public static String id = "100111"; // 100111 
 	public static String name = ""; // IoT_Parking_Kiosk
 	public static String process = ""; // com.IoTParkingKiosk
 	public static String server = ""; // http://10.0.0.2:5055
-	public static String portName = "COM1"; // COM1
+	public static String portname = "COM1"; // COM1
 	public static String frequence = "300"; // Reporting Interval
 	public static String gpio = ""; // create gpio controller
 
 	public EOSpyGPS(String[] args) {
-
-		this.eospy_ai_iot = this;
-		System.out.println("EOSpy GPS AI-IoT :: Internet of Things GPS Drools-jBPM Expert System"
-				+ " using EOSpy GPS AI-IoT Tron Processing -version: " + appVer + " (" + buildDate + ")");
+		this.eospygps = this;
+		System.out.println("EOSpyGPS AI-IoT :: Internet of Things GPS Drools-jBPM Expert System"
+				+ " using EOSpyGPS AI-IoT Tron Processing -version: " + appVer + " (" + buildDate + ")");
 
 		getIPAddress();
 		readProperties();
@@ -113,8 +114,9 @@ public class EOSpyGPS {
 			@Override
 			public void run() {
 				try {
-					EOSpyUI window = new EOSpyUI(exitOnClose);
-					window.show(); // window.frmEo.setVisible(true);
+					EOSpyUI eospyui = new EOSpyUI(exitOnClose);
+					startPi4jGPIO(eospyui); // Implementation for the Raspberry Pi4j GPIO example
+					eospyui.show(); // window.frmEo.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -150,7 +152,7 @@ public class EOSpyGPS {
 					server = value;
 				}
 				if (key.indexOf("port") != -1) {
-					portName = value;
+					portname = value;
 				}
 				if (key.indexOf("frequence") != -1) {
 					frequence = value;
@@ -163,6 +165,24 @@ public class EOSpyGPS {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+
+	public void startPi4jGPIO(EOSpyUI eospyui) {
+		pi4jgpio = new Pi4jGPIO(eospyui); // Implementation for the Raspberry Pi4j GPIO example
+
+		if ((gpio == "") || (gpio.indexOf("none") != -1)) {
+			System.err.println("Note: create gpio controller e.g. gpio=GPIO_01 not defined in piiottron.xml file.");
+		} else {
+			pi4jgpio.gpioStartController();
+	        System.out.println("Create GPIO Controller...");
+		}
+	}
+
+	public void stopPi4jGPIO() {
+		if (pi4jgpio.isPi4jActive()) {
+			pi4jgpio.gpioShutdown();
+			System.out.println("Stop all GPIO Activity / Threads");
 		}
 	}
 
@@ -191,8 +211,8 @@ public class EOSpyGPS {
 	}
 
 	public static void main(String[] args) {
-		System.out.println("EOSpy GPS AI-IoT :: Internet of Things Drools-jBPM Expert System"
-				+ " - Arduino Tron MQTT AI-IoT Client using EOSpy GPS AI-IoT Drools-jBPM");
+		System.out.println("EOSpyGPS AI-IoT :: Internet of Things Drools-jBPM Expert System"
+				+ " - Arduino Tron MQTT AI-IoT Client using EOSpyGPS AI-IoT Drools-jBPM");
 
 		new EOSpyGPS(args).init(true);
 	}
