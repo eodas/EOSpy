@@ -43,7 +43,7 @@ public class EOSpyUI {
 
 	private jSerialComm comm;
 	private GPSnmea gpsnmea;
-	private Event deviceEvent;
+	private Event event;
 	private static EOSpyUI eospyui;
 
 	// private JTextField textField_ID;
@@ -76,7 +76,7 @@ public class EOSpyUI {
 		eospyui = this;
 		comm = new jSerialComm();
 		gpsnmea = new GPSnmea();
-		deviceEvent = new Event();
+		event = new Event();
 	}
 
 	// Initialize the contents of the frame
@@ -561,16 +561,16 @@ public class EOSpyUI {
 
 		// $GPGGA GPS Log header
 		// public double utc = 0; // UTC time status of position (hours/minutes/seconds/decimal seconds)
-		deviceEvent.setLat(gpsnmea.position.lat); // lat Latitude
-		deviceEvent.setLon(gpsnmea.position.lon); // lon Longitude
+		event.setLat(gpsnmea.position.lat); // lat Latitude
+		event.setLon(gpsnmea.position.lon); // lon Longitude
 
 		// public int quality = 0; // position fix 0: Fix not available 1: GPS SPS mode refer to GPS quality table
-		deviceEvent.setSatellites(gpsnmea.position.satellites); // sats Number of satellites in use. May be different to the number in view
-		deviceEvent.setHdop(gpsnmea.position.hdop); // hdop Horizontal dilution of precision 
-		deviceEvent.setAltitude(gpsnmea.position.altitude); // altitude Antenna altitude above/below mean sea level
+		event.setSatellites(gpsnmea.position.satellites); // sats Number of satellites in use. May be different to the number in view
+		event.setHdop(gpsnmea.position.hdop); // hdop Horizontal dilution of precision 
+		event.setAltitude(gpsnmea.position.altitude); // altitude Antenna altitude above/below mean sea level
 		// public double geoid = 0; // geoid - undulation - the relationship between the geoid ellipsoid
-		deviceEvent.setSpeed(gpsnmea.position.speed); // speed Km - Speed over ground, knots
-		deviceEvent.setCourse(gpsnmea.position.course); // track true - Track made good, degrees True
+		event.setSpeed(gpsnmea.position.speed); // speed Km - Speed over ground, knots
+		event.setCourse(gpsnmea.position.course); // track true - Track made good, degrees True
 
 		// public double gpsdate = 0; // gps device date - Date: dd/mm/yy
 		// public double age = 0; // age Age of correction data (in seconds) - The maximum age limited 99 seconds
@@ -581,12 +581,12 @@ public class EOSpyUI {
 		// public String valid = ""; // data status - Data status: A = Data valid, V = Data invalid
 		// public String message; // $GPTXT - message transfers various information on the receiver
 
-		deviceEvent.setValid(gpsnmea.position.fixed); // valid - position fix as boolean refer to GPS quality table
+		event.setValid(gpsnmea.position.fixed); // valid - position fix as boolean refer to GPS quality table
 		showFixStatus(gpsnmea.position.fixed);
 
 		DecimalFormat lf = new DecimalFormat("0.000000");
-		LatStr = lf.format(deviceEvent.getLat());
-		LonStr = lf.format(deviceEvent.getLon());
+		LatStr = lf.format(event.getLat());
+		LonStr = lf.format(event.getLon());
 		textField_Lat.setText(LatStr);
 		textField_Lon.setText(LonStr);
 		
@@ -647,18 +647,31 @@ public class EOSpyUI {
 		fixtime = (long) (fixtime * 0.001);
 		postMsg = postMsg + "&timestamp=" + Long.toString(fixtime);
 
-		LatStr = lf.format(deviceEvent.getLat());
-		LonStr = lf.format(deviceEvent.getLon());
+		postMsg = postMsg + "&process=" + EOSpyGPS.process;
+		postMsg = postMsg + "&name=" + EOSpyGPS.name;
+		
+		LatStr = lf.format(event.getLat());
+		LonStr = lf.format(event.getLon());
 		textField_Lat.setText(LatStr);
 		textField_Lon.setText(LonStr);
 
 		postMsg = postMsg + "&lat=" + LatStr;
 		postMsg = postMsg + "&lon=" + LonStr;
-		postMsg = postMsg + "&speed=" + sf.format(deviceEvent.getSpeed());
-		postMsg = postMsg + "&bearing=" + sf.format(deviceEvent.getCourse());
-		postMsg = postMsg + "&altitude=" + sf.format(deviceEvent.getAltitude());
-		postMsg = postMsg + "&accuracy=0.0&valid=true&batt=89.7";
+		postMsg = postMsg + "&speed=" + sf.format(event.getSpeed());
+		postMsg = postMsg + "&bearing=" + sf.format(event.getCourse());
+		postMsg = postMsg + "&altitude=" + sf.format(event.getAltitude());
+		postMsg = postMsg + "&accuracy=" + sf.format(event.getAccuracy());
+		postMsg = postMsg + "&satellites=" + sf.format(event.getSatellites());
+		postMsg = postMsg + "&hdop=" + sf.format(event.getHdop());
+		postMsg = postMsg + "&course=" + sf.format(event.getCourse());
 
+		if (event.isValid()) {
+			postMsg = postMsg + "&valid=true";
+		} else {
+			postMsg = postMsg + "&valid=false";
+		}
+		postMsg = postMsg + "&batt=98.7";
+		
 		String serverEvent = textField_ServerEvent.getText();
 		if (!serverEvent.equals(null) || !serverEvent.equals("")) {
 			postMsg = postMsg + serverEvent;
@@ -666,7 +679,7 @@ public class EOSpyUI {
 		if (!IoTEvent.equals("")) {
 			postMsg = postMsg + IoTEvent;
 			if (EOSpyGPS.gpsDebug.indexOf("none") == -1) {
-				System.out.println();
+				System.out.println("> Post IoTEvent="+IoTEvent);
 			}
 		}
 
