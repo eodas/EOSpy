@@ -15,20 +15,7 @@ import java.util.Map;
  */
 
 public class GPSnmea {
-
-//	GPS Quality Indicators
-//	Indicator - Description
-//  
-//	0 -	Fix not available or invalid
-//	1 -	Single point - Converging PPP (TerraStar-L)
-//	2 -	Pseudorange differential - Converged PPP (TerraStar-L) - Converging PPP (TerraStar-C, TerraStar-C PRO, TerraStar-X)
-//	4 -	RTK fixed ambiguity solution
-//	5 -	RTK doubleing ambiguity solution - Converged PPP (TerraStar-C, TerraStar-C PRO, TerraStar-X)
-//	6 -	Dead reckoning mode
-//	7 -	Manual input mode (fixed position)
-//	8 -	Simulator mode
-//	9 -	WAAS (SBAS)	
-
+	// NMEA acronym for the National Marine Electronics Association. 
 	interface SentenceParser {
 		public boolean parse(String[] tokens, GPSPosition position);
 	}
@@ -84,6 +71,17 @@ public class GPSnmea {
 			try {
 				position.quality = Integer.parseInt(tokens[6]);
 			} catch (Exception e) {
+			//	* GPS Quality Indicators
+			//	Ind-Description
+			//	0 -	Fix not available or invalid
+			//	1 -	Single point - Converging PPP (TerraStar-L)
+			//	2 -	Pseudorange differential - Converged PPP (TerraStar-L) - Converging PPP (TerraStar-C, TerraStar-C PRO, TerraStar-X)
+			//	4 -	RTK fixed ambiguity solution
+			//	5 -	RTK doubleing ambiguity solution - Converged PPP (TerraStar-C, TerraStar-C PRO, TerraStar-X)
+			//	6 -	Dead reckoning mode
+			//	7 -	Manual input mode (fixed position)
+			//	8 -	Simulator mode
+			//	9 -	WAAS (SBAS)	
 			}
 			try {
 				position.satellites = Integer.parseInt(tokens[7]);
@@ -248,27 +246,28 @@ public class GPSnmea {
 		final double GPS_FEET_PER_METER = 3.2808399;
 
 		// $GPGGA GPS Log header
-		public double utc = 0; // UTC time status of position (hours/minutes/seconds/decimal seconds)
-		public double lat = 0; // lat Latitude
-		public double lon = 0; // lon Longitude
-		public int quality = 0; // position fix 0: Fix not available 1: GPS SPS mode refer to GPS quality table
-		public int satellites = 0; // sats Number of satellites in use. May be different to the number in view
-		public double hdop = 0; // hdop Horizontal dilution of precision
-		public double altitude = 0; // altitude Antenna altitude above/below mean sea level
-		public double geoid = 0; // geoid - undulation - the relationship between the geoid ellipsoid
-		public double speed = 0; // speed Km - Speed over ground, knots
-		public double course = 0; // track true - Track made good, degrees True
-		public double gpsdate = 0; // gps device date - Date: dd/mm/yy
-		public double age = 0; // age Age of correction data (in seconds) - The maximum age limited 99 seconds.
-		public double stnID = 0; // stn ID Differential base station ID
-		public String modeMA = ""; // mode MA A = Automatic 2D/3D M = Manual, forced to operate in 2D or 3D
-		public int mode123 = 0; // mode 123 Mode: 1 = Fix not available; 2 = 2D; 3 = 3D
-		public String valid = ""; // data status - Data status: A = Data valid, V = Data invalid
+		public double utc = 0; 		// utc time - Status of position (hours/minutes/seconds/decimal seconds)
+		public double lat = 0; 		// lat - Latitude
+		public double lon = 0; 		// lon - Longitude
+		public int quality = 0; 	// position fix 0: Fix not available 1: GPS SPS mode refer to GPS quality table
+		public int satellites = 0; 	// sats - Number of satellites in use. May be different to the number in view
+		public double hdop = 0; 	// hdop - Horizontal dilution of precision
+		public double altitude = 0; // altitude - Antenna altitude above/below mean sea level
+		public double geoid = 0; 	// geoid - undulation - the relationship between the geoid ellipsoid
+		public double speed = 0; 	// speed Km - Speed over ground, knots
+		public double course = 0; 	// track true - Track made good, degrees True
+		public double gpsdate = 0; 	// gps device date - Date: dd/mm/yy
+		public double age = 0; 		// age - Age of correction data (in seconds) - The maximum age limited 99 seconds.
+		public double stnID = 0; 	// stn ID - Differential base station ID
+		public String modeMA = ""; 	// mode MA - A = Automatic 2D/3D M = Manual, forced to operate in 2D or 3D
+		public int mode123 = 0; 	// mode 123 - 1 = Fix not available; 2 = 2D; 3 = 3D
 		public String message = ""; // $GPTXT - message transfers various information on the receiver
+		public String valid = ""; 	// data status - Data status: A = Data valid, V = Data invalid 
 		public boolean fixed = false; // valid - position fix as boolean refer to GPS quality table
 
 		public void updatefix() {
 			fixed = quality > 0;
+			// quality is converted to valid fixed
 		}
 
 		public double speed_mph() {
@@ -303,18 +302,21 @@ public class GPSnmea {
 		}
 	}
 
+	// * GSV records, which describe satellites 'visible', lack the SNR (signal–to–noise ratio) field for satellite 16 and all data for satellite 36.
+    // * GSA record, which lists satellites used for determining a fix (position) and gives a DOP of the fix, contains 12 fields for satellites' 
+	//       numbers, but only 8 satellites were taken into account—so 4 fields remain blank.
 	public GPSPosition position = new GPSPosition();
 
 	private static final Map<String, SentenceParser> sentenceParsers = new HashMap<String, SentenceParser>();
 
 	public GPSnmea() {
-		sentenceParsers.put("GPGGA", new GPGGA());
-		sentenceParsers.put("GPGLL", new GPGLL());
-		sentenceParsers.put("GPGSA", new GPGSA());
-		sentenceParsers.put("GPGSV", new GPGSV());
-		sentenceParsers.put("GPRMC", new GPRMC());
-		sentenceParsers.put("GPVTG", new GPVTG());
-		sentenceParsers.put("GPTXT", new GPTXT());
+		sentenceParsers.put("GPGGA", new GPGGA()); // GPGGA - GPS fix data and undulation
+		sentenceParsers.put("GPGLL", new GPGLL()); // GPGLL - Geographic position
+		sentenceParsers.put("GPGSA", new GPGSA()); // GPGSA - GPS DOP and active satellites
+		sentenceParsers.put("GPGSV", new GPGSV()); // GPGSV - GPS satellites in view
+		sentenceParsers.put("GPRMC", new GPRMC()); // GPRMC - GPS specific information
+		sentenceParsers.put("GPVTG", new GPVTG()); // GPVTG - Track made good and ground speed
+		sentenceParsers.put("GPTXT", new GPTXT()); // GPTXT - GPS message transfers various information on the receiver
 	}
 
 	public GPSPosition parse(String line) {

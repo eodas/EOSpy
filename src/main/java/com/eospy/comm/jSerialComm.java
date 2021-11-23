@@ -55,12 +55,12 @@ public class jSerialComm {
 				for (int i = 0; i < newData.length; ++i) {
 					commString = commString + (char) newData[i];
 					if ((char) newData[i] == '\n') {
-						System.out.print(commString);
+					//	System.out.print(commString);
 						EOSpyUI.commLine(commString);
 						commString = "";
 					}
 				}
-				System.out.println("Read " + numRead + " bytes");
+			//	System.out.println("Read " + numRead + " bytes");
 			}
 		});
 	}

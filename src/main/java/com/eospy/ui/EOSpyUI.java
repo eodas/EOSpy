@@ -579,7 +579,7 @@ public class EOSpyUI {
 		// public int mode123 = 0; // mode 123 Mode: 1 = Fix not available; 2 = 2D; 3 = 3D
 
 		// public String valid = ""; // data status - Data status: A = Data valid, V = Data invalid
-		// public String message; // $GPTXT - message transfers various information on the receiver
+		event.setTextMessage(gpsnmea.position.message); // $GPTXT - message transfers various information on the receiver
 
 		event.setValid(gpsnmea.position.fixed); // valid - position fix as boolean refer to GPS quality table
 		showFixStatus(gpsnmea.position.fixed);
@@ -596,7 +596,7 @@ public class EOSpyUI {
 
 		freqInterval = Integer.parseInt(EOSpyGPS.frequence);
 
-		if (((System.currentTimeMillis() - lastSendTime) / 1000F) > freqInterval) {
+		if (((System.currentTimeMillis() - lastSendTime) / 1000) > freqInterval) {
 			lastSendTime = 0;
 		}
 
@@ -662,8 +662,8 @@ public class EOSpyUI {
 		postMsg = postMsg + "&altitude=" + sf.format(event.getAltitude());
 		postMsg = postMsg + "&accuracy=" + sf.format(event.getAccuracy());
 		postMsg = postMsg + "&satellites=" + sf.format(event.getSatellites());
-		postMsg = postMsg + "&hdop=" + sf.format(event.getHdop());
 		postMsg = postMsg + "&course=" + sf.format(event.getCourse());
+		postMsg = postMsg + "&hdop=" + sf.format(event.getHdop());
 
 		if (event.isValid()) {
 			postMsg = postMsg + "&valid=true";
@@ -679,7 +679,7 @@ public class EOSpyUI {
 		if (!IoTEvent.equals("")) {
 			postMsg = postMsg + IoTEvent;
 			if (EOSpyGPS.gpsDebug.indexOf("none") == -1) {
-				System.out.println("> Post IoTEvent="+IoTEvent);
+				System.out.println("> Post IoTEvent=" + IoTEvent);
 			}
 		}
 
@@ -738,5 +738,4 @@ public class EOSpyUI {
 		}
 		// System.exit(0);
 	}
-	
 }
