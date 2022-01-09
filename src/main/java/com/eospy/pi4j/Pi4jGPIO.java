@@ -1,6 +1,5 @@
 package com.eospy.pi4j;
 
-import com.eospy.ui.EOSpyUI;
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPinDigitalInput;
@@ -26,7 +25,7 @@ import com.pi4j.io.gpio.RaspiPin;
 * Device tree is enabled.
 *--> Raspberry Pi 4 Model B Rev 1.2
 * This Raspberry Pi supports user-level GPIO access.
-* 
+* $ gpio readall
 * +-----+-----+---------+------+---+---Pi 4B--+---+------+---------+-----+-----+
 * | BCM | wPi |   Name  | Mode | V | Physical | V | Mode | Name    | wPi | BCM |
 * +-----+-----+---------+------+---+----++----+---+------+---------+-----+-----+
@@ -35,7 +34,7 @@ import com.pi4j.io.gpio.RaspiPin;
 * |   3 |   9 |   SCL.1 |   IN | 1 |  5 || 6  |   |      | 0v      |     |     |
 * |   4 |   7 | GPIO. 7 |   IN | 1 |  7 || 8  | 1 | IN   | TxD     | 15  | 14  |
 * |     |     |      0v |      |   |  9 || 10 | 1 | IN   | RxD     | 16  | 15  |
-* |  17 |   0 | GPIO. 0 |   IN | 0 | 11 || 12 | 0 | IN   | GPIO. 1 | 1   | 18  |
+* |  17 |   0 | GPIO. 0 | grn2 | 0 | 11 || 12 | 0 | but2 | GPIO. 1 | 1   | 18  |
 * |  27 |   2 | GPIO. 2 |   IN | 0 | 13 || 14 |   |      | 0v      |     |     |
 * |  22 |   3 | GPIO. 3 |   IN | 0 | 15 || 16 | 0 | IN   | GPIO. 4 | 4   | 23  |
 * |     |     |    3.3v |      |   | 17 || 18 | 0 | IN   | GPIO. 5 | 5   | 24  |
@@ -44,11 +43,11 @@ import com.pi4j.io.gpio.RaspiPin;
 * |  11 |  14 |    SCLK |   IN | 0 | 23 || 24 | 1 | IN   | CE0     | 10  | 8   |
 * |     |     |      0v |      |   | 25 || 26 | 1 | IN   | CE1     | 11  | 7   |
 * |   0 |  30 |   SDA.0 |   IN | 1 | 27 || 28 | 1 | IN   | SCL.0   | 31  | 1   |
-* |   5 |  21 | GPIO.21 |  OUT | 0 | 29 || 30 |   |      | 0v      |     |     |
-* |   6 |  22 | GPIO.22 |  OUT | 1 | 31 || 32 | 0 | IN   | GPIO.26 | 26  | 12  |
-* |  13 |  23 | GPIO.23 |   IN | 0 | 33 || 34 |   |      | 0v      |     |     |
-* |  19 |  24 | GPIO.24 |   IN | 0 | 35 || 36 | 0 | IN   | GPIO.27 | 27  | 16  |
-* |  26 |  25 | GPIO.25 |   IN | 0 | 37 || 38 | 0 | IN   | GPIO.28 | 28  | 20  |
+* |   5 |  21 | GPIO.21 | red1 | 0 | 29 || 30 |   |      | 0v      |     |     |
+* |   6 |  22 | GPIO.22 | red2 | 1 | 31 || 32 | 0 | yel1 | GPIO.26 | 26  | 12  |
+* |  13 |  23 | GPIO.23 | yel2 | 0 | 33 || 34 |   |      | 0v      |     |     |
+* |  19 |  24 | GPIO.24 | but1 | 0 | 35 || 36 | 0 | grn1 | GPIO.27 | 27  | 16  |
+* |  26 |  25 | GPIO.25 |   IN | 0 | 37 || 38 | 0 | buz1 | GPIO.28 | 28  | 20  |
 * |     |     |      0v |      |   | 39 || 40 | 0 | IN   | GPIO.29 | 29  | 21  |
 * +-----+-----+---------+------+---+----++----+---+------+---------+-----+-----+
 * | BCM | wPi |   Name  | Mode | V | Physical | V | Mode | Name    | wPi | BCM |
@@ -88,182 +87,125 @@ import com.pi4j.io.gpio.RaspiPin;
  * Main window implementation for the Raspberry GPIO example
  */
 public class Pi4jGPIO {
-	private static Pi4jGPIO PI4JGPIO_INSTANCE = null;
-	private boolean pi4jActive = false;
-	private EOSpyUI eospyui =  null;
-	
+	private static Pi4jGPIO pi4jgpio = null;
+
 	GpioController gpio;
 
 	// provision led gpio pins as an output pins and blink
 	GpioPinDigitalOutput redled1; // LED GPIO pin GPIO.21
 	GpioPinDigitalOutput redled2; // LED GPIO pin GPIO.22
-	GpioPinDigitalOutput yellowled1; // LED GPIO pin GPIO.26
-	GpioPinDigitalOutput yellowled2; // LED GPIO pin GPIO.23
-	GpioPinDigitalOutput greenled1; // LED GPIO pin GPIO.27
-	GpioPinDigitalOutput greenled2; // LED GPIO pin GPIO.0
+	GpioPinDigitalOutput yelled1; // LED GPIO pin GPIO.26
+	GpioPinDigitalOutput yelled2; // LED GPIO pin GPIO.23
+	GpioPinDigitalOutput grnled1; // LED GPIO pin GPIO.27
+	GpioPinDigitalOutput grnled2; // LED GPIO pin GPIO.00
 
 	// provision switch gpio pins as an input pin with its internal pull down
 	// resistor enabled
 	GpioPinDigitalInput button1; // Button GPIO pin GPIO.24
-	GpioPinDigitalInput button2; // Button GPIO pin GPIO.1
+	GpioPinDigitalInput button2; // Button GPIO pin GPIO.01
 
 	// provision buzzer gpio pin as an output pins and buzz
 	GpioPinDigitalOutput buzzer1; // Buzzer GPIO pin GPIO.28
 
-	public Pi4jGPIO(EOSpyUI eospyui) {
-		Pi4jGPIO.PI4JGPIO_INSTANCE = this;
-		this.eospyui = eospyui;
+	public Pi4jGPIO() {
+		pi4jgpio = this;
 	}
 
 	public static Pi4jGPIO getInstance() {
-		return PI4JGPIO_INSTANCE;
-	}
-
-	public boolean isPi4jActive() {
-		return pi4jActive;
-	}
-
-	public void setPi4jActive(boolean pi4jActive) {
-		this.pi4jActive = pi4jActive;
+		return pi4jgpio;
 	}
 
 	// LED GPIO pin GPIO.21
 	public void redled1On() {
-		if (pi4jActive) {
-			redled1.setState(PinState.HIGH);
-		}
+		redled1.setState(PinState.HIGH);
 	}
 
 	public void redled1Off() {
-		if (pi4jActive) {
-			redled1.setState(PinState.LOW);
-		}
+		redled1.setState(PinState.LOW);
 	}
 
 	public void redled1Blink(long delay, long duration) {
-		if (pi4jActive) {
-			redled1.blink(delay, duration);
-		}
+		redled1.blink(delay, duration);
 	}
 
 	// LED GPIO pin GPIO.22
 	public void redled2On() {
-		if (pi4jActive) {
-			redled2.setState(PinState.HIGH);
-		}
+		redled2.setState(PinState.HIGH);
 	}
 
 	public void redled2Off() {
-		if (pi4jActive) {
-			redled2.setState(PinState.LOW);
-		}
+		redled2.setState(PinState.LOW);
 	}
 
 	public void redled2Blink(long delay, long duration) {
-		if (pi4jActive) {
-			redled2.blink(delay, duration);
-		}
+		redled2.blink(delay, duration);
 	}
 
 	// LED GPIO pin GPIO.26
-	public void yellowled1On() {
-		if (pi4jActive) {
-			yellowled1.setState(PinState.HIGH);
-		}
+	public void yelled1On() {
+		yelled1.setState(PinState.HIGH);
 	}
 
-	public void yellowled1Off() {
-		if (pi4jActive) {
-			yellowled1.setState(PinState.LOW);
-		}
+	public void yelled1Off() {
+		yelled1.setState(PinState.LOW);
 	}
 
-	public void yellowled1Blink(long delay, long duration) {
-		if (pi4jActive) {
-			yellowled1.blink(delay, duration);
-		}
+	public void yelled1Blink(long delay, long duration) {
+		yelled1.blink(delay, duration);
 	}
 
 	// LED GPIO pin GPIO.23
-	public void yellowled2On() {
-		if (pi4jActive) {
-			yellowled2.setState(PinState.HIGH);
-		}
+	public void yelled2On() {
+		yelled2.setState(PinState.HIGH);
 	}
 
-	public void yellowled2Off() {
-		if (pi4jActive) {
-			yellowled2.setState(PinState.LOW);
-		}
+	public void yelled2Off() {
+		yelled2.setState(PinState.LOW);
 	}
 
-	public void yellowled2Blink(long delay, long duration) {
-		if (pi4jActive) {
-			yellowled2.blink(delay, duration);
-		}
+	public void yelled2Blink(long delay, long duration) {
+		yelled2.blink(delay, duration);
 	}
 
 	// LED GPIO pin GPIO.27
-	public void greenled1On() {
-		if (pi4jActive) {
-			greenled1.setState(PinState.HIGH);
-		}
+	public void grnled1On() {
+		grnled1.setState(PinState.HIGH);
 	}
 
-	public void greenled1Off() {
-		if (pi4jActive) {
-			greenled1.setState(PinState.LOW);
-		}
+	public void grnled1Off() {
+		grnled1.setState(PinState.LOW);
 	}
 
-	public void greenled1Blink(long delay, long duration) {
-		if (pi4jActive) {
-			greenled1.blink(delay, duration);
-		}
+	public void grnled1Blink(long delay, long duration) {
+		grnled1.blink(delay, duration);
 	}
 
 	// LED GPIO pin GPIO.0
-	public void greenled2On() {
-		if (pi4jActive) {
-			greenled2.setState(PinState.HIGH);
-		}
+	public void grnled2On() {
+		grnled2.setState(PinState.HIGH);
 	}
 
-	public void greenled2Off() {
-		if (pi4jActive) {
-			greenled2.setState(PinState.LOW);
-		}
+	public void grnled2Off() {
+		grnled2.setState(PinState.LOW);
 	}
 
-	public void greenled2Blink(long delay, long duration) {
-		if (pi4jActive) {
-			greenled2.blink(delay, duration);
-		}
+	public void grnled2Blink(long delay, long duration) {
+		grnled2.blink(delay, duration);
 	}
 
 	// This interface is extension of GpioPin interface with operation to read
-	// digital states.
-	public void gpioSwitchState() {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				while (pi4jActive) {
-					if (button1.getState().isHigh()) {
-						eospyui.serverSendPost("&keypress=1.0");
-						System.out.println("button1.getState().isHigh()");
-					}
-					if (button2.getState().isHigh()) {
-						eospyui.serverSendPost("&keypress=2.0");
-						System.out.println("button2.getState().isHigh()");
-					}
-					try {
-						Thread.sleep(900L);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}).start();
+	// digital states
+	public int gpioSwitchState() {
+		int button = 0;
+		if (button1.getState().isHigh()) {
+			button = 1;
+			System.out.println("button1.getState().isHigh()");
+		}
+		if (button2.getState().isHigh()) {
+			button = 2;
+			System.out.println("button2.getState().isHigh()");
+		}
+		return button;
 	}
 
 	/**
@@ -277,10 +219,10 @@ public class Pi4jGPIO {
 		// provision led gpio pins as an output pins and blink
 		redled1 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_21);
 		redled2 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_22);
-		yellowled1 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_26);
-		yellowled2 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_23);
-		greenled1 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_27);
-		greenled2 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00);
+		yelled1 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_26);
+		yelled2 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_23);
+		grnled1 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_27);
+		grnled2 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00);
 
 		// provision switch gpio pins as an input pin with its internal pull down
 		// resistor enabled
@@ -289,14 +231,9 @@ public class Pi4jGPIO {
 
 		// provision buzzer gpio pin as an output pins and buzz
 		buzzer1 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_28);
-
-		gpioSwitchState(); // This interface is extension of GpioPin interface with operation to read
-							// digital states.
-		pi4jActive = true;
 	}
 
 	public void gpioShutdown() {
-		pi4jActive = false;
 		// stop all GPIO activity/threads (this method will forcefully shutdown all GPIO
 		// monitoring threads and scheduled tasks) Pi4J GPIO controller
 		gpio.shutdown(); // Implement this method call if you wish to terminate the Pi4J GPIO controller

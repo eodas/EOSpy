@@ -15,6 +15,7 @@ import java.util.Locale;
 import java.util.Properties;
 
 import com.eospy.ui.EOSpyUI;
+import com.pi4j.io.gpio.GpioFactory;
 import com.eospy.pi4j.Pi4jGPIO;
 
 /**
@@ -58,14 +59,13 @@ import com.eospy.pi4j.Pi4jGPIO;
  * This is the main class for EOSpy GPS AI-IoT Drools-jBPM Expert System
  */
 public class EOSpyGPS {
-
-	public static EOSpyGPS eospygps;
+	public static EOSpyGPS eospygps = null;
 
 	private String base_path = "";
 	private String appVer = "1.01A";
 	private String buildDate = "0304";
 	private boolean is64bitJMV = false;
-	public static Pi4jGPIO pi4jgpio = null;
+	private boolean pi4jActive = false;
 	public static String gpsDebug = "none"; // none, debug
 
 	public static String id = "100111"; // 100111 
@@ -77,7 +77,7 @@ public class EOSpyGPS {
 	public static String gpio = ""; // create gpio controller
 
 	public EOSpyGPS(String[] args) {
-		this.eospygps = this;
+		eospygps = this;
 		System.out.println("EOSpyGPS AI-IoT :: Internet of Things GPS Drools-jBPM Expert System"
 				+ " using EOSpyGPS AI-IoT Tron Processing -version: " + appVer + " (" + buildDate + ")");
 
@@ -115,7 +115,7 @@ public class EOSpyGPS {
 			public void run() {
 				try {
 					EOSpyUI eospyui = new EOSpyUI(exitOnClose);
-					startPi4jGPIO(eospyui); // Implementation for the Raspberry Pi4j GPIO example
+					startPi4jGPIO(); // Implementation for the Raspberry Pi4j GPIO example
 					eospyui.show(); // window.frmEo.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -168,20 +168,52 @@ public class EOSpyGPS {
 		}
 	}
 
-	public void startPi4jGPIO(EOSpyUI eospyui) {
-		pi4jgpio = new Pi4jGPIO(eospyui); // Implementation for the Raspberry Pi4j GPIO example
-
+	public void startPi4jGPIO() {
 		if ((gpio == "") || (gpio.indexOf("none") != -1)) {
-			System.err.println("Note: create gpio controller e.g. gpio=GPIO_01 not defined in piiottron.xml file.");
+			System.err.println("startPi4jGPIO(): create gpio controller e.g. gpio=GPIO_01 not defined in piiottron.xml file.");
 		} else {
+			Pi4jGPIO pi4jgpio = new Pi4jGPIO(); // Implementation for the Raspberry Pi4j GPIO example
 			pi4jgpio.gpioStartController();
+			// This interface is extension of GpioPin interface with operation to read digital states
+			pi4jActive = true;
+			gpioSwitchState();
 	        System.out.println("Create GPIO Controller...");
 		}
 	}
 
+	// This interface is extension of GpioPin interface with operation to read digital states
+	public void gpioSwitchState() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (pi4jActive) {
+					// This interface is extension of GpioPin interface with operation to read digital states
+					int i = Pi4jGPIO.getInstance().gpioSwitchState(); 
+
+					if (i == 1) {
+						EOSpyUI.getInstance().serverSendPost("&keypress=1.0");
+						System.out.println("button1.getState().isHigh()");
+					}
+					if (i == 2) {
+						EOSpyUI.getInstance().serverSendPost("&keypress=2.0");
+						System.out.println("button2.getState().isHigh()");
+					}
+					try {
+						Thread.sleep(200L);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}).start();
+	}
+	
 	public void stopPi4jGPIO() {
-		if (pi4jgpio.isPi4jActive()) {
-			pi4jgpio.gpioShutdown();
+		if (Pi4jGPIO.getInstance() == null) {
+			System.err.println("stopPi4jGPIO(): create gpio controller e.g. gpio=GPIO_01 not defined in piiottron.xml file.");
+		} else {
+			pi4jActive = false;
+			Pi4jGPIO.getInstance().gpioShutdown();
 			System.out.println("Stop all GPIO Activity / Threads");
 		}
 	}

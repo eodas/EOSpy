@@ -13,6 +13,7 @@ import com.eospy.gps.GPSnmea;
 import com.eospy.ui.AboutDialog;
 import com.eospy.util.WebBrowser;
 import com.eospy.model.Event;
+import com.eospy.pi4j.Pi4jGPIO;
 import com.eospy.server.AgentConnect;
 
 import java.awt.Font;
@@ -33,6 +34,7 @@ import javax.swing.JSpinner;
 import java.awt.Color;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.SwingConstants;
 
 /**
  * Main window implementation for the EOSpyGPS AI-IoT example
@@ -44,7 +46,7 @@ public class EOSpyUI {
 	private jSerialComm comm;
 	private GPSnmea gpsnmea;
 	private Event event;
-	private static EOSpyUI eospyui;
+	private static EOSpyUI eospyui = null;
 
 	// private JTextField textField_ID;
 	// private JTextField textField_URL;
@@ -79,6 +81,10 @@ public class EOSpyUI {
 		event = new Event();
 	}
 
+	public static EOSpyUI getInstance() {
+		return eospyui;
+	}
+
 	// Initialize the contents of the frame
 	private JFrame buildFrame(boolean exitOnClose) {
 		gpsFrame = new JFrame();
@@ -97,11 +103,10 @@ public class EOSpyUI {
 		gpsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 23, 417, 135, 0, 0 };
-		gridBagLayout.rowHeights = new int[] { 32, 17, 14, 0, 0, 0, 0, 0, 0, 0, 0,
-				0, 0, 0, 42, 0, 0 };
+		gridBagLayout.rowHeights = new int[] { 32, 17, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0 };
 		gridBagLayout.columnWeights = new double[] { 1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE };
-		gridBagLayout.rowWeights = new double[] { 1.0, 0.0, 0.0,
-				0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
+		gridBagLayout.rowWeights = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+				1.0, 0.0, Double.MIN_VALUE };
 		gpsFrame.getContentPane().setLayout(gridBagLayout);
 
 		textField_FixStatus = new JTextField();
@@ -137,6 +142,7 @@ public class EOSpyUI {
 		gpsFrame.getContentPane().add(lblLabel_ServerStatus, gbc_lblLabel_ServerStatus);
 
 		tglbtnServerToggleButton = new JToggleButton("Off");
+		tglbtnServerToggleButton.setHorizontalAlignment(SwingConstants.LEFT);
 		tglbtnServerToggleButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		tglbtnServerToggleButton.addActionListener(new ActionListener() {
 			@Override
@@ -145,7 +151,7 @@ public class EOSpyUI {
 			}
 		});
 		GridBagConstraints gbc_tglbtnServerToggleButton = new GridBagConstraints();
-		gbc_tglbtnServerToggleButton.anchor = GridBagConstraints.NORTHEAST;
+		gbc_tglbtnServerToggleButton.anchor = GridBagConstraints.NORTHWEST;
 		gbc_tglbtnServerToggleButton.insets = new Insets(0, 0, 5, 5);
 		gbc_tglbtnServerToggleButton.gridx = 2;
 		gbc_tglbtnServerToggleButton.gridy = 2;
@@ -222,21 +228,22 @@ public class EOSpyUI {
 		gbc_lblNewLabel_4.gridx = 1;
 		gbc_lblNewLabel_4.gridy = 11;
 		// gpsFrame.getContentPane().add(lblNewLabel_4, gbc_lblNewLabel_4);
-
-		/* spinner_FreqInterval = new JSpinner();
-		spinner_FreqInterval.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent arg0) {
-				freqIntervalSpinnerChanged(arg0);
-			}
-		}); */
-		// spinner_FreqInterval.setModel(new SpinnerNumberModel(freqInterval, 1, 100000, 1));
+		/*
+		 * spinner_FreqInterval = new JSpinner();
+		 * spinner_FreqInterval.addChangeListener(new ChangeListener() {
+		 * 
+		 * @Override public void stateChanged(ChangeEvent arg0) {
+		 * freqIntervalSpinnerChanged(arg0); } });
+		 */
+		// spinner_FreqInterval.setModel(new SpinnerNumberModel(freqInterval, 1, 100000,
+		// 1));
 		GridBagConstraints gbc_spinner_FreqInterval = new GridBagConstraints();
 		gbc_spinner_FreqInterval.anchor = GridBagConstraints.NORTHWEST;
 		gbc_spinner_FreqInterval.insets = new Insets(0, 0, 5, 5);
 		gbc_spinner_FreqInterval.gridx = 1;
 		gbc_spinner_FreqInterval.gridy = 12;
-		// gpsFrame.getContentPane().add(spinner_FreqInterval, gbc_spinner_FreqInterval);
+		// gpsFrame.getContentPane().add(spinner_FreqInterval,
+		// gbc_spinner_FreqInterval);
 
 		// JLabel lblNewLabel_5 = new JLabel("Reporting Interval in Seconds");
 		GridBagConstraints gbc_lblNewLabel_5 = new GridBagConstraints();
@@ -245,7 +252,7 @@ public class EOSpyUI {
 		gbc_lblNewLabel_5.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_5.gridx = 1;
 		gbc_lblNewLabel_5.gridy = 13;
-		
+
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setForeground(Color.BLUE);
 		GridBagConstraints gbc_separator_1 = new GridBagConstraints();
@@ -535,9 +542,10 @@ public class EOSpyUI {
 		lblLabel_Progress.setText(str);
 	}
 
-	/* void freqIntervalSpinnerChanged(ChangeEvent arg0) {
-		freqInterval = (Integer) spinner_FreqInterval.getValue();
-	} */
+	/*
+	 * void freqIntervalSpinnerChanged(ChangeEvent arg0) { freqInterval = (Integer)
+	 * spinner_FreqInterval.getValue(); }
+	 */
 
 	void serverServiceAction(ActionEvent arg0) {
 		if (EOSpyGPS.portname.equals(null) || EOSpyGPS.portname.equals("")) {
@@ -560,26 +568,34 @@ public class EOSpyUI {
 		gpsnmea.parse(line); // GPS nmea.parse line
 
 		// $GPGGA GPS Log header
-		// public double utc = 0; // UTC time status of position (hours/minutes/seconds/decimal seconds)
+		// public double utc = 0; // UTC time status of position
+		// (hours/minutes/seconds/decimal seconds)
 		event.setLat(gpsnmea.position.lat); // lat Latitude
 		event.setLon(gpsnmea.position.lon); // lon Longitude
 
-		// public int quality = 0; // position fix 0: Fix not available 1: GPS SPS mode refer to GPS quality table
-		event.setSatellites(gpsnmea.position.satellites); // sats Number of satellites in use. May be different to the number in view
-		event.setHdop(gpsnmea.position.hdop); // hdop Horizontal dilution of precision 
+		// public int quality = 0; // position fix 0: Fix not available 1: GPS SPS mode
+		// refer to GPS quality table
+   	    // sats Number of satellites in use. May be different to the number in view
+		event.setSatellites(gpsnmea.position.satellites);
+		event.setHdop(gpsnmea.position.hdop); // hdop Horizontal dilution of precision
 		event.setAltitude(gpsnmea.position.altitude); // altitude Antenna altitude above/below mean sea level
 		// public double geoid = 0; // geoid - undulation - the relationship between the geoid ellipsoid
 		event.setSpeed(gpsnmea.position.speed); // speed Km - Speed over ground, knots
 		event.setCourse(gpsnmea.position.course); // track true - Track made good, degrees True
 
 		// public double gpsdate = 0; // gps device date - Date: dd/mm/yy
-		// public double age = 0; // age Age of correction data (in seconds) - The maximum age limited 99 seconds
+		// public double age = 0; // age Age of correction data (in seconds) - The
+		// maximum age limited 99 seconds
 		// public double stnID = 0; // stn ID Differential base station ID
-		// public String modeMA = ""; // mode MA A = Automatic 2D/3D M = Manual, forced to operate in 2D or 3D
-		// public int mode123 = 0; // mode 123 Mode: 1 = Fix not available; 2 = 2D; 3 = 3D
+		// public String modeMA = ""; // mode MA A = Automatic 2D/3D M = Manual, forced
+		// to operate in 2D or 3D
+		// public int mode123 = 0; // mode 123 Mode: 1 = Fix not available; 2 = 2D; 3 =
+		// 3D
 
-		// public String valid = ""; // data status - Data status: A = Data valid, V = Data invalid
-		event.setTextMessage(gpsnmea.position.message); // $GPTXT - message transfers various information on the receiver
+		// public String valid = ""; // data status - Data status: A = Data valid, V =
+		// Data invalid
+		// $GPTXT - message transfers various information on the receiver
+		event.setTextMessage(gpsnmea.position.message); 
 
 		event.setValid(gpsnmea.position.fixed); // valid - position fix as boolean refer to GPS quality table
 		showFixStatus(gpsnmea.position.fixed);
@@ -589,7 +605,7 @@ public class EOSpyUI {
 		LonStr = lf.format(event.getLon());
 		textField_Lat.setText(LatStr);
 		textField_Lon.setText(LonStr);
-		
+
 		if (!gpsnmea.position.fixed) {
 			lastSendTime = 0;
 		}
@@ -603,7 +619,7 @@ public class EOSpyUI {
 		if (freqInterval == 0) {
 			lastSendTime = 10;
 		}
-		
+
 		if ((lastSendTime == 0) && (gpsnmea.position.fixed)) {
 			lastSendTime = System.currentTimeMillis();
 			serverSendPost("");
@@ -621,26 +637,31 @@ public class EOSpyUI {
 
 	public void serverSendPost(String IoTEvent) {
 
-		// continuously blink the led every 1/2 second for 15 seconds
-		if (IoTEvent.indexOf("&keypress=1.0") != -1) {
-			EOSpyGPS.pi4jgpio.redled1Blink(500, 15000);
-		}
-		if (IoTEvent.indexOf("&keypress=2.0") != -1) {
-			EOSpyGPS.pi4jgpio.redled2Blink(500, 15000);
-		}
-		if (IoTEvent.indexOf("&keypress=4.0") != -1) {
-			EOSpyGPS.pi4jgpio.yellowled1Blink(500, 15000);
-		}
-		if (IoTEvent.indexOf("&keypress=8.0") != -1) {
-			EOSpyGPS.pi4jgpio.yellowled2Blink(500, 15000);
+		if (Pi4jGPIO.getInstance() == null) {
+			System.err.println(
+					"stopPi4jGPIO(): create gpio controller e.g. gpio=GPIO_01 not defined in piiottron.xml file.");
+		} else {
+			// continuously blink the led every 1/2 second for 15 seconds
+			if (IoTEvent.indexOf("&keypress=1.0") != -1) {
+				Pi4jGPIO.getInstance().redled1Blink(500, 15000);
+			}
+			if (IoTEvent.indexOf("&keypress=2.0") != -1) {
+				Pi4jGPIO.getInstance().redled2Blink(500, 15000);
+			}
+			if (IoTEvent.indexOf("&keypress=4.0") != -1) {
+				Pi4jGPIO.getInstance().yelled1Blink(500, 15000);
+			}
+			if (IoTEvent.indexOf("&keypress=8.0") != -1) {
+				Pi4jGPIO.getInstance().yelled2Blink(500, 15000);
+			}
+
+			// continuously blink the led every 1 second
+			Pi4jGPIO.getInstance().grnled1Blink(1000, 15000);
 		}
 
-		// continuously blink the led every 1 second
-		EOSpyGPS.pi4jgpio.greenled1Blink(1000, 15000);
-		
 		DecimalFormat lf = new DecimalFormat("0.000000");
 		DecimalFormat sf = new DecimalFormat("0.00");
-		String postMsg = "/?id=" + EOSpyGPS.id; //textField_ID.getText();
+		String postMsg = "/?id=" + EOSpyGPS.id; // textField_ID.getText();
 
 		java.util.Date date = new Date();
 		long fixtime = date.getTime();
@@ -649,7 +670,7 @@ public class EOSpyUI {
 
 		postMsg = postMsg + "&process=" + EOSpyGPS.process;
 		postMsg = postMsg + "&name=" + EOSpyGPS.name;
-		
+
 		LatStr = lf.format(event.getLat());
 		LonStr = lf.format(event.getLon());
 		textField_Lat.setText(LatStr);
@@ -671,7 +692,7 @@ public class EOSpyUI {
 			postMsg = postMsg + "&valid=false";
 		}
 		postMsg = postMsg + "&batt=98.7";
-		
+
 		String serverEvent = textField_ServerEvent.getText();
 		if (!serverEvent.equals(null) || !serverEvent.equals("")) {
 			postMsg = postMsg + serverEvent;
@@ -719,16 +740,17 @@ public class EOSpyUI {
 	public void show() {
 		this.gpsFrame.setVisible(true);
 	}
-	
+
 	void windowClosingAction(WindowEvent e) {
 		// stop all GPIO activity/threads
-		// (this method will forcefully shutdown all GPIO monitoring threads and scheduled tasks)
+		// (this method will forcefully shutdown all GPIO monitoring threads and
+		// scheduled tasks)
 		if ((EOSpyGPS.gpio == "") || (EOSpyGPS.gpio.indexOf("none") != -1)) {
-			System.err.println(
-					"Note: create gpio controller e.g. gpio=GPIO_01 not defined in iotbpm.properties file.");
+			System.err.println("Note: create gpio controller e.g. gpio=GPIO_01 not defined in iotbpm.properties file.");
 		} else {
 			// Pi4J GPIO controller
-			EOSpyGPS.eospygps.stopPi4jGPIO(); // implement this method call if you wish to terminate the Pi4J GPIO controller
+			// implement this method call if you wish to terminate the Pi4J GPIO controller
+			EOSpyGPS.eospygps.stopPi4jGPIO(); 
 		}
 
 		if (serverService) {
