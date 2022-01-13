@@ -15,7 +15,6 @@ import java.util.Locale;
 import java.util.Properties;
 
 import com.eospy.ui.EOSpyUI;
-import com.pi4j.io.gpio.GpioFactory;
 import com.eospy.pi4j.Pi4jGPIO;
 
 /**
@@ -176,38 +175,10 @@ public class EOSpyGPS {
 			pi4jgpio.gpioStartController();
 			// This interface is extension of GpioPin interface with operation to read digital states
 			pi4jActive = true;
-			gpioSwitchState();
 	        System.out.println("Create GPIO Controller...");
 		}
 	}
 
-	// This interface is extension of GpioPin interface with operation to read digital states
-	public void gpioSwitchState() {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				while (pi4jActive) {
-					// This interface is extension of GpioPin interface with operation to read digital states
-					int i = Pi4jGPIO.getInstance().gpioSwitchState(); 
-
-					if (i == 1) {
-						EOSpyUI.getInstance().serverSendPost("&keypress=1.0");
-						System.out.println("button1.getState().isHigh()");
-					}
-					if (i == 2) {
-						EOSpyUI.getInstance().serverSendPost("&keypress=2.0");
-						System.out.println("button2.getState().isHigh()");
-					}
-					try {
-						Thread.sleep(200L);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}).start();
-	}
-	
 	public void stopPi4jGPIO() {
 		if (Pi4jGPIO.getInstance() == null) {
 			System.err.println("stopPi4jGPIO(): create gpio controller e.g. gpio=GPIO_01 not defined in piiottron.xml file.");

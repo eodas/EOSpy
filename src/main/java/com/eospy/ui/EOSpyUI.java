@@ -228,22 +228,21 @@ public class EOSpyUI {
 		gbc_lblNewLabel_4.gridx = 1;
 		gbc_lblNewLabel_4.gridy = 11;
 		// gpsFrame.getContentPane().add(lblNewLabel_4, gbc_lblNewLabel_4);
-		/*
-		 * spinner_FreqInterval = new JSpinner();
-		 * spinner_FreqInterval.addChangeListener(new ChangeListener() {
-		 * 
-		 * @Override public void stateChanged(ChangeEvent arg0) {
-		 * freqIntervalSpinnerChanged(arg0); } });
-		 */
-		// spinner_FreqInterval.setModel(new SpinnerNumberModel(freqInterval, 1, 100000,
-		// 1));
+
+		/* spinner_FreqInterval = new JSpinner();
+		spinner_FreqInterval.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				freqIntervalSpinnerChanged(arg0);
+			}
+		}); */
+		// spinner_FreqInterval.setModel(new SpinnerNumberModel(freqInterval, 1, 100000, 1));
 		GridBagConstraints gbc_spinner_FreqInterval = new GridBagConstraints();
 		gbc_spinner_FreqInterval.anchor = GridBagConstraints.NORTHWEST;
 		gbc_spinner_FreqInterval.insets = new Insets(0, 0, 5, 5);
 		gbc_spinner_FreqInterval.gridx = 1;
 		gbc_spinner_FreqInterval.gridy = 12;
-		// gpsFrame.getContentPane().add(spinner_FreqInterval,
-		// gbc_spinner_FreqInterval);
+		// gpsFrame.getContentPane().add(spinner_FreqInterval, gbc_spinner_FreqInterval);
 
 		// JLabel lblNewLabel_5 = new JLabel("Reporting Interval in Seconds");
 		GridBagConstraints gbc_lblNewLabel_5 = new GridBagConstraints();
@@ -542,10 +541,9 @@ public class EOSpyUI {
 		lblLabel_Progress.setText(str);
 	}
 
-	/*
-	 * void freqIntervalSpinnerChanged(ChangeEvent arg0) { freqInterval = (Integer)
-	 * spinner_FreqInterval.getValue(); }
-	 */
+	/* void freqIntervalSpinnerChanged(ChangeEvent arg0) {
+		freqInterval = (Integer) spinner_FreqInterval.getValue();
+	} */
 
 	void serverServiceAction(ActionEvent arg0) {
 		if (EOSpyGPS.portname.equals(null) || EOSpyGPS.portname.equals("")) {
@@ -568,34 +566,26 @@ public class EOSpyUI {
 		gpsnmea.parse(line); // GPS nmea.parse line
 
 		// $GPGGA GPS Log header
-		// public double utc = 0; // UTC time status of position
-		// (hours/minutes/seconds/decimal seconds)
+		// public double utc = 0; // UTC time status of position (hours/minutes/seconds/decimal seconds)
 		event.setLat(gpsnmea.position.lat); // lat Latitude
 		event.setLon(gpsnmea.position.lon); // lon Longitude
 
-		// public int quality = 0; // position fix 0: Fix not available 1: GPS SPS mode
-		// refer to GPS quality table
-   	    // sats Number of satellites in use. May be different to the number in view
-		event.setSatellites(gpsnmea.position.satellites);
-		event.setHdop(gpsnmea.position.hdop); // hdop Horizontal dilution of precision
+		// public int quality = 0; // position fix 0: Fix not available 1: GPS SPS mode refer to GPS quality table
+		event.setSatellites(gpsnmea.position.satellites); // sats Number of satellites in use. May be different to the number in view
+		event.setHdop(gpsnmea.position.hdop); // hdop Horizontal dilution of precision 
 		event.setAltitude(gpsnmea.position.altitude); // altitude Antenna altitude above/below mean sea level
 		// public double geoid = 0; // geoid - undulation - the relationship between the geoid ellipsoid
 		event.setSpeed(gpsnmea.position.speed); // speed Km - Speed over ground, knots
 		event.setCourse(gpsnmea.position.course); // track true - Track made good, degrees True
 
 		// public double gpsdate = 0; // gps device date - Date: dd/mm/yy
-		// public double age = 0; // age Age of correction data (in seconds) - The
-		// maximum age limited 99 seconds
+		// public double age = 0; // age Age of correction data (in seconds) - The maximum age limited 99 seconds
 		// public double stnID = 0; // stn ID Differential base station ID
-		// public String modeMA = ""; // mode MA A = Automatic 2D/3D M = Manual, forced
-		// to operate in 2D or 3D
-		// public int mode123 = 0; // mode 123 Mode: 1 = Fix not available; 2 = 2D; 3 =
-		// 3D
+		// public String modeMA = ""; // mode MA A = Automatic 2D/3D M = Manual, forced to operate in 2D or 3D
+		// public int mode123 = 0; // mode 123 Mode: 1 = Fix not available; 2 = 2D; 3 = 3D
 
-		// public String valid = ""; // data status - Data status: A = Data valid, V =
-		// Data invalid
-		// $GPTXT - message transfers various information on the receiver
-		event.setTextMessage(gpsnmea.position.message); 
+		// public String valid = ""; // data status - Data status: A = Data valid, V = Data invalid
+		event.setTextMessage(gpsnmea.position.message); // $GPTXT - message transfers various information on the receiver
 
 		event.setValid(gpsnmea.position.fixed); // valid - position fix as boolean refer to GPS quality table
 		showFixStatus(gpsnmea.position.fixed);
@@ -649,14 +639,14 @@ public class EOSpyUI {
 				Pi4jGPIO.getInstance().redled2Blink(500, 15000);
 			}
 			if (IoTEvent.indexOf("&keypress=4.0") != -1) {
-				Pi4jGPIO.getInstance().yelled1Blink(500, 15000);
+				Pi4jGPIO.getInstance().yellowled1Blink(500, 15000);
 			}
 			if (IoTEvent.indexOf("&keypress=8.0") != -1) {
-				Pi4jGPIO.getInstance().yelled2Blink(500, 15000);
+				Pi4jGPIO.getInstance().yellowled2Blink(500, 15000);
 			}
 
 			// continuously blink the led every 1 second
-			Pi4jGPIO.getInstance().grnled1Blink(1000, 15000);
+			Pi4jGPIO.getInstance().greenled1Blink(1000, 15000);
 		}
 
 		DecimalFormat lf = new DecimalFormat("0.000000");
@@ -743,14 +733,13 @@ public class EOSpyUI {
 
 	void windowClosingAction(WindowEvent e) {
 		// stop all GPIO activity/threads
-		// (this method will forcefully shutdown all GPIO monitoring threads and
-		// scheduled tasks)
+		// (this method will forcefully shutdown all GPIO monitoring threads and scheduled tasks)
 		if ((EOSpyGPS.gpio == "") || (EOSpyGPS.gpio.indexOf("none") != -1)) {
-			System.err.println("Note: create gpio controller e.g. gpio=GPIO_01 not defined in iotbpm.properties file.");
+			System.err.println(
+					"Note: create gpio controller e.g. gpio=GPIO_01 not defined in iotbpm.properties file.");
 		} else {
 			// Pi4J GPIO controller
-			// implement this method call if you wish to terminate the Pi4J GPIO controller
-			EOSpyGPS.eospygps.stopPi4jGPIO(); 
+			EOSpyGPS.eospygps.stopPi4jGPIO(); // implement this method call if you wish to terminate the Pi4J GPIO controller
 		}
 
 		if (serverService) {
