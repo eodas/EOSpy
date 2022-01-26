@@ -103,8 +103,7 @@ public class Pi4jGPIO {
 	GpioPinDigitalOutput greenled1; // LED GPIO pin GPIO.27
 	GpioPinDigitalOutput greenled2; // LED GPIO pin GPIO.00
 
-	// provision switch gpio pins as an input pin with its internal pull down
-	// resistor enabled
+	// provision switch gpio pins as an input pin with its internal pull down resistor enabled
 	GpioPinDigitalInput button1; // Button GPIO pin GPIO.24
 	GpioPinDigitalInput button2; // Button GPIO pin GPIO.01
 
@@ -201,8 +200,7 @@ public class Pi4jGPIO {
 		greenled2.blink(delay, duration);
 	}
 
-	// This interface is extension of GpioPin interface with operation to read
-	// digital states.
+	// This interface is extension of GpioPin interface with operation to read digital states
 /*	public void gpioSwitchState() {
 		new Thread(new Runnable() {
 			@Override
@@ -242,8 +240,7 @@ public class Pi4jGPIO {
 		greenled1 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_27);
 		greenled2 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00);
 
-		// provision switch gpio pins as an input pin with its internal pull down
-		// resistor enabled
+		// provision switch gpio pins as an input pin with its internal pull down resistor enabled
 		button1 = gpio.provisionDigitalInputPin(RaspiPin.GPIO_24, PinPullResistance.PULL_DOWN);
 		button2 = gpio.provisionDigitalInputPin(RaspiPin.GPIO_01, PinPullResistance.PULL_DOWN);
 
@@ -275,10 +272,26 @@ public class Pi4jGPIO {
 		pi4jActive = true;
 	}
 
+	public void buzzer(int s1, int s2, int cnt) {
+		int i = 0; // loop counter
+        while(i < cnt) {
+        	try {
+        		buzzer1.setState(PinState.HIGH);
+				Thread.sleep(s1);
+        		buzzer1.setState(PinState.LOW);
+				Thread.sleep(s2);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	i++;
+        }
+	}
+	
 	public void gpioShutdown() {
 		pi4jActive = false;
-		// stop all GPIO activity/threads (this method will forcefully shutdown all GPIO
-		// monitoring threads and scheduled tasks) Pi4J GPIO controller
+		// stop all GPIO activity/threads (this method will forcefully shutdown all
+		// GPIO monitoring threads and scheduled tasks) Pi4J GPIO controller
 		gpio.shutdown(); // Implement this method call if you wish to terminate the Pi4J GPIO controller
 		// System.exit(0);
 	}
