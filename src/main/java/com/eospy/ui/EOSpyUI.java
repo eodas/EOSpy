@@ -9,11 +9,11 @@ import javax.swing.event.ChangeListener;
 
 import com.eospy.EOSpyGPS;
 import com.eospy.comm.jSerialComm;
+import com.eospy.gpio.RPiGPIO;
 import com.eospy.gps.GPSnmea;
 import com.eospy.ui.AboutDialog;
 import com.eospy.util.WebBrowser;
 import com.eospy.model.Event;
-import com.eospy.pi4j.Pi4jGPIO;
 import com.eospy.server.AgentConnect;
 
 import java.awt.Font;
@@ -88,9 +88,12 @@ public class EOSpyUI {
 	// Initialize the contents of the frame
 	private JFrame buildFrame(boolean exitOnClose) {
 		gpsFrame = new JFrame();
+		gpsFrame.setLocation(850, 850);
+	
 		gpsFrame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
+				System.out.print("Closing windowClosing(WindowEvent e)");
 				windowClosingAction(e);
 			}
 		});
@@ -489,7 +492,9 @@ public class EOSpyUI {
 		Exit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
+				System.out.print("Exit windowClosing(WindowEvent e)");
+				windowClosingAction(null);
+				// System.exit(0);
 			}
 		});
 		Exit.setBounds(426, 40, 85, 35);
@@ -627,26 +632,25 @@ public class EOSpyUI {
 
 	public void serverSendPost(String IoTEvent) {
 
-		if (Pi4jGPIO.getInstance() == null) {
-			System.err.println(
-					"stopPi4jGPIO(): create gpio controller e.g. gpio=GPIO_01 not defined in piiottron.xml file.");
+		if (RPiGPIO.getInstance() == null) {
+			System.err.println("GPIO stop(): create gpio controller e.g. gpio=GPIO_01 not defined in piiottron.xml file.");
 		} else {
 			// continuously blink the led every 1/2 second for 15 seconds
 			if (IoTEvent.indexOf("&keypress=1.0") != -1) {
-				Pi4jGPIO.getInstance().redled1Blink(500, 15000);
+				RPiGPIO.getInstance().redled1Blink(200, 3);
 			}
 			if (IoTEvent.indexOf("&keypress=2.0") != -1) {
-				Pi4jGPIO.getInstance().redled2Blink(500, 15000);
+				RPiGPIO.getInstance().redled2Blink(200, 7);
 			}
 			if (IoTEvent.indexOf("&keypress=4.0") != -1) {
-				Pi4jGPIO.getInstance().yellowled1Blink(500, 15000);
+				RPiGPIO.getInstance().yellowled1Blink(100, 7);
 			}
 			if (IoTEvent.indexOf("&keypress=8.0") != -1) {
-				Pi4jGPIO.getInstance().yellowled2Blink(500, 15000);
+				RPiGPIO.getInstance().yellowled2Blink(200, 3);
 			}
 
 			// continuously blink the led every 1 second
-			Pi4jGPIO.getInstance().greenled1Blink(1000, 15000);
+			RPiGPIO.getInstance().greenled1Blink(100, 8);
 		}
 
 		DecimalFormat lf = new DecimalFormat("0.000000");
@@ -735,11 +739,10 @@ public class EOSpyUI {
 		// stop all GPIO activity/threads
 		// (this method will forcefully shutdown all GPIO monitoring threads and scheduled tasks)
 		if ((EOSpyGPS.gpio == "") || (EOSpyGPS.gpio.indexOf("none") != -1)) {
-			System.err.println(
-					"Note: create gpio controller e.g. gpio=GPIO_01 not defined in iotbpm.properties file.");
+			System.err.println("Note: create gpio controller e.g. gpio=GPIO_01 not defined in iotbpm.properties file.");
 		} else {
 			// Pi4J GPIO controller
-			EOSpyGPS.eospygps.stopPi4jGPIO(); // implement this method call if you wish to terminate the Pi4J GPIO controller
+			EOSpyGPS.eospygps.gpioHalt(); // implement this method call if you wish to terminate the Pi4J GPIO controller
 		}
 
 		if (serverService) {
