@@ -14,8 +14,8 @@ import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Properties;
 
+import com.eospy.gpio.RPiGPIO;
 import com.eospy.ui.EOSpyUI;
-import com.eospy.pi4j.Pi4jGPIO;
 
 /**
  * Executive Order Corporation we make Things Smart
@@ -64,7 +64,7 @@ public class EOSpyGPS {
 	private String appVer = "1.01A";
 	private String buildDate = "0304";
 	private boolean is64bitJMV = false;
-	private boolean pi4jActive = false;
+	private boolean gpioActive = false;
 	public static String gpsDebug = "none"; // none, debug
 
 	public static String id = "100111"; // 100111 
@@ -114,7 +114,7 @@ public class EOSpyGPS {
 			public void run() {
 				try {
 					EOSpyUI eospyui = new EOSpyUI(exitOnClose);
-					startPi4jGPIO(); // Implementation for the Raspberry Pi4j GPIO example
+					gpioInit(eospyui); // Implementation for the Raspberry GPIO example
 					eospyui.show(); // window.frmEo.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -167,26 +167,26 @@ public class EOSpyGPS {
 		}
 	}
 
-	public void startPi4jGPIO() {
+	public void gpioInit(EOSpyUI eospyui) {
 		if ((gpio == "") || (gpio.indexOf("none") != -1)) {
-			System.err.println("startPi4jGPIO(): create gpio controller e.g. gpio=GPIO_01 not defined in piiottron.xml file.");
+			System.err.println("GPIO start(): create gpio controller e.g. gpio=GPIO_01 not defined in piiottron.xml file.");
 		} else {
-			Pi4jGPIO pi4jgpio = new Pi4jGPIO(); // Implementation for the Raspberry Pi4j GPIO example
-			pi4jgpio.gpioStartController();
+			RPiGPIO rpigpio = new RPiGPIO(eospyui); // Implementation for the Raspberry GPIO example
 			// This interface is extension of GpioPin interface with operation to read digital states
-			pi4jActive = true;
-	        System.out.println("Create GPIO Controller...");
+			rpigpio.gpioStart();
+			gpioActive = true;
+	        System.out.println("GPIO Start Controller...");
 		}
 	}
 
-	public void stopPi4jGPIO() {
-		if (Pi4jGPIO.getInstance() == null) {
-			System.err.println("stopPi4jGPIO(): create gpio controller e.g. gpio=GPIO_01 not defined in piiottron.xml file.");
-		} else {
-			pi4jActive = false;
-			Pi4jGPIO.getInstance().gpioShutdown();
+	public void gpioHalt() {
+//		if (RPiGPIO.getInstance() == null) {
+			System.err.println("GPIO stop(): create gpio controller e.g. gpio=GPIO_01 not defined in piiottron.xml file.");
+//		} else {
+			gpioActive = false;
+			RPiGPIO.getInstance().gpioStop();
 			System.out.println("Stop all GPIO Activity / Threads");
-		}
+//		}
 	}
 
 	public void getIPAddress() {
