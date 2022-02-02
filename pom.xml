@@ -13,21 +13,12 @@
 	<description>EOSpyGPS :: AI-IoT Application using the jBPM and Drools Rules Engine for EOSpy Arduino Tron and AI-IoT Executive Order Corp</description>
 
 	<properties>
+	    <!-- DEPENDENCIES VERSIONS -->
 	    <maven.compiler.target>1.7</maven.compiler.target>
 	    <maven.compiler.source>1.7</maven.compiler.source>
-	    
-	    <!-- DEPENDENCIES VERSIONS -->
-    <slf4j.version>2.0-SNAPSHOT</slf4j.version>
-    <pi4j.version>1.4</pi4j.version>
 	</properties>
 
 	<dependencies> 
-
-		<dependency>
-			<groupId>com.pi4j</groupId>
-			<artifactId>pi4j-core</artifactId>
-      		<version>${pi4j.version}</version>
-		</dependency>
 
 		<dependency>
 		   <groupId>com.fazecast</groupId>
