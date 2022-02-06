@@ -145,7 +145,7 @@ public class RPiGPIO {
     private final String BUZZER1 = "20"; // RED LED pin GPIO.BCM 20
 
 	public RPiGPIO(EOSpyUI eospyui) {
-		eospyui = this.eospyui;
+		this.eospyui = eospyui;
 		rpigpio = this;
 	}
 
@@ -289,9 +289,9 @@ public class RPiGPIO {
 			boolean blink = true;
 			for (int i = 0; i < duration; i++) {
 				if (blink) {
-			        doAction(RED_LED1, Action.DIGITAL_LOW);
-				} else {
 			        doAction(RED_LED1, Action.DIGITAL_HIGH);
+				} else {
+			        doAction(RED_LED1, Action.DIGITAL_LOW);
 				}
 				blink = !blink;
 				try {
@@ -314,9 +314,9 @@ public class RPiGPIO {
 			boolean blink = true;
 			for (int i = 0; i < duration; i++) {
 				if (blink) {
-			        doAction(RED_LED2, Action.DIGITAL_LOW);
-				} else {
 			        doAction(RED_LED2, Action.DIGITAL_HIGH);
+				} else {
+			        doAction(RED_LED2, Action.DIGITAL_LOW);
 				}
 				blink = !blink;
 				try {
@@ -339,9 +339,9 @@ public class RPiGPIO {
 			boolean blink = true;
 			for (int i = 0; i < duration; i++) {
 				if (blink) {
-			        doAction(YELLOW_LED1, Action.DIGITAL_LOW);
-				} else {
 			        doAction(YELLOW_LED1, Action.DIGITAL_HIGH);
+				} else {
+			        doAction(YELLOW_LED1, Action.DIGITAL_LOW);
 				}
 				blink = !blink;
 				try {
@@ -364,9 +364,9 @@ public class RPiGPIO {
 			boolean blink = true;
 			for (int i = 0; i < duration; i++) {
 				if (blink) {
-			        doAction(YELLOW_LED2, Action.DIGITAL_LOW);
-				} else {
 			        doAction(YELLOW_LED2, Action.DIGITAL_HIGH);
+				} else {
+			        doAction(YELLOW_LED2, Action.DIGITAL_LOW);
 				}
 				blink = !blink;
 				try {
@@ -389,9 +389,9 @@ public class RPiGPIO {
 			boolean blink = true;
 			for (int i = 0; i < duration; i++) {
 				if (blink) {
-			        doAction(GREEN_LED1, Action.DIGITAL_LOW);
-				} else {
 			        doAction(GREEN_LED1, Action.DIGITAL_HIGH);
+				} else {
+			        doAction(GREEN_LED1, Action.DIGITAL_LOW);
 				}
 				blink = !blink;
 				try {
@@ -414,9 +414,9 @@ public class RPiGPIO {
 			boolean blink = true;
 			for (int i = 0; i < duration; i++) {
 				if (blink) {
-			        doAction(GREEN_LED2, Action.DIGITAL_LOW);
-				} else {
 			        doAction(GREEN_LED2, Action.DIGITAL_HIGH);
+				} else {
+			        doAction(GREEN_LED2, Action.DIGITAL_LOW);
 				}
 				blink = !blink;
 				try {
@@ -467,7 +467,7 @@ public class RPiGPIO {
 					} 
 					
 					try {
-						Thread.sleep(900L);
+						Thread.sleep(200L);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}

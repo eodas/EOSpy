@@ -88,7 +88,6 @@ public class EOSpyUI {
 	// Initialize the contents of the frame
 	private JFrame buildFrame(boolean exitOnClose) {
 		gpsFrame = new JFrame();
-		gpsFrame.setLocation(850, 850);
 	
 		gpsFrame.addWindowListener(new WindowAdapter() {
 			@Override
@@ -103,6 +102,8 @@ public class EOSpyUI {
 		gpsFrame.setBounds(10, 10, 555, 485);
 		gpsFrame.setDefaultCloseOperation(exitOnClose ? JFrame.EXIT_ON_CLOSE : WindowConstants.DISPOSE_ON_CLOSE);
 
+		gpsFrame.setLocationRelativeTo(null); // Center in screen
+		
 		gpsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 23, 417, 135, 0, 0 };
@@ -494,7 +495,6 @@ public class EOSpyUI {
 			public void actionPerformed(ActionEvent e) {
 				System.out.print("Exit windowClosing(WindowEvent e)");
 				windowClosingAction(null);
-				// System.exit(0);
 			}
 		});
 		Exit.setBounds(426, 40, 85, 35);
@@ -637,16 +637,16 @@ public class EOSpyUI {
 		} else {
 			// continuously blink the led every 1/2 second for 15 seconds
 			if (IoTEvent.indexOf("&keypress=1.0") != -1) {
-				RPiGPIO.getInstance().redled1Blink(200, 3);
+				RPiGPIO.getInstance().redled1Blink(200, 4);
 			}
 			if (IoTEvent.indexOf("&keypress=2.0") != -1) {
-				RPiGPIO.getInstance().redled2Blink(200, 7);
+				RPiGPIO.getInstance().redled2Blink(200, 8);
 			}
 			if (IoTEvent.indexOf("&keypress=4.0") != -1) {
-				RPiGPIO.getInstance().yellowled1Blink(100, 7);
+				RPiGPIO.getInstance().yellowled1Blink(100, 8);
 			}
 			if (IoTEvent.indexOf("&keypress=8.0") != -1) {
-				RPiGPIO.getInstance().yellowled2Blink(200, 3);
+				RPiGPIO.getInstance().yellowled2Blink(200, 4);
 			}
 
 			// continuously blink the led every 1 second
@@ -750,6 +750,8 @@ public class EOSpyUI {
 		} else {
 			System.out.println("Note: jSerialComm.SerialPort comm.closeCommPort() not active.");
 		}
-		// System.exit(0);
+		if (e == null) {
+			System.exit(0);
+		}
 	}
 }
